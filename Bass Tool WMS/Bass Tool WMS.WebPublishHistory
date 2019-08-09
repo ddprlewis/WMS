@@ -51,22 +51,22 @@
 <[11]<type="folder">
 <name="ExeReportStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/11/2019 01:39:53 51 pm')>
+<timestamp=CTODT('08/09/2019 08:32:37 38 am')>
 >
 <[12]<type="folder">
 <name="AppDataReportStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/11/2019 01:39:53 51 pm')>
+<timestamp=CTODT('08/09/2019 08:32:37 38 am')>
 >
 <[13]<type="folder">
 <name="ExeChartStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/11/2019 01:39:53 52 pm')>
+<timestamp=CTODT('08/09/2019 08:32:37 38 am')>
 >
 <[14]<type="folder">
 <name="AppDataChartStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/11/2019 01:39:53 52 pm')>
+<timestamp=CTODT('08/09/2019 08:32:37 38 am')>
 >
 <[15]<type="A5WPage">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5w}">
@@ -101,7 +101,7 @@
 <[21]<type="WebComponent">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\basstoolwms.a5wcmp}">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/11/2019 01:39:54 32 pm')>
+<timestamp=CTODT('08/08/2019 04:04:16 06 pm')>
 >
 <[22]<type="WebComponent">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\hold.a5wcmp}">
@@ -192,6 +192,8 @@
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\pockbo.a5rpt}">
 <target_folder="c:\a5webroot\wms">
 <timestamp=CTODT('11/30/2018 01:22:27 74 pm')>
+<project="Default">
+<profile="LAN Publish">
 >
 <[40]<type="WebComponent">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\basstoolwms.a5wcmp}">
@@ -201,7 +203,7 @@
 <[41]<type="file">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\pockbo.a5rpt}">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('12/11/2018 09:20:02 94 am')>
+<timestamp=CTODT('08/09/2019 08:32:37 63 am')>
 >
 <[42]<type="css">
 <name="alpha-blue">
@@ -216,7 +218,9 @@
 <[44]<type="file">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\poreceipt.a5rpt}">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('12/11/2018 09:21:21 33 am')>
+<timestamp=CTODT('08/08/2019 02:48:02 99 pm')>
+<project="Default">
+<profile="LAN Publish">
 >
 <[45]<type="library">
 <name="library">
