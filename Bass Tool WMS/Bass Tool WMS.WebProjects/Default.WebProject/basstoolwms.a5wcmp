@@ -173,7 +173,7 @@
         "info": {
             "createdBy": "RLewis",
             "dateCreated": "2018-7-13",
-            "dateLastEdited": "2019-8-20"
+            "dateLastEdited": "2019-8-21"
         },
         "flagShowCommentsInTree": true,
         "treeCommentOffset": "6",
@@ -481,18 +481,10 @@
                 "repeatingSectionParentId": -1,
                 "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=29d58de1-0f77-4ea7-be85-557f90326935}{I:'$$window.toolbar'} [ControlBar:CONTROLBAR_FOOTER] ¶",
                 "crc": "4294936298",
-                "indentTree": 2,
-                "precalc": {
-                    "ControlHTML": "<div class=\"A5CWLayout\"   id=\"{dialog.componentName}.V.R{dialog.rownumber}.CONTROLBAR_FOOTER\" style=\"width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -webkit-box-sizing: border-box;\">\n</div><!--breakbegin--><br  style=\"clear:both; \" /><!--breakend-->\n",
-                    "DesignViewHTML": ""
-                },
-                "parentIsCollapsed": false,
-                "inPanelCard": false,
-                "inTreeControl": false,
                 "v": {
+                    "id": "CONTROLBAR_FOOTER",
                     "comment": "",
                     "_dirty": false,
-                    "id": "CONTROLBAR_FOOTER",
                     "ControlBar": {
                         "definitionJSON": "{\n\t\"cb\": {\n\t\t\"controlBarProperties\": {\n\t\t\t\"edge\": \"bottom\",\n\t\t\t\"javascript\": {\n\t\t\t},\n\t\t\t\"disclosure\": {\n\t\t\t\t\"animation\": {\n\t\t\t\t\t\"duration\": 300\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"selectActiveLayoutDynamically\": false,\n\t\t\t\"refreshOnContainerResize\": true,\n\t\t\t\"animateRefresh\": false,\n\t\t\t\"animationType\": \"slide-left\",\n\t\t\t\"animationDuration\": \"200\",\n\t\t\t\"animationTween\": \"ease-in-out\",\n\t\t\t\"showSystemCommentsInJavascript\": true\n\t\t},\n\t\t\"actions\": [\n\t\t{\n\t\t\t\"name\": \"MAINMENU_onClick\",\n\t\t\t\"javascript\": \"callMainMenu();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 506,\\r\\n\\t\\\"end\\\": 521\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryListReview_onClick\",\n\t\t\t\"javascript\": \"callPOEntryReviewAll();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 526,\\r\\n\\t\\\"end\\\": 526\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryBack_onClick\",\n\t\t\t\"javascript\": \"callReceivePO();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 522,\\r\\n\\t\\\"end\\\": 522\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonItemInquiryListBack_onClick\",\n\t\t\t\"javascript\": \"callItemInquiryLookup();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 506,\\r\\n\\t\\\"end\\\": 530\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonIISearch_onClick\",\n\t\t\t\"javascript\": \"var lcKeyWord = {dialog.object}.getValue('IIKEYWORDSEARCH');\\r\\n\\t\\r\\nif(lcKeyWord.length != 0) {\\r\\n\\t{grid.object}.runAction('keyword lookup');\\r\\n} else {\\r\\n\\t{grid.object}.runAction('inquirylookup');\\r\\n}\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonClearIISearch_onClick\",\n\t\t\t\"javascript\": \"{dialog.object}.setValue('IIKEYWORDSEARCH', '');\\r\\n{dialog.object}.setValue('IIITEMLOOKUP', '');\\r\\n{dialog.object}.setValue('IIBINLOOKUP', '');\\r\\n{dialog.object}.setFocus('IIITEMLOOKUP');\\r\\n\\r\\n\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryListSubmit_onClick\",\n\t\t\t\"javascript\": \"/*\\r\\nYour javascript can reference:\\r\\n'data' - an object with 3 properties:\\r\\n\\t'element' - pointer to the element on which the event was fired\\r\\n\\t'event' - the event object\\r\\n\\t'item' - an object with a property 'name' - the name if the item on which the event was fired and 'def' - the definition of the item\\r\\n'this.data' - the data object for the ControlBar\\r\\n\\r\\nTIP: This is a system generated comment.\\r\\nTo remove this comment from the code, add this comment\\r\\nto your code at the start of a line : //nosystemcomment\\r\\n*/\\r\\n\\r\\nsubmitPOEntry();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1025,\\r\\n\\t\\\"end\\\": 1025\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryReviewBack_onClick\",\n\t\t\t\"javascript\": \"{dialog.object}.setValue('POEMETHOD','ITEM');\\r\\ncallPOEntry('');\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryRemaining_onClick\",\n\t\t\t\"javascript\": \"callPOEntryReviewRemaining();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 514,\\r\\n\\t\\\"end\\\": 514\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryAll_onClick\",\n\t\t\t\"javascript\": \"callPOEntryReviewAll();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryEntered_onClick\",\n\t\t\t\"javascript\": \"callPOEntryReviewEntered();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 530,\\r\\n\\t\\\"end\\\": 533\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"HtmPPDetailBack_onClick\",\n\t\t\t\"javascript\": \"callPOPutaway();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 521,\\r\\n\\t\\\"end\\\": 521\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOPutawayList_onClick\",\n\t\t\t\"javascript\": \"callPOPutawayList();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 525,\\r\\n\\t\\\"end\\\": 525\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOPutawayListBack_onClick\",\n\t\t\t\"javascript\": \"locateCart();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonCLNewLoc_onClick\",\n\t\t\t\"javascript\": \"{dialog.object}.setValue('CLNEWBIN', '');\\r\\n{dialog.object}.setValue('CLITEM', '');\\r\\n{dialog.object}.setFocus('CLNEWBIN');\\r\\n\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 548,\\r\\n\\t\\\"end\\\": 626\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonCLClear_onClick\",\n\t\t\t\"javascript\": \"\\r\\n{dialog.object}.setValue('CLITEM', '');\\r\\n{dialog.object}.setFocus('CLITEM');\\r\\n\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPLClear_onClick\",\n\t\t\t\"javascript\": \"callPrintLabel();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPrintPOCKBO_onClick\",\n\t\t\t\"javascript\": \"callPrintPOCKBO();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 506,\\r\\n\\t\\\"end\\\": 524\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPrintPOCKBOBack_onClick\",\n\t\t\t\"javascript\": \"callPOEntry('');\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 520,\\r\\n\\t\\\"end\\\": 520\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOReceipt_onClick\",\n\t\t\t\"javascript\": \"callPrintPORECEIPT();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryDelete_onClick\",\n\t\t\t\"javascript\": \"callPOEntryDelete();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 523,\\r\\n\\t\\\"end\\\": 523\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryPrintLabel_onClick\",\n\t\t\t\"javascript\": \"var lcItem = {dialog.object}.getValue('ITEM');\\r\\nvar lnQty  = {dialog.object}.getValue('OPEN');\\r\\n{dialog.object}.setValue('PLITEM', lcItem);\\r\\n{dialog.object}.setValue('PLQTY', lnQty);\\r\\n{dialog.object}.setValue('PLRETURNCALL', 'plReturnToEntry');\\r\\nlookupPLItem();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 506,\\r\\n\\t\\\"end\\\": 762\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPLBack_onClick\",\n\t\t\t\"javascript\": \"var lcReturnCall = {dialog.object}.getValue('PLRETURNCALL');\\r\\n\\r\\nif(lcReturnCall.length == 0) {\\r\\n\\tcallMainMenu();\\r\\n} else {\\r\\n  window[lcReturnCall]();\\r\\n}\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 567,\\r\\n\\t\\\"end\\\": 567\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPLLabelPrint_onClick\",\n\t\t\t\"javascript\": \"var lcItem = {dialog.object}.getValue('PPITEM');\\r\\nvar lnQty  = {dialog.object}.getValue('PPQTY');\\r\\n{dialog.object}.setValue('PLITEM', lcItem);\\r\\n{dialog.object}.setValue('PLQTY', lnQty);\\r\\n{dialog.object}.setValue('PLRETURNCALL', 'plReturnToPutaway');\\r\\nlookupPLItem();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 506,\\r\\n\\t\\\"end\\\": 767\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonCLLabelPrint_onClick\",\n\t\t\t\"javascript\": \"var lcItem = {dialog.object}.getValue('CLITEM');\\r\\nvar lnQty  = {dialog.object}.getValue('CLONHAND');\\r\\n{dialog.object}.setValue('PLITEM', lcItem);\\r\\n{dialog.object}.setValue('PLQTY', lnQty);\\r\\n{dialog.object}.setValue('PLRETURNCALL', 'plReturnToChangeLoc');\\r\\nlookupPLItem();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonListItemsOnShelf_onClick\",\n\t\t\t\"javascript\": \"callMoveList();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 510,\\r\\n\\t\\\"end\\\": 515\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonBackToMoveItem_onClick\",\n\t\t\t\"javascript\": \"callMoveInventory();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 1,\\r\\n\\t\\\"end\\\": 1\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonIIMoveItem_onClick\",\n\t\t\t\"javascript\": \"{dialog.object}.setValue('FROMII', '');\\r\\niiMoveItem();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 505,\\r\\n\\t\\\"end\\\": 505\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonIIAdjustQty_onClick\",\n\t\t\t\"javascript\": \"iiAdjustQty();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 506,\\r\\n\\t\\\"end\\\": 519\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonMovieItemBack_onClick\",\n\t\t\t\"javascript\": \"\\r\\nvar lcFromInquiry = {dialog.object}.getValue('FROMII');\\r\\n\\r\\nif (lcFromInquiry == 'TRUE') {\\r\\n\\tcallItemInquiryLookup();\\r\\n} else {\\r\\n\\tcallMainMenu();\\r\\n}\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 596,\\r\\n\\t\\\"end\\\": 620\\r\\n}\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonAdjustInventoryBack_onClick\",\n\t\t\t\"javascript\": \"callItemInquiryLookup();\",\n\t\t\t\"editorstatejson\": \"{\\r\\n\\t\\\"start\\\": 530,\\r\\n\\t\\\"end\\\": 530\\r\\n}\"\n\t\t}],\n\t\t\"items\": [\n\t\t{\n\t\t\t\"name\": \"MAINMENU\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"MAINMENU_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"HtmlBlank\",\n\t\t\t\"itemType\": \"html\",\n\t\t\t\"itemAction\": {\n\t\t\t},\n\t\t\t\"item\": {\n\t\t\t\t\"html\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryListReview\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Review\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryListReview_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryListSubmit\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Submit\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryListSubmit_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"subTheme\": \"left\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonItemInquiryListBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonItemInquiryListBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonIISearch\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Search\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonIISearch_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonClearIISearch\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Clear\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonClearIISearch_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryReviewBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryReviewBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryRemaining\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Remaining\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryRemaining_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryAll\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"All\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryAll_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryEntered\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Entered\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryEntered_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"HtmPPDetailBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"HtmPPDetailBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOPutawayList\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"View Route\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOPutawayList_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOPutawayListBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOPutawayListBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"HtmlUser\",\n\t\t\t\"itemType\": \"html\",\n\t\t\t\"itemAction\": {\n\t\t\t},\n\t\t\t\"item\": {\n\t\t\t\t\"html\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"html\": \"{userid}\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonCLNewLoc\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Next Bin\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"style\": \"text-align: left;\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonCLNewLoc_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonCLClear\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Clear\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"style\": \"text-align: left;\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonCLClear_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPLClear\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Clear\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPLClear_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPrintPOCKBO\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"POCKBO\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPrintPOCKBO_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPrintPOCKBOBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPrintPOCKBOBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOReceipt\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"PO Receipt\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOReceipt_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"POPrintMenu\",\n\t\t\t\"itemType\": \"disclosure-button\",\n\t\t\t\"itemAction\": {\n\t\t\t},\n\t\t\t\"item\": {\n\t\t\t\t\"disclosure\": {\n\t\t\t\t\t\"name\": \"layout:LayoutPOEntryPrintMenu\",\n\t\t\t\t\t\"type\": \"flyout\",\n\t\t\t\t\t\"size\": \"none\",\n\t\t\t\t\t\"flagAnimate\": true,\n\t\t\t\t\t\"animation\": {\n\t\t\t\t\t\t\"duration\": \"200\",\n\t\t\t\t\t\t\"tween\": \"ease-in-out\"\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHide\": true,\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHideDisclosure\": \"always\",\n\t\t\t\t\t\"rectangle\": {\n\t\t\t\t\t\t\"left\": \"100\",\n\t\t\t\t\t\t\"right\": \"100\",\n\t\t\t\t\t\t\"top\": \"100\",\n\t\t\t\t\t\t\"bottom\": \"100\",\n\t\t\t\t\t\t\"edge\": \"top\",\n\t\t\t\t\t\t\"fill\": \"width\",\n\t\t\t\t\t\t\"method\": \"SpecifyNow\"\n\t\t\t\t\t},\n\t\t\t\t\t\"show\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Print\",\n\t\t\t\t\t\t\"hasCustomHideButton\": false\n\t\t\t\t\t},\n\t\t\t\t\t\"hide\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Button\"\n\t\t\t\t\t},\n\t\t\t\t\t\"margin\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"PORECEIPTReviewMenu\",\n\t\t\t\"itemType\": \"disclosure-button\",\n\t\t\t\"itemAction\": {\n\t\t\t},\n\t\t\t\"item\": {\n\t\t\t\t\"disclosure\": {\n\t\t\t\t\t\"name\": \"layout:LayoutPOReceiptReviewMenu\",\n\t\t\t\t\t\"type\": \"flyout\",\n\t\t\t\t\t\"size\": \"none\",\n\t\t\t\t\t\"flagAnimate\": true,\n\t\t\t\t\t\"animation\": {\n\t\t\t\t\t\t\"duration\": \"200\",\n\t\t\t\t\t\t\"tween\": \"ease-in-out\"\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHide\": true,\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHideDisclosure\": \"always\",\n\t\t\t\t\t\"rectangle\": {\n\t\t\t\t\t\t\"left\": \"100\",\n\t\t\t\t\t\t\"right\": \"100\",\n\t\t\t\t\t\t\"top\": \"100\",\n\t\t\t\t\t\t\"bottom\": \"100\",\n\t\t\t\t\t\t\"edge\": \"top\",\n\t\t\t\t\t\t\"fill\": \"width\",\n\t\t\t\t\t\t\"method\": \"SpecifyNow\"\n\t\t\t\t\t},\n\t\t\t\t\t\"show\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Review\",\n\t\t\t\t\t\t\"hasCustomHideButton\": false\n\t\t\t\t\t},\n\t\t\t\t\t\"hide\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Button\"\n\t\t\t\t\t},\n\t\t\t\t\t\"margin\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryDelete\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Delete\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryDelete_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPOEntryPrintLabel\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Barcode Label\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPOEntryPrintLabel_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPLBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPLBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonPLLabelPrint\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Label\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonPLLabelPrint_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonCLLabelPrint\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Label\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"style\": \"text-align: left;\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonCLLabelPrint_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"DisclosurebuttonCLOptions\",\n\t\t\t\"itemType\": \"disclosure-button\",\n\t\t\t\"itemAction\": {\n\t\t\t},\n\t\t\t\"item\": {\n\t\t\t\t\"disclosure\": {\n\t\t\t\t\t\"name\": \"layout:LayoutCLOptionsMenu\",\n\t\t\t\t\t\"type\": \"flyout\",\n\t\t\t\t\t\"size\": \"none\",\n\t\t\t\t\t\"flagAnimate\": true,\n\t\t\t\t\t\"animation\": {\n\t\t\t\t\t\t\"duration\": \"200\",\n\t\t\t\t\t\t\"tween\": \"ease-in-out\"\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHide\": true,\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHideDisclosure\": \"always\",\n\t\t\t\t\t\"rectangle\": {\n\t\t\t\t\t\t\"left\": \"100\",\n\t\t\t\t\t\t\"right\": \"100\",\n\t\t\t\t\t\t\"top\": \"100\",\n\t\t\t\t\t\t\"bottom\": \"100\",\n\t\t\t\t\t\t\"edge\": \"top\",\n\t\t\t\t\t\t\"fill\": \"width\",\n\t\t\t\t\t\t\"method\": \"SpecifyNow\"\n\t\t\t\t\t},\n\t\t\t\t\t\"show\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Options\",\n\t\t\t\t\t\t\"hasCustomHideButton\": false\n\t\t\t\t\t},\n\t\t\t\t\t\"hide\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Button\"\n\t\t\t\t\t},\n\t\t\t\t\t\"margin\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonListItemsOnShelf\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"List\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"tip\": \"List the items contained on the shelf\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t\t\"show\": \"{dialog.object}.getValue('FROMSHELF').length != 0\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonListItemsOnShelf_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonBackToMoveItem\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonBackToMoveItem_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonIIMoveItem\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Change Shelf\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonIIMoveItem_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonIIAdjustQty\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Adjust Qty\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonIIAdjustQty_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"DisclosurebuttonIIOptions\",\n\t\t\t\"itemType\": \"disclosure-button\",\n\t\t\t\"itemAction\": {\n\t\t\t},\n\t\t\t\"item\": {\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"disclosure\": {\n\t\t\t\t\t\"name\": \"layout:MenuIIOptions\",\n\t\t\t\t\t\"type\": \"flyout-element\",\n\t\t\t\t\t\"size\": \"none\",\n\t\t\t\t\t\"flagAnimate\": true,\n\t\t\t\t\t\"animation\": {\n\t\t\t\t\t\t\"duration\": \"200\",\n\t\t\t\t\t\t\"tween\": \"ease-in-out\"\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHide\": true,\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"autoHideDisclosure\": \"always\",\n\t\t\t\t\t\"rectangle\": {\n\t\t\t\t\t\t\"left\": \"100\",\n\t\t\t\t\t\t\"right\": \"100\",\n\t\t\t\t\t\t\"top\": \"100\",\n\t\t\t\t\t\t\"bottom\": \"100\",\n\t\t\t\t\t\t\"edge\": \"top\",\n\t\t\t\t\t\t\"fill\": \"width\",\n\t\t\t\t\t\t\"method\": \"SpecifyNow\"\n\t\t\t\t\t},\n\t\t\t\t\t\"show\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Options\",\n\t\t\t\t\t\t\"hasCustomHideButton\": false\n\t\t\t\t\t},\n\t\t\t\t\t\"hide\": {\n\t\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\t\"html\": \"Button\"\n\t\t\t\t\t},\n\t\t\t\t\t\"margin\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonMovieItemBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonMovieItemBack_onClick\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"ButtonAdjustInventoryBack\",\n\t\t\t\"itemType\": \"button\",\n\t\t\t\"item\": {\n\t\t\t\t\"button\": {\n\t\t\t\t\t\"html\": \"Back\",\n\t\t\t\t\t\"specialType\": \"None\",\n\t\t\t\t\t\"special\": {\n\t\t\t\t\t\t\"setActivePanel\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t\"layout\": \"Text only\",\n\t\t\t\t\t\"subTheme\": \"left\",\n\t\t\t\t\t\"autoHideDisclosure\": \"auto\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"htmltitle\": {\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"leftOffset\": \"75px\",\n\t\t\t\t\t\"rightOffset\": \"75px\"\n\t\t\t\t},\n\t\t\t\t\"edit\": {\n\t\t\t\t\t\"update\": \"default\",\n\t\t\t\t\t\"bind\": {\n\t\t\t\t\t},\n\t\t\t\t\t\"settings\": {\n\t\t\t\t\t\t\"watermark\": {\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"itemAction\": {\n\t\t\t\t\"click\": \"ButtonAdjustInventoryBack_onClick\"\n\t\t\t}\n\t\t}],\n\t\t\"javascriptLocal\": [],\n\t\t\"data\": [\n\t\t{\n\t\t\t\"name\": \"userid\",\n\t\t\t\"datavalue\": \"Javascript:getuserid\"\n\t\t}],\n\t\t\"layouts\": [\n\t\t{\n\t\t\t\"name\": \"LayoutMainMenu\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"middle\": \"HtmlUser\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutReceivePO\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"MAINMENU\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"middle\": \"HtmlUser\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOEntry\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPOEntryBack\",\n\t\t\t\t\"middle\": \"POPrintMenu\",\n\t\t\t\t\"after\": \"PORECEIPTReviewMenu\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutItemInquiry\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"MAINMENU\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"after\": \"ButtonIISearch\",\n\t\t\t\t\"middle\": \"ButtonClearIISearch\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutItemInquiryList\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonItemInquiryListBack\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"middle\": \"HtmlUser\",\n\t\t\t\t\"after\": \"DisclosurebuttonIIOptions\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOEntryReviewAll\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPOEntryReviewBack\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"after\": \"PORECEIPTReviewMenu\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOEntryReviewRemaining\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPOEntryReviewBack\",\n\t\t\t\t\"after\": \"PORECEIPTReviewMenu\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOEntryReviewEntered\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPOEntryReviewBack\",\n\t\t\t\t\"after\": \"PORECEIPTReviewMenu\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOPutawayDetail\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"HtmPPDetailBack\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"after\": \"ButtonPOPutawayList\",\n\t\t\t\t\"middle\": \"ButtonPLLabelPrint\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOPutaway\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"MAINMENU\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"middle\": \"HtmlUser\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOPutawayList\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPOPutawayListBack\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutChangeLoc\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"MAINMENU\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"after\": \"DisclosurebuttonCLOptions\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutChangeUser\",\n\t\t\t\"default\": true,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"middle\": \"HtmlBlank\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPrintLabel\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPLBack\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"after\": \"ButtonPLClear\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPrintPOCKBO\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPrintPOCKBOBack\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOEntryPrintMenu\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"middle\": \"ButtonPOReceipt\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"middle\": \"ButtonPrintPOCKBO\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"middle\": \"ButtonPOEntryPrintLabel\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPrintPORECEIPT\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPrintPOCKBOBack\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOReceiptReviewMenu\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonPOEntryEntered\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonPOEntryRemaining\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonPOEntryAll\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutPOEntryDelete\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonPOEntryReviewBack\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutCLOptionsMenu\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonCLNewLoc\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonCLClear\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonCLLabelPrint\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutMoveInventory\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonMovieItemBack\",\n\t\t\t\t\"middle\": \"HtmlUser\",\n\t\t\t\t\"linetype\": \"Default\",\n\t\t\t\t\"after\": \"ButtonListItemsOnShelf\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutSelectMoveItem\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonBackToMoveItem\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"MenuIIOptions\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonIIMoveItem\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"after\": \"ButtonIIAdjustQty\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t},\n\t\t{\n\t\t\t\"name\": \"LayoutAdjustInventory\",\n\t\t\t\"default\": false,\n\t\t\t\"lines\": [\n\t\t\t{\n\t\t\t\t\"before\": \"ButtonAdjustInventoryBack\",\n\t\t\t\t\"linetype\": \"Default\"\n\t\t\t}]\n\t\t}],\n\t\t\"disclosures\": []\n\t},\n\t\"_state\": {\n\t\t\"showPane\": {\n\t\t\t\"css\": true,\n\t\t\t\"javascript\": true,\n\t\t\t\"items\": true,\n\t\t\t\"preview\": true\n\t\t},\n\t\t\"selected_action_C\": \"28\\r\\n\",\n\t\t\"selected_item_C\": \"37\\r\\n\",\n\t\t\"selected_layout_C\": \"17\\r\\n\",\n\t\t\"cssMode\": 1,\n\t\t\"jsMode\": 1,\n\t\t\"mode_items\": \"Filter\",\n\t\t\"mode_actions\": \"Filter\",\n\t\t\"mode_Layouts\": \"Filter\",\n\t\t\"mode_disclosures\": \"Filter\",\n\t\t\"previewSize\": \"433px\",\n\t\t\"tabPage\": \"Actions\",\n\t\t\"selected_data_c\": \"1\",\n\t\t\"selected_layoutLine_c\": \"1\"\n\t}\n}"
                     },
@@ -508,7 +500,15 @@
                     "style": "",
                     "controlContainerClass": "",
                     "controlContainerPreventFloat": false
-                }
+                },
+                "indentTree": 2,
+                "precalc": {
+                    "ControlHTML": "<div class=\"A5CWLayout\"   id=\"{dialog.componentName}.V.R{dialog.rownumber}.CONTROLBAR_FOOTER\" style=\"width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -webkit-box-sizing: border-box;\">\n</div><!--breakbegin--><br  style=\"clear:both; \" /><!--breakend-->\n",
+                    "DesignViewHTML": ""
+                },
+                "parentIsCollapsed": false,
+                "inPanelCard": false,
+                "inTreeControl": false
             },
             {
                 "controlType": "layout_directive_ContainerEnd",
@@ -3637,14 +3637,14 @@
             },
             {
                 "controlType": "layout_directive_PanelCardBegin",
-                "display": "{C=#104+150+112,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=0dec2085-ccbd-455e-b2ff-edc4a08c0e0d}{I:'$$web.panel.card'} [Panel Card: PANELCARD_POENTRY]",
+                "display": "{F=+I}{C=#104+150+112,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=0dec2085-ccbd-455e-b2ff-edc4a08c0e0d}{I:'$$web.panel.card'}{I:'$$navigate.next'} [Panel Card: PANELCARD_POENTRY] (items: 15) (COLLAPSED)",
                 "displayODFlat": "{Data=0dec2085-ccbd-455e-b2ff-edc4a08c0e0d}{I:'$$web.panel.card'} [Panel Card: PANELCARD_3]",
                 "idInternal": "0dec2085-ccbd-455e-b2ff-edc4a08c0e0d",
                 "lastIndex": 41,
                 "parentContainer": 1,
                 "displayOD": "{C=#104+150+112,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=0dec2085-ccbd-455e-b2ff-edc4a08c0e0d}{I:'$$web.panel.card'} [Panel Card: PANELCARD_3]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=#104+150+112,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=0dec2085-ccbd-455e-b2ff-edc4a08c0e0d}{I:'$$web.panel.card'} [Panel Card: PANELCARD_POENTRY]",
+                "displayODtree": "{F=+I}{C=#104+150+112,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=0dec2085-ccbd-455e-b2ff-edc4a08c0e0d}{I:'$$web.panel.card'}{I:'$$navigate.next'} [Panel Card: PANELCARD_POENTRY] (items: 15) (COLLAPSED)",
                 "crc": "4294904837",
                 "v": {
                     "container": {
@@ -3698,24 +3698,20 @@
                     "ControlHTML": "'xbasic\n\nv._dirty = .f.\n\n\n",
                     "DesignViewHTML": ""
                 },
-                "isCollapsed": false,
+                "isCollapsed": true,
                 "parentIsCollapsed": false,
                 "isCollapsedTemp": true
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=3e7e36e6-ac59-4632-9609-4170d1ae86e6}{I:'$$control.edit'} [CART]",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=3e7e36e6-ac59-4632-9609-4170d1ae86e6}{I:'$$control.edit'} [CART]{hidden}",
                 "displayODFlat": "{Data=3e7e36e6-ac59-4632-9609-4170d1ae86e6}{I:'$$control.edit'} [CART]",
                 "idInternal": "3e7e36e6-ac59-4632-9609-4170d1ae86e6",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=3e7e36e6-ac59-4632-9609-4170d1ae86e6}{I:'$$control.edit'} [CART]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=3e7e36e6-ac59-4632-9609-4170d1ae86e6}{I:'$$control.edit'} [CART]",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=3e7e36e6-ac59-4632-9609-4170d1ae86e6}{I:'$$control.edit'} [CART]{hidden}",
                 "crc": "4294966139",
-                "indentTree": 2,
-                "parentIsCollapsed": false,
-                "inPanelCard": true,
-                "inTreeControl": false,
                 "v": {
                     "controlType": "Textbox",
                     "variableName": "CART",
@@ -3724,12 +3720,14 @@
                     "watermark": {
                         "text": "<FieldLabel>"
                     },
+                    "precalc": {
+                        "javascriptAbstractSetupCode": ""
+                    },
                     "lookup": {
                         "editCombo": {
                             "openLookupOnFocus": false
                         }
                     },
-                    "textboxSubTheme": "",
                     "textboxAutocorrect": true,
                     "textboxAutoCapitalize": true,
                     "label": "Cart",
@@ -3749,8 +3747,6 @@
                     "clientSideFormat": {
                         "type": "Mask"
                     },
-                    "getFunction": "",
-                    "setFunction": "",
                     "onChange_ValidationOption": "Client-side only",
                     "dataBinding": {
                         "updateable": true,
@@ -3765,11 +3761,13 @@
                             "inkunits": 1
                         }
                     },
+                    "javascript": {
+                        "onkeypress": "if(event.keyCode==13){\n\tvalidateCart();\n} else {\n    return;\n}"
+                    },
+                    "textboxSubTheme": "",
+                    "getFunction": "",
+                    "setFunction": "",
                     "datePicker": {
-                        "friendlyDisplay": {
-                            "enabled": false,
-                            "settingsJSON": ""
-                        },
                         "displayTimePicker": false,
                         "openMethod": "ClickIcon",
                         "dateFormat": "<Default>",
@@ -3786,39 +3784,41 @@
                             "mask": ""
                         },
                         "timePickerOptionsDefined": false,
-                        "display": false
+                        "display": false,
+                        "friendlyDisplay": {
+                            "enabled": false,
+                            "settingsJSON": ""
+                        }
                     },
-                    "javascript": {
-                        "onkeypress": "if(event.keyCode==13){\n\tvalidateCart();\n} else {\n    return;\n}"
+                    "displayAsSlider": false,
+                    "flags": {
+                        "clientSideDefinition": false
                     },
                     "specialtype": "None",
                     "specialtypeJSON": "",
-                    "displayAsSlider": false,
                     "listView": {
                         "class": ""
-                    },
-                    "precalc": {
-                        "javascriptAbstractSetupCode": ""
-                    },
-                    "flags": {
-                        "clientSideDefinition": false
                     }
                 },
+                "indentTree": 2,
                 "precalc": {
                     "ControlHTML": "<div class=\"A5CWLayout\" style=\"width: 100%\" >\n\t<!--LblS--><label id=\"{grid.componentname}.LBL.R{grid.rownumber}.CART\" for=\"{grid.componentname}.V.R{grid.rownumber}.CART\" title=\"\" class=\"[class.dialogFieldLabel]\" style=\"float: left; width: __global.labelWidth__; box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -webkit-box-sizing: border-box;\">Cart</label>\n<!--LblE--><!--FldS--><div style=\"margin-left: __global.labelWidth__ ;\"><input\ttype=\"text\" id=\"{grid.componentname}.V.R{grid.rownumber}.CART\" title=\"\"     class=\"[class.dialogInput]\" style=\"width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -webkit-box-sizing: border-box;\"  onkeypress=\"if(event.keyCode==13){ \tvalidateCart(); } else {     return; }\"   name=\"V.R{grid.rownumber}.CART\"    value=\"\"    />\n</div><!--FldE-->\n</div>",
                     "DesignViewHTML": "",
                     "columnInfo": "'CART': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
-                }
+                },
+                "parentIsCollapsed": true,
+                "inPanelCard": true,
+                "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=8f77537a-9515-4d63-bf54-6e5cb264ffd2}{I:'$$control.edit'} [ITEM] ¶",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=8f77537a-9515-4d63-bf54-6e5cb264ffd2}{I:'$$control.edit'} [ITEM] ¶{hidden}",
                 "displayODFlat": "{Data=8f77537a-9515-4d63-bf54-6e5cb264ffd2}{I:'$$control.edit'} [ITEM]",
                 "idInternal": "8f77537a-9515-4d63-bf54-6e5cb264ffd2",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=8f77537a-9515-4d63-bf54-6e5cb264ffd2}{I:'$$control.edit'} [ITEM]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=8f77537a-9515-4d63-bf54-6e5cb264ffd2}{I:'$$control.edit'} [ITEM] ¶",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=8f77537a-9515-4d63-bf54-6e5cb264ffd2}{I:'$$control.edit'} [ITEM] ¶{hidden}",
                 "crc": "4294906159",
                 "v": {
                     "controlType": "Textbox",
@@ -3917,19 +3917,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'ITEM': {info: {controlType: 'Textbox',controlSubType: 'Auto-Suggest List'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=9bba9375-2f2c-488a-be24-85efbca23444}{I:'$$control.edit'} [DESCRIPTION] ¶",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=9bba9375-2f2c-488a-be24-85efbca23444}{I:'$$control.edit'} [DESCRIPTION] ¶{hidden}",
                 "displayODFlat": "{Data=9bba9375-2f2c-488a-be24-85efbca23444}{I:'$$control.edit'} [DESCRIPTION]",
                 "idInternal": "9bba9375-2f2c-488a-be24-85efbca23444",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=9bba9375-2f2c-488a-be24-85efbca23444}{I:'$$control.edit'} [DESCRIPTION]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=9bba9375-2f2c-488a-be24-85efbca23444}{I:'$$control.edit'} [DESCRIPTION] ¶",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=9bba9375-2f2c-488a-be24-85efbca23444}{I:'$$control.edit'} [DESCRIPTION] ¶{hidden}",
                 "crc": "4294935080",
                 "v": {
                     "controlType": "Textbox",
@@ -4023,19 +4023,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'DESCRIPTION': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=356f0819-4a2b-4608-a1bb-54662642fbd8}{I:'$$control.edit'} [VPARTNO] ¶",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=356f0819-4a2b-4608-a1bb-54662642fbd8}{I:'$$control.edit'} [VPARTNO] ¶{hidden}",
                 "displayODFlat": "{Data=356f0819-4a2b-4608-a1bb-54662642fbd8}{I:'$$control.edit'} [VPARTNO]",
                 "idInternal": "356f0819-4a2b-4608-a1bb-54662642fbd8",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=356f0819-4a2b-4608-a1bb-54662642fbd8}{I:'$$control.edit'} [VPARTNO]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=356f0819-4a2b-4608-a1bb-54662642fbd8}{I:'$$control.edit'} [VPARTNO] ¶",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=356f0819-4a2b-4608-a1bb-54662642fbd8}{I:'$$control.edit'} [VPARTNO] ¶{hidden}",
                 "crc": "4294904054",
                 "v": {
                     "controlType": "Textbox",
@@ -4131,19 +4131,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'VPARTNO': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970}{I:'$$control.edit'} [OPEN] ¶",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970}{I:'$$control.edit'} [OPEN] ¶{hidden}",
                 "displayODFlat": "{Data=6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970}{I:'$$control.edit'} [OPEN]",
                 "idInternal": "6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970}{I:'$$control.edit'} [OPEN]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970}{I:'$$control.edit'} [OPEN] ¶",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6ea3bd3c-c14f-4cb1-8f48-8ba8ff837970}{I:'$$control.edit'} [OPEN] ¶{hidden}",
                 "crc": "4294914716",
                 "v": {
                     "controlType": "Textbox",
@@ -4239,19 +4239,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'OPEN': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=c07003ee-56f3-4ea5-9b31-0dc871d0c200}{I:'$$control.edit'} [RECEIVED] ¶",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=c07003ee-56f3-4ea5-9b31-0dc871d0c200}{I:'$$control.edit'} [RECEIVED] ¶{hidden}",
                 "displayODFlat": "{Data=c07003ee-56f3-4ea5-9b31-0dc871d0c200}{I:'$$control.edit'} [RECEIVED]",
                 "idInternal": "c07003ee-56f3-4ea5-9b31-0dc871d0c200",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=c07003ee-56f3-4ea5-9b31-0dc871d0c200}{I:'$$control.edit'} [RECEIVED]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=c07003ee-56f3-4ea5-9b31-0dc871d0c200}{I:'$$control.edit'} [RECEIVED] ¶",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=c07003ee-56f3-4ea5-9b31-0dc871d0c200}{I:'$$control.edit'} [RECEIVED] ¶{hidden}",
                 "crc": "4294906792",
                 "v": {
                     "controlType": "Textbox",
@@ -4347,19 +4347,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'RECEIVED': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=748ce7fd-cc69-4bc1-be60-aba183641da7}{I:'$$control.edit'} [QTY] ¶",
+                "display": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=748ce7fd-cc69-4bc1-be60-aba183641da7}{I:'$$control.edit'} [QTY] ¶{hidden}",
                 "displayODFlat": "{Data=748ce7fd-cc69-4bc1-be60-aba183641da7}{I:'$$control.edit'} [QTY]",
                 "idInternal": "748ce7fd-cc69-4bc1-be60-aba183641da7",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=748ce7fd-cc69-4bc1-be60-aba183641da7}{I:'$$control.edit'} [QTY]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=748ce7fd-cc69-4bc1-be60-aba183641da7}{I:'$$control.edit'} [QTY] ¶",
+                "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=748ce7fd-cc69-4bc1-be60-aba183641da7}{I:'$$control.edit'} [QTY] ¶{hidden}",
                 "crc": "4294961181",
                 "v": {
                     "controlType": "Textbox",
@@ -4459,19 +4459,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'QTY': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=ecc6edb5-4363-40a4-b40e-8b554a486319}{I:'$$control.edit'} [PENDING] ¶",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=ecc6edb5-4363-40a4-b40e-8b554a486319}{I:'$$control.edit'} [PENDING] ¶{hidden}",
                 "displayODFlat": "{Data=ecc6edb5-4363-40a4-b40e-8b554a486319}{I:'$$control.edit'} [PENDING]",
                 "idInternal": "ecc6edb5-4363-40a4-b40e-8b554a486319",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=ecc6edb5-4363-40a4-b40e-8b554a486319}{I:'$$control.edit'} [PENDING]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=ecc6edb5-4363-40a4-b40e-8b554a486319}{I:'$$control.edit'} [PENDING] ¶",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=ecc6edb5-4363-40a4-b40e-8b554a486319}{I:'$$control.edit'} [PENDING] ¶{hidden}",
                 "crc": "4294913812",
                 "v": {
                     "controlType": "Textbox",
@@ -4568,19 +4568,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'PENDING': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=dd325c19-6beb-40fe-bf1a-8f2806bfbe77}{I:'$$control.edit'} [LINE]",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=dd325c19-6beb-40fe-bf1a-8f2806bfbe77}{I:'$$control.edit'} [LINE]{hidden}",
                 "displayODFlat": "{Data=dd325c19-6beb-40fe-bf1a-8f2806bfbe77}{I:'$$control.edit'} [LINE]",
                 "idInternal": "dd325c19-6beb-40fe-bf1a-8f2806bfbe77",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=dd325c19-6beb-40fe-bf1a-8f2806bfbe77}{I:'$$control.edit'} [LINE]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=dd325c19-6beb-40fe-bf1a-8f2806bfbe77}{I:'$$control.edit'} [LINE]",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=dd325c19-6beb-40fe-bf1a-8f2806bfbe77}{I:'$$control.edit'} [LINE]{hidden}",
                 "crc": "4294961248",
                 "v": {
                     "controlType": "Textbox",
@@ -4677,19 +4677,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'LINE': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=5abb44ba-2d47-45c8-83e8-7fad9d5703e7}{I:'$$control.edit'} [POEMETHOD]",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=5abb44ba-2d47-45c8-83e8-7fad9d5703e7}{I:'$$control.edit'} [POEMETHOD]{hidden}",
                 "displayODFlat": "{Data=5abb44ba-2d47-45c8-83e8-7fad9d5703e7}{I:'$$control.edit'} [POEMETHOD]",
                 "idInternal": "5abb44ba-2d47-45c8-83e8-7fad9d5703e7",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=5abb44ba-2d47-45c8-83e8-7fad9d5703e7}{I:'$$control.edit'} [POEMETHOD]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=5abb44ba-2d47-45c8-83e8-7fad9d5703e7}{I:'$$control.edit'} [POEMETHOD]",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=5abb44ba-2d47-45c8-83e8-7fad9d5703e7}{I:'$$control.edit'} [POEMETHOD]{hidden}",
                 "crc": "4294953926",
                 "v": {
                     "controlType": "Textbox",
@@ -4783,19 +4783,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'POEMETHOD': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=12a51e61-f9bd-4a2f-85fc-2c5136be1466}{I:'$$control.edit'} [DELETE]",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=12a51e61-f9bd-4a2f-85fc-2c5136be1466}{I:'$$control.edit'} [DELETE]{hidden}",
                 "displayODFlat": "{Data=12a51e61-f9bd-4a2f-85fc-2c5136be1466}{I:'$$control.edit'} [DELETE]",
                 "idInternal": "12a51e61-f9bd-4a2f-85fc-2c5136be1466",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=12a51e61-f9bd-4a2f-85fc-2c5136be1466}{I:'$$control.edit'} [DELETE]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=12a51e61-f9bd-4a2f-85fc-2c5136be1466}{I:'$$control.edit'} [DELETE]",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=12a51e61-f9bd-4a2f-85fc-2c5136be1466}{I:'$$control.edit'} [DELETE]{hidden}",
                 "crc": "4294935033",
                 "v": {
                     "controlType": "Textbox",
@@ -4888,19 +4888,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'DELETE': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=d820ae41-ba77-47ae-a37d-9158359a91af}{I:'$$control.edit'} [POSESSNO]",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=d820ae41-ba77-47ae-a37d-9158359a91af}{I:'$$control.edit'} [POSESSNO]{hidden}",
                 "displayODFlat": "{Data=d820ae41-ba77-47ae-a37d-9158359a91af}{I:'$$control.edit'} [POSESSNO]",
                 "idInternal": "d820ae41-ba77-47ae-a37d-9158359a91af",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=d820ae41-ba77-47ae-a37d-9158359a91af}{I:'$$control.edit'} [POSESSNO]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=d820ae41-ba77-47ae-a37d-9158359a91af}{I:'$$control.edit'} [POSESSNO]",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=d820ae41-ba77-47ae-a37d-9158359a91af}{I:'$$control.edit'} [POSESSNO]{hidden}",
                 "crc": "4294923124",
                 "v": {
                     "controlType": "Textbox",
@@ -4993,19 +4993,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'POSESSNO': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=beaa6b04-2239-4260-9072-1074c8b9a9e1}{I:'$$control.edit'} [POCKBOITEM]",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=beaa6b04-2239-4260-9072-1074c8b9a9e1}{I:'$$control.edit'} [POCKBOITEM]{hidden}",
                 "displayODFlat": "{Data=beaa6b04-2239-4260-9072-1074c8b9a9e1}{I:'$$control.edit'} [POCKBOITEM]",
                 "idInternal": "beaa6b04-2239-4260-9072-1074c8b9a9e1",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=beaa6b04-2239-4260-9072-1074c8b9a9e1}{I:'$$control.edit'} [POCKBOITEM]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=beaa6b04-2239-4260-9072-1074c8b9a9e1}{I:'$$control.edit'} [POCKBOITEM]",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=beaa6b04-2239-4260-9072-1074c8b9a9e1}{I:'$$control.edit'} [POCKBOITEM]{hidden}",
                 "crc": "4294906424",
                 "v": {
                     "controlType": "Textbox",
@@ -5098,19 +5098,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'POCKBOITEM': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "dialog_formcontrol",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=b2fbd713-9f06-43db-ac90-56218e29e8c3}{I:'$$control.edit'} [POCKBOQTY]",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=b2fbd713-9f06-43db-ac90-56218e29e8c3}{I:'$$control.edit'} [POCKBOQTY]{hidden}",
                 "displayODFlat": "{Data=b2fbd713-9f06-43db-ac90-56218e29e8c3}{I:'$$control.edit'} [POCKBOQTY]",
                 "idInternal": "b2fbd713-9f06-43db-ac90-56218e29e8c3",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=b2fbd713-9f06-43db-ac90-56218e29e8c3}{I:'$$control.edit'} [POCKBOQTY]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=b2fbd713-9f06-43db-ac90-56218e29e8c3}{I:'$$control.edit'} [POCKBOQTY]",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=b2fbd713-9f06-43db-ac90-56218e29e8c3}{I:'$$control.edit'} [POCKBOQTY]{hidden}",
                 "crc": "4294961778",
                 "v": {
                     "controlType": "Textbox",
@@ -5203,19 +5203,19 @@
                     "DesignViewHTML": "",
                     "columnInfo": "'POCKBOQTY': {info: {controlType: 'Textbox'}, hiddenVal: false, type: 'input,label', isCalc: false, hlp: '', isArray: false, dataType: 'C'  }\n"
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "layout_directive_button",
-                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6fab8266-a045-4c28-a399-f82671ac8b79}{I:'$$control.button'} [Button: Submit] ¶",
+                "display": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6fab8266-a045-4c28-a399-f82671ac8b79}{I:'$$control.button'} [Button: Submit] ¶{hidden}",
                 "displayODFlat": "{Data=6fab8266-a045-4c28-a399-f82671ac8b79}{I:'$$control.button'} [Button]",
                 "idInternal": "6fab8266-a045-4c28-a399-f82671ac8b79",
                 "parentContainer": 25,
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6fab8266-a045-4c28-a399-f82671ac8b79}{I:'$$control.button'} [Button]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6fab8266-a045-4c28-a399-f82671ac8b79}{I:'$$control.button'} [Button: Submit] ¶",
+                "displayODtree": "{C=System-ButtonShadow,White}{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=6fab8266-a045-4c28-a399-f82671ac8b79}{I:'$$control.button'} [Button: Submit] ¶{hidden}",
                 "crc": "4294921341",
                 "v": {
                     "buttonText": "Submit",
@@ -5277,25 +5277,25 @@
                     "ControlHTML": "<div class=\"A5container\">\n\t<button type=\"button\" id=\"{dialog.componentName}.V.R{dialog.rownumber}.BUTTON_SUBMITITEM\"    ></button>\n</div><!--breakbegin--><br  style=\"clear:both; \" /><!--breakend-->",
                     "DesignViewHTML": ""
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "inPanelCard": true,
                 "inTreeControl": false
             },
             {
                 "controlType": "layout_directive_PanelCardEnd",
-                "display": "{C=#104+150+1120,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3}{I:'vertLineCap'} [Panel Card End: PANELCARD_POENTRY]",
+                "display": "{C=#104+150+1120,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3}{I:'vertLineCap'} [Panel Card End: PANELCARD_POENTRY]{hidden}",
                 "displayODFlat": "{Data=60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3}{I:'vertlinecap'} [Panel Card End]",
                 "idInternal": "60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3",
                 "parentContainer": 1,
                 "displayOD": "{C=#104+150+1120,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3}{I:'vertlinecap'} [Panel Card End]",
                 "repeatingSectionParentId": -1,
-                "displayODtree": "{C=#104+150+1120,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3}{I:'vertLineCap'} [Panel Card End: PANELCARD_POENTRY]",
+                "displayODtree": "{C=#104+150+1120,White}{B=White,#104+150+112}{F=+B}{I:'vertLine'}{Data=60b1f25b-5058-4e7c-acbd-6f9a6d6e52e3}{I:'vertLineCap'} [Panel Card End: PANELCARD_POENTRY]{hidden}",
                 "indentTree": 1,
                 "precalc": {
                     "ControlHTML": "'xbasic\nv._dirty = .f.\n",
                     "DesignViewHTML": ""
                 },
-                "parentIsCollapsed": false,
+                "parentIsCollapsed": true,
                 "containerStartIndex": 25
             },
             {
@@ -5374,7 +5374,11 @@
                 "displayOD": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=cf150de0_df1d_4a16_9d4e_50704a0c91e8}{I:'$$control.browse'} [MOVELIST]",
                 "repeatingSectionParentId": -1,
                 "displayODtree": "{B=White,Light Blue}{I:'vertLine'}{I:'vertLine'}{Data=cf150de0_df1d_4a16_9d4e_50704a0c91e8}{I:'$$control.browse'} [MOVELIST]",
-                "crc": "4294952369",
+                "crc": "4294940982",
+                "indentTree": 2,
+                "parentIsCollapsed": false,
+                "inPanelCard": true,
+                "inTreeControl": false,
                 "v": {
                     "controlType": "List",
                     "variableName": "MOVELIST",
@@ -5382,18 +5386,12 @@
                     "watermark": {
                         "text": "<FieldLabel>"
                     },
-                    "precalc": {
-                        "javascriptAbstractSetupCode": "",
-                        "controlHTMLInPanelCard": "in panel card",
-                        "javascript_listViewData": "{dialog.object}._listViewData['MOVELIST'] = [[dialog.listViewData.MOVELIST]]; ",
-                        "javascript_listViewSettings": "{dialog.object}._listViewSettings['MOVELIST'] = [[dialog.listViewSettings.MOVELIST]]; ",
-                        "javascript_listview": "{dialog.object}._controls['MOVELIST'] =  { type: 'list',  data: {dialog.object}._listViewData['MOVELIST'],  onInitialize: function() { \n\t\tvar pe = $(this.contId).parentElement;\n\t\tif(typeof this.listVariableName != 'undefined') { \n\t\t\tvar _cn = '{dialog.componentName}_' + this.listVariableName.toUpperCase() + '_2';\n\t\t\t$acn(pe,_cn);\n\t\t}\n\t\n},  settings: {dialog.object}._listViewSettings['MOVELIST'] }"
-                    },
                     "lookup": {
                         "editCombo": {
                             "openLookupOnFocus": false
                         }
                     },
+                    "textboxSubTheme": "",
                     "textboxAutocorrect": true,
                     "textboxAutoCapitalize": true,
                     "label": "MOVELIST",
@@ -5413,6 +5411,8 @@
                     "clientSideFormat": {
                         "type": "Mask"
                     },
+                    "getFunction": "",
+                    "setFunction": "",
                     "onChange_ValidationOption": "Client-side only",
                     "dataBinding": {
                         "updateable": true,
@@ -5427,24 +5427,17 @@
                             "inkunits": 1
                         }
                     },
-                    "textboxSubTheme": "",
-                    "getFunction": "",
-                    "setFunction": "",
                     "datePicker": {
-                        "displayTimePicker": false,
-                        "display": false,
                         "friendlyDisplay": {
                             "enabled": false,
                             "settingsJSON": ""
-                        }
-                    },
-                    "displayAsSlider": false,
-                    "flags": {
-                        "clientSideDefinition": false
+                        },
+                        "display": false,
+                        "displayTimePicker": false
                     },
                     "listView": {
-                        "class": "<Default>",
                         "listGUID": "d6885e26-1061-4a6b-a8b5-c45daeeb6daf",
+                        "class": "<Default>",
                         "style": "",
                         "dataSourceType": "SQL",
                         "overrides": "",
@@ -5557,7 +5550,7 @@
                             "filter": "",
                             "distinct": false,
                             "order": "",
-                            "sqlstatement": "SELECT b.bin, a.item, b.itmdesc, b.ionhand, a.qonhand, a.loctid, a.qserial, b.mpartno  FROM iciqty a \t INNER JOIN icitem b \t\t ON  a.item = b.item   WHERE a.qstore = :VP_FROMSHELF  AND  a.qonhand > 0  AND  a.loctid = :VP_LOCTID  AND  a.qonhand > 0  AND  a.qserial <> '_OVERSHIP'   ORDER BY a.item",
+                            "sqlstatement": "SELECT b.bin, a.item, b.itmdesc, b.ionhand, a.qonhand, a.loctid, a.qserial, b.mpartno  FROM iciqty a \t INNER JOIN icitem b \t\t ON  a.item = b.item   WHERE a.qstore = :VP_FROMSHELF  AND  a.qonhand > 0  AND  a.qonhand > 0  AND  a.qserial <> '_OVERSHIP'   ORDER BY a.item",
                             "portableSQL": true,
                             "first": -1,
                             "primaryKey": "a.id_col",
@@ -7157,6 +7150,110 @@
                                 }
                             ]
                         },
+                        "dataBinding": {
+                            "tablesArray": {
+                                "tables": [
+                                    {
+                                        "table": "iciqty",
+                                        "owner": "",
+                                        "alias": "a",
+                                        "primaryKeyFields": "id_col",
+                                        "mapPrimaryKeyToListQuery": "",
+                                        "primaryKeyIsAutoIncrement": true,
+                                        "sequenceName": "",
+                                        "sqlInsertSequence": "",
+                                        "tableInfo": "qserial=C|F|T|Character|!!|qserial\nloctid=C|F|T|Character|!!|loctid\nitem=C|F|T|Character|!!|item\nlotno=C|F|T|Character|!!|lotno\nqtranno=C|F|T|Character|!!|qtranno\nqsoaloc=N|F|T|Number|!!|qsoaloc\nqwoaloc=N|F|T|Number|!!|qwoaloc\nqonhand=N|F|T|Number|!!|qonhand\nqonhnd1=N|F|T|Number|!!|qonhnd1\nqtmaloc=N|F|T|Number|!!|qtmaloc\nissued=T|F|T|DateTime|!!|issued\nqstore=C|F|T|Character|!!|qstore\nqbin=C|F|T|Character|!!|qbin\ntmpstr1=C|F|T|Character|!!|tmpstr1\ntmpnum1=N|F|T|Number|!!|tmpnum1\nclosctr=N|F|T|Number|!!|closctr\notranno=C|F|T|Character|!!|otranno\nadduser=C|F|T|Character|!!|adduser\nadddate=T|F|T|DateTime|!!|adddate\naddtime=C|F|T|Character|!!|addtime\nlckstat=C|F|T|Character|!!|lckstat\nlckuser=C|F|T|Character|!!|lckuser\nlckdate=T|F|T|DateTime|!!|lckdate\nlcktime=C|F|T|Character|!!|lcktime\nlicid=C|F|T|Character|!!|licid\nqsorsrv=N|F|T|Number|!!|qsorsrv\nqcost=N|F|T|Number|!!|qcost\nid_col=N|T|T|Integer32|!!|id_col\n",
+                                        "tableInfoCRC": -1,
+                                        "updateWhereClause": "{qserial}=(qserial = :old_qserial OR qserial IS NULL AND :old_qserial IS NULL)\n{loctid}=(loctid = :old_loctid OR loctid IS NULL AND :old_loctid IS NULL)\n{item}=(item = :old_item OR item IS NULL AND :old_item IS NULL)\n{lotno}=(lotno = :old_lotno OR lotno IS NULL AND :old_lotno IS NULL)\n{qtranno}=(qtranno = :old_qtranno OR qtranno IS NULL AND :old_qtranno IS NULL)\n{qsoaloc}=(qsoaloc = :old_qsoaloc OR qsoaloc IS NULL AND :old_qsoaloc IS NULL)\n{qwoaloc}=(qwoaloc = :old_qwoaloc OR qwoaloc IS NULL AND :old_qwoaloc IS NULL)\n{qonhand}=(qonhand = :old_qonhand OR qonhand IS NULL AND :old_qonhand IS NULL)\n{qonhnd1}=(qonhnd1 = :old_qonhnd1 OR qonhnd1 IS NULL AND :old_qonhnd1 IS NULL)\n{qtmaloc}=(qtmaloc = :old_qtmaloc OR qtmaloc IS NULL AND :old_qtmaloc IS NULL)\n{issued}=(issued = :old_issued OR issued IS NULL AND :old_issued IS NULL)\n{qstore}=(qstore = :old_qstore OR qstore IS NULL AND :old_qstore IS NULL)\n{qbin}=(qbin = :old_qbin OR qbin IS NULL AND :old_qbin IS NULL)\n{tmpstr1}=(tmpstr1 = :old_tmpstr1 OR tmpstr1 IS NULL AND :old_tmpstr1 IS NULL)\n{tmpnum1}=(tmpnum1 = :old_tmpnum1 OR tmpnum1 IS NULL AND :old_tmpnum1 IS NULL)\n{closctr}=(closctr = :old_closctr OR closctr IS NULL AND :old_closctr IS NULL)\n{otranno}=(otranno = :old_otranno OR otranno IS NULL AND :old_otranno IS NULL)\n{adduser}=(adduser = :old_adduser OR adduser IS NULL AND :old_adduser IS NULL)\n{adddate}=(adddate = :old_adddate OR adddate IS NULL AND :old_adddate IS NULL)\n{addtime}=(addtime = :old_addtime OR addtime IS NULL AND :old_addtime IS NULL)\n{lckstat}=(lckstat = :old_lckstat OR lckstat IS NULL AND :old_lckstat IS NULL)\n{lckuser}=(lckuser = :old_lckuser OR lckuser IS NULL AND :old_lckuser IS NULL)\n{lckdate}=(lckdate = :old_lckdate OR lckdate IS NULL AND :old_lckdate IS NULL)\n{lcktime}=(lcktime = :old_lcktime OR lcktime IS NULL AND :old_lcktime IS NULL)\n{licid}=(licid = :old_licid OR licid IS NULL AND :old_licid IS NULL)\n{qsorsrv}=(qsorsrv = :old_qsorsrv OR qsorsrv IS NULL AND :old_qsorsrv IS NULL)\n{qcost}=(qcost = :old_qcost OR qcost IS NULL AND :old_qcost IS NULL)\n{id_col}=id_col = :old_id_col\n",
+                                        "updateWhereClauseNative": "",
+                                        "allowInsert": true,
+                                        "allowUpdate": true,
+                                        "allowDelete": true,
+                                        "deleteType": "Hard",
+                                        "deleteField": "",
+                                        "readonly": false,
+                                        "securityGroups_insert": "",
+                                        "securityGroups_update": "",
+                                        "securityGroups_delete": "",
+                                        "serversidePermission_insert": "",
+                                        "serversidePermission_update": "",
+                                        "serversidePermission_delete": "",
+                                        "joinDefinition": "",
+                                        "parentAlias": "",
+                                        "events": {
+                                            "beforeInsert": "",
+                                            "beforeUpdate": "",
+                                            "beforeDelete": "",
+                                            "afterInsert": "",
+                                            "afterUpdate": "",
+                                            "afterDelete": "",
+                                            "onWriteConflict": "",
+                                            "onSQLError": ""
+                                        },
+                                        "geography": {
+                                            "geocodeFieldDefinition": "",
+                                            "locationFieldDefinition": ""
+                                        },
+                                        "flagStoreLocationInformationC": "No",
+                                        "flagStoreLocationInformation": false,
+                                        "latField": "",
+                                        "lngField": "",
+                                        "flagUpdateLocationField": false,
+                                        "storeLocationWhen": "InsertOnly",
+                                        "locationFieldNameForLatLng": ""
+                                    },
+                                    {
+                                        "table": "icitem",
+                                        "owner": "",
+                                        "alias": "b",
+                                        "primaryKeyFields": "id_col",
+                                        "mapPrimaryKeyToListQuery": "",
+                                        "primaryKeyIsAutoIncrement": true,
+                                        "sequenceName": "",
+                                        "sqlInsertSequence": "",
+                                        "tableInfo": "item=C|F|T|Character|!!|item\nitmdesc=C|F|T|Character|!!|itmdesc\nplinid=C|F|T|Character|!!|plinid\naltitm1=C|F|T|Character|!!|altitm1\naltitm2=C|F|T|Character|!!|altitm2\nsuplier=C|F|T|Character|!!|suplier\nstkumid=C|F|T|Character|!!|stkumid\nsumfact=N|F|T|Number|!!|sumfact\npumfact=N|F|T|Number|!!|pumfact\nsunmsid=C|F|T|Character|!!|sunmsid\npunmsid=C|F|T|Character|!!|punmsid\navgcost=N|F|T|Number|!!|avgcost\nstdcost=N|F|T|Number|!!|stdcost\nlstcost=N|F|T|Number|!!|lstcost\nionhand=N|F|T|Number|!!|ionhand\nipusvl=N|F|T|Number|!!|ipusvl\nipslvl=N|F|T|Number|!!|ipslvl\nipusqt=N|F|T|Number|!!|ipusqt\nipslqt=N|F|T|Number|!!|ipslqt\niyusvl=N|F|T|Number|!!|iyusvl\niyslvl=N|F|T|Number|!!|iyslvl\niyusqt=N|F|T|Number|!!|iyusqt\niyslqt=N|F|T|Number|!!|iyslqt\nilsale=T|F|T|DateTime|!!|ilsale\nilrecv=T|F|T|DateTime|!!|ilrecv\nilpcnt=T|F|T|DateTime|!!|ilpcnt\nilordr=T|F|T|DateTime|!!|ilordr\nprice=N|F|T|Number|!!|price\nprice2=N|F|T|Number|!!|price2\nlevel2=N|F|T|Number|!!|level2\nprice3=N|F|T|Number|!!|price3\nlevel3=N|F|T|Number|!!|level3\nsdisrat=N|F|T|Number|!!|sdisrat\nloadpct=N|F|T|Number|!!|loadpct\ndecnum=N|F|T|Number|!!|decnum\ntaxcode=C|F|T|Character|!!|taxcode\nabccode=C|F|T|Character|!!|abccode\ncntcode=C|F|T|Character|!!|cntcode\nupccode=C|F|T|Character|!!|upccode\nstkcode=C|F|T|Character|!!|stkcode\ntype=C|F|T|Character|!!|type\ncomcode=C|F|T|Character|!!|comcode\nresell=L|F|T|Boolean|!!|resell\nhistory=L|F|T|Boolean|!!|history\nuselots=C|F|T|Character|!!|uselots\nuseserl=C|F|T|Character|!!|useserl\nmakeitr=L|F|T|Boolean|!!|makeitr\npurextr=L|F|T|Boolean|!!|purextr\ndefcost=C|F|T|Character|!!|defcost\nphantom=L|F|T|Boolean|!!|phantom\nonbom=L|F|T|Boolean|!!|onbom\ngenpob=L|F|T|Boolean|!!|genpob\nweight=N|F|T|Number|!!|weight\nitmclss=C|F|T|Character|!!|itmclss\ncode=C|F|T|Character|!!|code\nbarcode=C|F|T|Character|!!|barcode\ncommpln=C|F|T|Character|!!|commpln\nnserial=N|F|T|Number|!!|nserial\nnlotno=N|F|T|Number|!!|nlotno\nitmmemo=C|F|F|VaryingCharacter|!!|itmmemo\ndrpshp=L|F|T|Boolean|!!|drpshp\ninspect=L|F|T|Boolean|!!|inspect\nsubcom=L|F|T|Boolean|!!|subcom\nadduser=C|F|T|Character|!!|adduser\nadddate=T|F|T|DateTime|!!|adddate\naddtime=C|F|T|Character|!!|addtime\nlckstat=C|F|T|Character|!!|lckstat\nlckuser=C|F|T|Character|!!|lckuser\nlckdate=T|F|T|DateTime|!!|lckdate\nlcktime=C|F|T|Character|!!|lcktime\nwebprice=N|F|T|Number|!!|webprice\nshpdays=N|F|T|Number|!!|shpdays\nesellable=L|F|T|Boolean|!!|esellable\nsavgcst=N|F|T|Number|!!|savgcst\nsstdcst=N|F|T|Number|!!|sstdcst\nslstcst=N|F|T|Number|!!|slstcst\npavgcst=N|F|T|Number|!!|pavgcst\npstdcst=N|F|T|Number|!!|pstdcst\nplstcst=N|F|T|Number|!!|plstcst\nitemstat=C|F|T|Character|!!|itemstat\ncmpumid=C|F|T|Character|!!|cmpumid\ncmpumfact=N|F|T|Number|!!|cmpumfact\nmanufac=C|F|T|Character|!!|manufac\nmpartno=C|F|T|Character|!!|mpartno\nbin=C|F|T|Character|!!|bin\nusagea=N|F|T|Number|!!|usagea\nusageb=N|F|T|Number|!!|usageb\nusagec=N|F|T|Number|!!|usagec\norderpt=N|F|T|Number|!!|orderpt\nordqty=N|F|T|Number|!!|ordqty\nordincr=N|F|T|Number|!!|ordincr\nnusera=N|F|T|Number|!!|nusera\nnuserb=N|F|T|Number|!!|nuserb\nnuserc=N|F|T|Number|!!|nuserc\ncasepack=N|F|T|Number|!!|casepack\ndefloct=C|F|T|Character|!!|defloct\nblclass=C|F|T|Character|!!|blclass\ncubeamt=N|F|T|Number|!!|cubeamt\nbldesc=C|F|F|VaryingCharacter|!!|bldesc\nrfid=C|F|T|Character|!!|rfid\nnmfcufc=C|F|T|Character|!!|nmfcufc\nclassrate=C|F|T|Character|!!|classrate\nstkfee=N|F|T|Number|!!|stkfee\nwntid=C|F|T|Character|!!|wntid\nsomin=N|F|T|Number|!!|somin\nitmdesc2=C|F|F|VaryingCharacter|!!|itmdesc2\nitmdesc3=C|F|F|VaryingCharacter|!!|itmdesc3\nitmdesc4=C|F|F|VaryingCharacter|!!|itmdesc4\nitmdesc5=C|F|F|VaryingCharacter|!!|itmdesc5\nitmdesc6=C|F|F|VaryingCharacter|!!|itmdesc6\naltitmid=C|F|T|Character|!!|altitmid\neimagesm=C|F|T|Character|!!|eimagesm\neimagemd=C|F|T|Character|!!|eimagemd\neimagelg=C|F|T|Character|!!|eimagelg\neimagexl=C|F|T|Character|!!|eimagexl\nespecial=L|F|T|Boolean|!!|especial\nefeatured=L|F|T|Boolean|!!|efeatured\nerecurring=L|F|T|Boolean|!!|erecurring\netemplate=C|F|T|Character|!!|etemplate\nelink=C|F|F|VaryingCharacter|!!|elink\nenoshipchg=L|F|T|Boolean|!!|enoshipchg\nnoshipcalc=L|F|T|Boolean|!!|noshipcalc\nmsrp=N|F|T|Number|!!|msrp\nestyle=C|F|T|Character|!!|estyle\nestyle1=C|F|T|Character|!!|estyle1\nestyle2=C|F|T|Character|!!|estyle2\nlistorder=N|F|T|Number|!!|listorder\nelength=N|F|T|Number|!!|elength\newidth=N|F|T|Number|!!|ewidth\neheight=N|F|T|Number|!!|eheight\nsolopack=L|F|T|Boolean|!!|solopack\nnoreturn=L|F|T|Boolean|!!|noreturn\nitmdesc7=C|F|F|VaryingCharacter|!!|itmdesc7\nitemgen=B|F|F|VaryingBinary|!!|itemgen\nid_col=N|T|T|Integer32|!!|id_col\n",
+                                        "tableInfoCRC": -1,
+                                        "updateWhereClause": "{item}=(item = :old_item OR item IS NULL AND :old_item IS NULL)\n{itmdesc}=(itmdesc = :old_itmdesc OR itmdesc IS NULL AND :old_itmdesc IS NULL)\n{plinid}=(plinid = :old_plinid OR plinid IS NULL AND :old_plinid IS NULL)\n{altitm1}=(altitm1 = :old_altitm1 OR altitm1 IS NULL AND :old_altitm1 IS NULL)\n{altitm2}=(altitm2 = :old_altitm2 OR altitm2 IS NULL AND :old_altitm2 IS NULL)\n{suplier}=(suplier = :old_suplier OR suplier IS NULL AND :old_suplier IS NULL)\n{stkumid}=(stkumid = :old_stkumid OR stkumid IS NULL AND :old_stkumid IS NULL)\n{sumfact}=(sumfact = :old_sumfact OR sumfact IS NULL AND :old_sumfact IS NULL)\n{pumfact}=(pumfact = :old_pumfact OR pumfact IS NULL AND :old_pumfact IS NULL)\n{sunmsid}=(sunmsid = :old_sunmsid OR sunmsid IS NULL AND :old_sunmsid IS NULL)\n{punmsid}=(punmsid = :old_punmsid OR punmsid IS NULL AND :old_punmsid IS NULL)\n{avgcost}=(avgcost = :old_avgcost OR avgcost IS NULL AND :old_avgcost IS NULL)\n{stdcost}=(stdcost = :old_stdcost OR stdcost IS NULL AND :old_stdcost IS NULL)\n{lstcost}=(lstcost = :old_lstcost OR lstcost IS NULL AND :old_lstcost IS NULL)\n{ionhand}=(ionhand = :old_ionhand OR ionhand IS NULL AND :old_ionhand IS NULL)\n{ipusvl}=(ipusvl = :old_ipusvl OR ipusvl IS NULL AND :old_ipusvl IS NULL)\n{ipslvl}=(ipslvl = :old_ipslvl OR ipslvl IS NULL AND :old_ipslvl IS NULL)\n{ipusqt}=(ipusqt = :old_ipusqt OR ipusqt IS NULL AND :old_ipusqt IS NULL)\n{ipslqt}=(ipslqt = :old_ipslqt OR ipslqt IS NULL AND :old_ipslqt IS NULL)\n{iyusvl}=(iyusvl = :old_iyusvl OR iyusvl IS NULL AND :old_iyusvl IS NULL)\n{iyslvl}=(iyslvl = :old_iyslvl OR iyslvl IS NULL AND :old_iyslvl IS NULL)\n{iyusqt}=(iyusqt = :old_iyusqt OR iyusqt IS NULL AND :old_iyusqt IS NULL)\n{iyslqt}=(iyslqt = :old_iyslqt OR iyslqt IS NULL AND :old_iyslqt IS NULL)\n{ilsale}=(ilsale = :old_ilsale OR ilsale IS NULL AND :old_ilsale IS NULL)\n{ilrecv}=(ilrecv = :old_ilrecv OR ilrecv IS NULL AND :old_ilrecv IS NULL)\n{ilpcnt}=(ilpcnt = :old_ilpcnt OR ilpcnt IS NULL AND :old_ilpcnt IS NULL)\n{ilordr}=(ilordr = :old_ilordr OR ilordr IS NULL AND :old_ilordr IS NULL)\n{price}=(price = :old_price OR price IS NULL AND :old_price IS NULL)\n{price2}=(price2 = :old_price2 OR price2 IS NULL AND :old_price2 IS NULL)\n{level2}=(level2 = :old_level2 OR level2 IS NULL AND :old_level2 IS NULL)\n{price3}=(price3 = :old_price3 OR price3 IS NULL AND :old_price3 IS NULL)\n{level3}=(level3 = :old_level3 OR level3 IS NULL AND :old_level3 IS NULL)\n{sdisrat}=(sdisrat = :old_sdisrat OR sdisrat IS NULL AND :old_sdisrat IS NULL)\n{loadpct}=(loadpct = :old_loadpct OR loadpct IS NULL AND :old_loadpct IS NULL)\n{decnum}=(decnum = :old_decnum OR decnum IS NULL AND :old_decnum IS NULL)\n{taxcode}=(taxcode = :old_taxcode OR taxcode IS NULL AND :old_taxcode IS NULL)\n{abccode}=(abccode = :old_abccode OR abccode IS NULL AND :old_abccode IS NULL)\n{cntcode}=(cntcode = :old_cntcode OR cntcode IS NULL AND :old_cntcode IS NULL)\n{upccode}=(upccode = :old_upccode OR upccode IS NULL AND :old_upccode IS NULL)\n{stkcode}=(stkcode = :old_stkcode OR stkcode IS NULL AND :old_stkcode IS NULL)\n{type}=(type = :old_type OR type IS NULL AND :old_type IS NULL)\n{comcode}=(comcode = :old_comcode OR comcode IS NULL AND :old_comcode IS NULL)\n{resell}=(resell = :old_resell OR resell IS NULL AND :old_resell IS NULL)\n{history}=(history = :old_history OR history IS NULL AND :old_history IS NULL)\n{uselots}=(uselots = :old_uselots OR uselots IS NULL AND :old_uselots IS NULL)\n{useserl}=(useserl = :old_useserl OR useserl IS NULL AND :old_useserl IS NULL)\n{makeitr}=(makeitr = :old_makeitr OR makeitr IS NULL AND :old_makeitr IS NULL)\n{purextr}=(purextr = :old_purextr OR purextr IS NULL AND :old_purextr IS NULL)\n{defcost}=(defcost = :old_defcost OR defcost IS NULL AND :old_defcost IS NULL)\n{phantom}=(phantom = :old_phantom OR phantom IS NULL AND :old_phantom IS NULL)\n{onbom}=(onbom = :old_onbom OR onbom IS NULL AND :old_onbom IS NULL)\n{genpob}=(genpob = :old_genpob OR genpob IS NULL AND :old_genpob IS NULL)\n{weight}=(weight = :old_weight OR weight IS NULL AND :old_weight IS NULL)\n{itmclss}=(itmclss = :old_itmclss OR itmclss IS NULL AND :old_itmclss IS NULL)\n{code}=(code = :old_code OR code IS NULL AND :old_code IS NULL)\n{barcode}=(barcode = :old_barcode OR barcode IS NULL AND :old_barcode IS NULL)\n{commpln}=(commpln = :old_commpln OR commpln IS NULL AND :old_commpln IS NULL)\n{nserial}=(nserial = :old_nserial OR nserial IS NULL AND :old_nserial IS NULL)\n{nlotno}=(nlotno = :old_nlotno OR nlotno IS NULL AND :old_nlotno IS NULL)\n{itmmemo}=(itmmemo = :old_itmmemo OR itmmemo IS NULL AND :old_itmmemo IS NULL)\n{drpshp}=(drpshp = :old_drpshp OR drpshp IS NULL AND :old_drpshp IS NULL)\n{inspect}=(inspect = :old_inspect OR inspect IS NULL AND :old_inspect IS NULL)\n{subcom}=(subcom = :old_subcom OR subcom IS NULL AND :old_subcom IS NULL)\n{adduser}=(adduser = :old_adduser OR adduser IS NULL AND :old_adduser IS NULL)\n{adddate}=(adddate = :old_adddate OR adddate IS NULL AND :old_adddate IS NULL)\n{addtime}=(addtime = :old_addtime OR addtime IS NULL AND :old_addtime IS NULL)\n{lckstat}=(lckstat = :old_lckstat OR lckstat IS NULL AND :old_lckstat IS NULL)\n{lckuser}=(lckuser = :old_lckuser OR lckuser IS NULL AND :old_lckuser IS NULL)\n{lckdate}=(lckdate = :old_lckdate OR lckdate IS NULL AND :old_lckdate IS NULL)\n{lcktime}=(lcktime = :old_lcktime OR lcktime IS NULL AND :old_lcktime IS NULL)\n{webprice}=(webprice = :old_webprice OR webprice IS NULL AND :old_webprice IS NULL)\n{shpdays}=(shpdays = :old_shpdays OR shpdays IS NULL AND :old_shpdays IS NULL)\n{esellable}=(esellable = :old_esellable OR esellable IS NULL AND :old_esellable IS NULL)\n{savgcst}=(savgcst = :old_savgcst OR savgcst IS NULL AND :old_savgcst IS NULL)\n{sstdcst}=(sstdcst = :old_sstdcst OR sstdcst IS NULL AND :old_sstdcst IS NULL)\n{slstcst}=(slstcst = :old_slstcst OR slstcst IS NULL AND :old_slstcst IS NULL)\n{pavgcst}=(pavgcst = :old_pavgcst OR pavgcst IS NULL AND :old_pavgcst IS NULL)\n{pstdcst}=(pstdcst = :old_pstdcst OR pstdcst IS NULL AND :old_pstdcst IS NULL)\n{plstcst}=(plstcst = :old_plstcst OR plstcst IS NULL AND :old_plstcst IS NULL)\n{itemstat}=(itemstat = :old_itemstat OR itemstat IS NULL AND :old_itemstat IS NULL)\n{cmpumid}=(cmpumid = :old_cmpumid OR cmpumid IS NULL AND :old_cmpumid IS NULL)\n{cmpumfact}=(cmpumfact = :old_cmpumfact OR cmpumfact IS NULL AND :old_cmpumfact IS NULL)\n{manufac}=(manufac = :old_manufac OR manufac IS NULL AND :old_manufac IS NULL)\n{mpartno}=(mpartno = :old_mpartno OR mpartno IS NULL AND :old_mpartno IS NULL)\n{bin}=(bin = :old_bin OR bin IS NULL AND :old_bin IS NULL)\n{usagea}=(usagea = :old_usagea OR usagea IS NULL AND :old_usagea IS NULL)\n{usageb}=(usageb = :old_usageb OR usageb IS NULL AND :old_usageb IS NULL)\n{usagec}=(usagec = :old_usagec OR usagec IS NULL AND :old_usagec IS NULL)\n{orderpt}=(orderpt = :old_orderpt OR orderpt IS NULL AND :old_orderpt IS NULL)\n{ordqty}=(ordqty = :old_ordqty OR ordqty IS NULL AND :old_ordqty IS NULL)\n{ordincr}=(ordincr = :old_ordincr OR ordincr IS NULL AND :old_ordincr IS NULL)\n{nusera}=(nusera = :old_nusera OR nusera IS NULL AND :old_nusera IS NULL)\n{nuserb}=(nuserb = :old_nuserb OR nuserb IS NULL AND :old_nuserb IS NULL)\n{nuserc}=(nuserc = :old_nuserc OR nuserc IS NULL AND :old_nuserc IS NULL)\n{casepack}=(casepack = :old_casepack OR casepack IS NULL AND :old_casepack IS NULL)\n{defloct}=(defloct = :old_defloct OR defloct IS NULL AND :old_defloct IS NULL)\n{blclass}=(blclass = :old_blclass OR blclass IS NULL AND :old_blclass IS NULL)\n{cubeamt}=(cubeamt = :old_cubeamt OR cubeamt IS NULL AND :old_cubeamt IS NULL)\n{bldesc}=(bldesc = :old_bldesc OR bldesc IS NULL AND :old_bldesc IS NULL)\n{rfid}=(rfid = :old_rfid OR rfid IS NULL AND :old_rfid IS NULL)\n{nmfcufc}=(nmfcufc = :old_nmfcufc OR nmfcufc IS NULL AND :old_nmfcufc IS NULL)\n{classrate}=(classrate = :old_classrate OR classrate IS NULL AND :old_classrate IS NULL)\n{stkfee}=(stkfee = :old_stkfee OR stkfee IS NULL AND :old_stkfee IS NULL)\n{wntid}=(wntid = :old_wntid OR wntid IS NULL AND :old_wntid IS NULL)\n{somin}=(somin = :old_somin OR somin IS NULL AND :old_somin IS NULL)\n{itmdesc2}=(itmdesc2 = :old_itmdesc2 OR itmdesc2 IS NULL AND :old_itmdesc2 IS NULL)\n{itmdesc3}=(itmdesc3 = :old_itmdesc3 OR itmdesc3 IS NULL AND :old_itmdesc3 IS NULL)\n{itmdesc4}=(itmdesc4 = :old_itmdesc4 OR itmdesc4 IS NULL AND :old_itmdesc4 IS NULL)\n{itmdesc5}=(itmdesc5 = :old_itmdesc5 OR itmdesc5 IS NULL AND :old_itmdesc5 IS NULL)\n{itmdesc6}=(itmdesc6 = :old_itmdesc6 OR itmdesc6 IS NULL AND :old_itmdesc6 IS NULL)\n{altitmid}=(altitmid = :old_altitmid OR altitmid IS NULL AND :old_altitmid IS NULL)\n{eimagesm}=(eimagesm = :old_eimagesm OR eimagesm IS NULL AND :old_eimagesm IS NULL)\n{eimagemd}=(eimagemd = :old_eimagemd OR eimagemd IS NULL AND :old_eimagemd IS NULL)\n{eimagelg}=(eimagelg = :old_eimagelg OR eimagelg IS NULL AND :old_eimagelg IS NULL)\n{eimagexl}=(eimagexl = :old_eimagexl OR eimagexl IS NULL AND :old_eimagexl IS NULL)\n{especial}=(especial = :old_especial OR especial IS NULL AND :old_especial IS NULL)\n{efeatured}=(efeatured = :old_efeatured OR efeatured IS NULL AND :old_efeatured IS NULL)\n{erecurring}=(erecurring = :old_erecurring OR erecurring IS NULL AND :old_erecurring IS NULL)\n{etemplate}=(etemplate = :old_etemplate OR etemplate IS NULL AND :old_etemplate IS NULL)\n{elink}=(elink = :old_elink OR elink IS NULL AND :old_elink IS NULL)\n{enoshipchg}=(enoshipchg = :old_enoshipchg OR enoshipchg IS NULL AND :old_enoshipchg IS NULL)\n{noshipcalc}=(noshipcalc = :old_noshipcalc OR noshipcalc IS NULL AND :old_noshipcalc IS NULL)\n{msrp}=(msrp = :old_msrp OR msrp IS NULL AND :old_msrp IS NULL)\n{estyle}=(estyle = :old_estyle OR estyle IS NULL AND :old_estyle IS NULL)\n{estyle1}=(estyle1 = :old_estyle1 OR estyle1 IS NULL AND :old_estyle1 IS NULL)\n{estyle2}=(estyle2 = :old_estyle2 OR estyle2 IS NULL AND :old_estyle2 IS NULL)\n{listorder}=(listorder = :old_listorder OR listorder IS NULL AND :old_listorder IS NULL)\n{elength}=(elength = :old_elength OR elength IS NULL AND :old_elength IS NULL)\n{ewidth}=(ewidth = :old_ewidth OR ewidth IS NULL AND :old_ewidth IS NULL)\n{eheight}=(eheight = :old_eheight OR eheight IS NULL AND :old_eheight IS NULL)\n{solopack}=(solopack = :old_solopack OR solopack IS NULL AND :old_solopack IS NULL)\n{noreturn}=(noreturn = :old_noreturn OR noreturn IS NULL AND :old_noreturn IS NULL)\n{itmdesc7}=(itmdesc7 = :old_itmdesc7 OR itmdesc7 IS NULL AND :old_itmdesc7 IS NULL)\n{itemgen}=(itemgen = :old_itemgen OR itemgen IS NULL AND :old_itemgen IS NULL)\n{id_col}=id_col = :old_id_col\n",
+                                        "updateWhereClauseNative": "",
+                                        "allowInsert": true,
+                                        "allowUpdate": true,
+                                        "allowDelete": true,
+                                        "deleteType": "Hard",
+                                        "deleteField": "",
+                                        "readonly": false,
+                                        "securityGroups_insert": "",
+                                        "securityGroups_update": "",
+                                        "securityGroups_delete": "",
+                                        "serversidePermission_insert": "",
+                                        "serversidePermission_update": "",
+                                        "serversidePermission_delete": "",
+                                        "joinDefinition": "[\n{\n\tleft: 'item',\n\tright: 'item'\n}]",
+                                        "parentAlias": "a",
+                                        "events": {
+                                            "beforeInsert": "",
+                                            "beforeUpdate": "",
+                                            "beforeDelete": "",
+                                            "afterInsert": "",
+                                            "afterUpdate": "",
+                                            "afterDelete": "",
+                                            "onWriteConflict": "",
+                                            "onSQLError": ""
+                                        },
+                                        "geography": {
+                                            "geocodeFieldDefinition": "",
+                                            "locationFieldDefinition": ""
+                                        },
+                                        "flagStoreLocationInformationC": "No",
+                                        "flagStoreLocationInformation": false,
+                                        "latField": "",
+                                        "lngField": "",
+                                        "flagUpdateLocationField": false,
+                                        "storeLocationWhen": "InsertOnly",
+                                        "locationFieldNameForLatLng": ""
+                                    }
+                                ]
+                            }
+                        },
                         "odata": {
                             "url": "http://services.odata.org/V4/Northwind/Northwind.svc",
                             "serviceType": "OData",
@@ -7287,114 +7384,20 @@
                         "__xbjs": "ps.__checkedImage = \"svgIcon=#alpha-icon-checkCircle:icon,24\"\nps.__uncheckedImage = \"svgIcon=#alpha-icon-circle:icon,24\"",
                         "_templateCSS": "\n",
                         "allchildren": "",
-                        "optimizeJSONSize": true,
-                        "dataBinding": {
-                            "tablesArray": {
-                                "tables": [
-                                    {
-                                        "table": "iciqty",
-                                        "owner": "",
-                                        "alias": "a",
-                                        "primaryKeyFields": "id_col",
-                                        "mapPrimaryKeyToListQuery": "",
-                                        "primaryKeyIsAutoIncrement": true,
-                                        "sequenceName": "",
-                                        "sqlInsertSequence": "",
-                                        "tableInfo": "qserial=C|F|T|Character|!!|qserial\nloctid=C|F|T|Character|!!|loctid\nitem=C|F|T|Character|!!|item\nlotno=C|F|T|Character|!!|lotno\nqtranno=C|F|T|Character|!!|qtranno\nqsoaloc=N|F|T|Number|!!|qsoaloc\nqwoaloc=N|F|T|Number|!!|qwoaloc\nqonhand=N|F|T|Number|!!|qonhand\nqonhnd1=N|F|T|Number|!!|qonhnd1\nqtmaloc=N|F|T|Number|!!|qtmaloc\nissued=T|F|T|DateTime|!!|issued\nqstore=C|F|T|Character|!!|qstore\nqbin=C|F|T|Character|!!|qbin\ntmpstr1=C|F|T|Character|!!|tmpstr1\ntmpnum1=N|F|T|Number|!!|tmpnum1\nclosctr=N|F|T|Number|!!|closctr\notranno=C|F|T|Character|!!|otranno\nadduser=C|F|T|Character|!!|adduser\nadddate=T|F|T|DateTime|!!|adddate\naddtime=C|F|T|Character|!!|addtime\nlckstat=C|F|T|Character|!!|lckstat\nlckuser=C|F|T|Character|!!|lckuser\nlckdate=T|F|T|DateTime|!!|lckdate\nlcktime=C|F|T|Character|!!|lcktime\nlicid=C|F|T|Character|!!|licid\nqsorsrv=N|F|T|Number|!!|qsorsrv\nqcost=N|F|T|Number|!!|qcost\nid_col=N|T|T|Integer32|!!|id_col\n",
-                                        "tableInfoCRC": -1,
-                                        "updateWhereClause": "{qserial}=(qserial = :old_qserial OR qserial IS NULL AND :old_qserial IS NULL)\n{loctid}=(loctid = :old_loctid OR loctid IS NULL AND :old_loctid IS NULL)\n{item}=(item = :old_item OR item IS NULL AND :old_item IS NULL)\n{lotno}=(lotno = :old_lotno OR lotno IS NULL AND :old_lotno IS NULL)\n{qtranno}=(qtranno = :old_qtranno OR qtranno IS NULL AND :old_qtranno IS NULL)\n{qsoaloc}=(qsoaloc = :old_qsoaloc OR qsoaloc IS NULL AND :old_qsoaloc IS NULL)\n{qwoaloc}=(qwoaloc = :old_qwoaloc OR qwoaloc IS NULL AND :old_qwoaloc IS NULL)\n{qonhand}=(qonhand = :old_qonhand OR qonhand IS NULL AND :old_qonhand IS NULL)\n{qonhnd1}=(qonhnd1 = :old_qonhnd1 OR qonhnd1 IS NULL AND :old_qonhnd1 IS NULL)\n{qtmaloc}=(qtmaloc = :old_qtmaloc OR qtmaloc IS NULL AND :old_qtmaloc IS NULL)\n{issued}=(issued = :old_issued OR issued IS NULL AND :old_issued IS NULL)\n{qstore}=(qstore = :old_qstore OR qstore IS NULL AND :old_qstore IS NULL)\n{qbin}=(qbin = :old_qbin OR qbin IS NULL AND :old_qbin IS NULL)\n{tmpstr1}=(tmpstr1 = :old_tmpstr1 OR tmpstr1 IS NULL AND :old_tmpstr1 IS NULL)\n{tmpnum1}=(tmpnum1 = :old_tmpnum1 OR tmpnum1 IS NULL AND :old_tmpnum1 IS NULL)\n{closctr}=(closctr = :old_closctr OR closctr IS NULL AND :old_closctr IS NULL)\n{otranno}=(otranno = :old_otranno OR otranno IS NULL AND :old_otranno IS NULL)\n{adduser}=(adduser = :old_adduser OR adduser IS NULL AND :old_adduser IS NULL)\n{adddate}=(adddate = :old_adddate OR adddate IS NULL AND :old_adddate IS NULL)\n{addtime}=(addtime = :old_addtime OR addtime IS NULL AND :old_addtime IS NULL)\n{lckstat}=(lckstat = :old_lckstat OR lckstat IS NULL AND :old_lckstat IS NULL)\n{lckuser}=(lckuser = :old_lckuser OR lckuser IS NULL AND :old_lckuser IS NULL)\n{lckdate}=(lckdate = :old_lckdate OR lckdate IS NULL AND :old_lckdate IS NULL)\n{lcktime}=(lcktime = :old_lcktime OR lcktime IS NULL AND :old_lcktime IS NULL)\n{licid}=(licid = :old_licid OR licid IS NULL AND :old_licid IS NULL)\n{qsorsrv}=(qsorsrv = :old_qsorsrv OR qsorsrv IS NULL AND :old_qsorsrv IS NULL)\n{qcost}=(qcost = :old_qcost OR qcost IS NULL AND :old_qcost IS NULL)\n{id_col}=id_col = :old_id_col\n",
-                                        "updateWhereClauseNative": "",
-                                        "allowInsert": true,
-                                        "allowUpdate": true,
-                                        "allowDelete": true,
-                                        "deleteType": "Hard",
-                                        "deleteField": "",
-                                        "readonly": false,
-                                        "securityGroups_insert": "",
-                                        "securityGroups_update": "",
-                                        "securityGroups_delete": "",
-                                        "serversidePermission_insert": "",
-                                        "serversidePermission_update": "",
-                                        "serversidePermission_delete": "",
-                                        "joinDefinition": "",
-                                        "parentAlias": "",
-                                        "events": {
-                                            "beforeInsert": "",
-                                            "beforeUpdate": "",
-                                            "beforeDelete": "",
-                                            "afterInsert": "",
-                                            "afterUpdate": "",
-                                            "afterDelete": "",
-                                            "onWriteConflict": "",
-                                            "onSQLError": ""
-                                        },
-                                        "geography": {
-                                            "geocodeFieldDefinition": "",
-                                            "locationFieldDefinition": ""
-                                        },
-                                        "flagStoreLocationInformationC": "No",
-                                        "flagStoreLocationInformation": false,
-                                        "latField": "",
-                                        "lngField": "",
-                                        "flagUpdateLocationField": false,
-                                        "storeLocationWhen": "InsertOnly",
-                                        "locationFieldNameForLatLng": ""
-                                    },
-                                    {
-                                        "table": "icitem",
-                                        "owner": "",
-                                        "alias": "b",
-                                        "primaryKeyFields": "id_col",
-                                        "mapPrimaryKeyToListQuery": "",
-                                        "primaryKeyIsAutoIncrement": true,
-                                        "sequenceName": "",
-                                        "sqlInsertSequence": "",
-                                        "tableInfo": "item=C|F|T|Character|!!|item\nitmdesc=C|F|T|Character|!!|itmdesc\nplinid=C|F|T|Character|!!|plinid\naltitm1=C|F|T|Character|!!|altitm1\naltitm2=C|F|T|Character|!!|altitm2\nsuplier=C|F|T|Character|!!|suplier\nstkumid=C|F|T|Character|!!|stkumid\nsumfact=N|F|T|Number|!!|sumfact\npumfact=N|F|T|Number|!!|pumfact\nsunmsid=C|F|T|Character|!!|sunmsid\npunmsid=C|F|T|Character|!!|punmsid\navgcost=N|F|T|Number|!!|avgcost\nstdcost=N|F|T|Number|!!|stdcost\nlstcost=N|F|T|Number|!!|lstcost\nionhand=N|F|T|Number|!!|ionhand\nipusvl=N|F|T|Number|!!|ipusvl\nipslvl=N|F|T|Number|!!|ipslvl\nipusqt=N|F|T|Number|!!|ipusqt\nipslqt=N|F|T|Number|!!|ipslqt\niyusvl=N|F|T|Number|!!|iyusvl\niyslvl=N|F|T|Number|!!|iyslvl\niyusqt=N|F|T|Number|!!|iyusqt\niyslqt=N|F|T|Number|!!|iyslqt\nilsale=T|F|T|DateTime|!!|ilsale\nilrecv=T|F|T|DateTime|!!|ilrecv\nilpcnt=T|F|T|DateTime|!!|ilpcnt\nilordr=T|F|T|DateTime|!!|ilordr\nprice=N|F|T|Number|!!|price\nprice2=N|F|T|Number|!!|price2\nlevel2=N|F|T|Number|!!|level2\nprice3=N|F|T|Number|!!|price3\nlevel3=N|F|T|Number|!!|level3\nsdisrat=N|F|T|Number|!!|sdisrat\nloadpct=N|F|T|Number|!!|loadpct\ndecnum=N|F|T|Number|!!|decnum\ntaxcode=C|F|T|Character|!!|taxcode\nabccode=C|F|T|Character|!!|abccode\ncntcode=C|F|T|Character|!!|cntcode\nupccode=C|F|T|Character|!!|upccode\nstkcode=C|F|T|Character|!!|stkcode\ntype=C|F|T|Character|!!|type\ncomcode=C|F|T|Character|!!|comcode\nresell=L|F|T|Boolean|!!|resell\nhistory=L|F|T|Boolean|!!|history\nuselots=C|F|T|Character|!!|uselots\nuseserl=C|F|T|Character|!!|useserl\nmakeitr=L|F|T|Boolean|!!|makeitr\npurextr=L|F|T|Boolean|!!|purextr\ndefcost=C|F|T|Character|!!|defcost\nphantom=L|F|T|Boolean|!!|phantom\nonbom=L|F|T|Boolean|!!|onbom\ngenpob=L|F|T|Boolean|!!|genpob\nweight=N|F|T|Number|!!|weight\nitmclss=C|F|T|Character|!!|itmclss\ncode=C|F|T|Character|!!|code\nbarcode=C|F|T|Character|!!|barcode\ncommpln=C|F|T|Character|!!|commpln\nnserial=N|F|T|Number|!!|nserial\nnlotno=N|F|T|Number|!!|nlotno\nitmmemo=C|F|F|VaryingCharacter|!!|itmmemo\ndrpshp=L|F|T|Boolean|!!|drpshp\ninspect=L|F|T|Boolean|!!|inspect\nsubcom=L|F|T|Boolean|!!|subcom\nadduser=C|F|T|Character|!!|adduser\nadddate=T|F|T|DateTime|!!|adddate\naddtime=C|F|T|Character|!!|addtime\nlckstat=C|F|T|Character|!!|lckstat\nlckuser=C|F|T|Character|!!|lckuser\nlckdate=T|F|T|DateTime|!!|lckdate\nlcktime=C|F|T|Character|!!|lcktime\nwebprice=N|F|T|Number|!!|webprice\nshpdays=N|F|T|Number|!!|shpdays\nesellable=L|F|T|Boolean|!!|esellable\nsavgcst=N|F|T|Number|!!|savgcst\nsstdcst=N|F|T|Number|!!|sstdcst\nslstcst=N|F|T|Number|!!|slstcst\npavgcst=N|F|T|Number|!!|pavgcst\npstdcst=N|F|T|Number|!!|pstdcst\nplstcst=N|F|T|Number|!!|plstcst\nitemstat=C|F|T|Character|!!|itemstat\ncmpumid=C|F|T|Character|!!|cmpumid\ncmpumfact=N|F|T|Number|!!|cmpumfact\nmanufac=C|F|T|Character|!!|manufac\nmpartno=C|F|T|Character|!!|mpartno\nbin=C|F|T|Character|!!|bin\nusagea=N|F|T|Number|!!|usagea\nusageb=N|F|T|Number|!!|usageb\nusagec=N|F|T|Number|!!|usagec\norderpt=N|F|T|Number|!!|orderpt\nordqty=N|F|T|Number|!!|ordqty\nordincr=N|F|T|Number|!!|ordincr\nnusera=N|F|T|Number|!!|nusera\nnuserb=N|F|T|Number|!!|nuserb\nnuserc=N|F|T|Number|!!|nuserc\ncasepack=N|F|T|Number|!!|casepack\ndefloct=C|F|T|Character|!!|defloct\nblclass=C|F|T|Character|!!|blclass\ncubeamt=N|F|T|Number|!!|cubeamt\nbldesc=C|F|F|VaryingCharacter|!!|bldesc\nrfid=C|F|T|Character|!!|rfid\nnmfcufc=C|F|T|Character|!!|nmfcufc\nclassrate=C|F|T|Character|!!|classrate\nstkfee=N|F|T|Number|!!|stkfee\nwntid=C|F|T|Character|!!|wntid\nsomin=N|F|T|Number|!!|somin\nitmdesc2=C|F|F|VaryingCharacter|!!|itmdesc2\nitmdesc3=C|F|F|VaryingCharacter|!!|itmdesc3\nitmdesc4=C|F|F|VaryingCharacter|!!|itmdesc4\nitmdesc5=C|F|F|VaryingCharacter|!!|itmdesc5\nitmdesc6=C|F|F|VaryingCharacter|!!|itmdesc6\naltitmid=C|F|T|Character|!!|altitmid\neimagesm=C|F|T|Character|!!|eimagesm\neimagemd=C|F|T|Character|!!|eimagemd\neimagelg=C|F|T|Character|!!|eimagelg\neimagexl=C|F|T|Character|!!|eimagexl\nespecial=L|F|T|Boolean|!!|especial\nefeatured=L|F|T|Boolean|!!|efeatured\nerecurring=L|F|T|Boolean|!!|erecurring\netemplate=C|F|T|Character|!!|etemplate\nelink=C|F|F|VaryingCharacter|!!|elink\nenoshipchg=L|F|T|Boolean|!!|enoshipchg\nnoshipcalc=L|F|T|Boolean|!!|noshipcalc\nmsrp=N|F|T|Number|!!|msrp\nestyle=C|F|T|Character|!!|estyle\nestyle1=C|F|T|Character|!!|estyle1\nestyle2=C|F|T|Character|!!|estyle2\nlistorder=N|F|T|Number|!!|listorder\nelength=N|F|T|Number|!!|elength\newidth=N|F|T|Number|!!|ewidth\neheight=N|F|T|Number|!!|eheight\nsolopack=L|F|T|Boolean|!!|solopack\nnoreturn=L|F|T|Boolean|!!|noreturn\nitmdesc7=C|F|F|VaryingCharacter|!!|itmdesc7\nitemgen=B|F|F|VaryingBinary|!!|itemgen\nid_col=N|T|T|Integer32|!!|id_col\n",
-                                        "tableInfoCRC": -1,
-                                        "updateWhereClause": "{item}=(item = :old_item OR item IS NULL AND :old_item IS NULL)\n{itmdesc}=(itmdesc = :old_itmdesc OR itmdesc IS NULL AND :old_itmdesc IS NULL)\n{plinid}=(plinid = :old_plinid OR plinid IS NULL AND :old_plinid IS NULL)\n{altitm1}=(altitm1 = :old_altitm1 OR altitm1 IS NULL AND :old_altitm1 IS NULL)\n{altitm2}=(altitm2 = :old_altitm2 OR altitm2 IS NULL AND :old_altitm2 IS NULL)\n{suplier}=(suplier = :old_suplier OR suplier IS NULL AND :old_suplier IS NULL)\n{stkumid}=(stkumid = :old_stkumid OR stkumid IS NULL AND :old_stkumid IS NULL)\n{sumfact}=(sumfact = :old_sumfact OR sumfact IS NULL AND :old_sumfact IS NULL)\n{pumfact}=(pumfact = :old_pumfact OR pumfact IS NULL AND :old_pumfact IS NULL)\n{sunmsid}=(sunmsid = :old_sunmsid OR sunmsid IS NULL AND :old_sunmsid IS NULL)\n{punmsid}=(punmsid = :old_punmsid OR punmsid IS NULL AND :old_punmsid IS NULL)\n{avgcost}=(avgcost = :old_avgcost OR avgcost IS NULL AND :old_avgcost IS NULL)\n{stdcost}=(stdcost = :old_stdcost OR stdcost IS NULL AND :old_stdcost IS NULL)\n{lstcost}=(lstcost = :old_lstcost OR lstcost IS NULL AND :old_lstcost IS NULL)\n{ionhand}=(ionhand = :old_ionhand OR ionhand IS NULL AND :old_ionhand IS NULL)\n{ipusvl}=(ipusvl = :old_ipusvl OR ipusvl IS NULL AND :old_ipusvl IS NULL)\n{ipslvl}=(ipslvl = :old_ipslvl OR ipslvl IS NULL AND :old_ipslvl IS NULL)\n{ipusqt}=(ipusqt = :old_ipusqt OR ipusqt IS NULL AND :old_ipusqt IS NULL)\n{ipslqt}=(ipslqt = :old_ipslqt OR ipslqt IS NULL AND :old_ipslqt IS NULL)\n{iyusvl}=(iyusvl = :old_iyusvl OR iyusvl IS NULL AND :old_iyusvl IS NULL)\n{iyslvl}=(iyslvl = :old_iyslvl OR iyslvl IS NULL AND :old_iyslvl IS NULL)\n{iyusqt}=(iyusqt = :old_iyusqt OR iyusqt IS NULL AND :old_iyusqt IS NULL)\n{iyslqt}=(iyslqt = :old_iyslqt OR iyslqt IS NULL AND :old_iyslqt IS NULL)\n{ilsale}=(ilsale = :old_ilsale OR ilsale IS NULL AND :old_ilsale IS NULL)\n{ilrecv}=(ilrecv = :old_ilrecv OR ilrecv IS NULL AND :old_ilrecv IS NULL)\n{ilpcnt}=(ilpcnt = :old_ilpcnt OR ilpcnt IS NULL AND :old_ilpcnt IS NULL)\n{ilordr}=(ilordr = :old_ilordr OR ilordr IS NULL AND :old_ilordr IS NULL)\n{price}=(price = :old_price OR price IS NULL AND :old_price IS NULL)\n{price2}=(price2 = :old_price2 OR price2 IS NULL AND :old_price2 IS NULL)\n{level2}=(level2 = :old_level2 OR level2 IS NULL AND :old_level2 IS NULL)\n{price3}=(price3 = :old_price3 OR price3 IS NULL AND :old_price3 IS NULL)\n{level3}=(level3 = :old_level3 OR level3 IS NULL AND :old_level3 IS NULL)\n{sdisrat}=(sdisrat = :old_sdisrat OR sdisrat IS NULL AND :old_sdisrat IS NULL)\n{loadpct}=(loadpct = :old_loadpct OR loadpct IS NULL AND :old_loadpct IS NULL)\n{decnum}=(decnum = :old_decnum OR decnum IS NULL AND :old_decnum IS NULL)\n{taxcode}=(taxcode = :old_taxcode OR taxcode IS NULL AND :old_taxcode IS NULL)\n{abccode}=(abccode = :old_abccode OR abccode IS NULL AND :old_abccode IS NULL)\n{cntcode}=(cntcode = :old_cntcode OR cntcode IS NULL AND :old_cntcode IS NULL)\n{upccode}=(upccode = :old_upccode OR upccode IS NULL AND :old_upccode IS NULL)\n{stkcode}=(stkcode = :old_stkcode OR stkcode IS NULL AND :old_stkcode IS NULL)\n{type}=(type = :old_type OR type IS NULL AND :old_type IS NULL)\n{comcode}=(comcode = :old_comcode OR comcode IS NULL AND :old_comcode IS NULL)\n{resell}=(resell = :old_resell OR resell IS NULL AND :old_resell IS NULL)\n{history}=(history = :old_history OR history IS NULL AND :old_history IS NULL)\n{uselots}=(uselots = :old_uselots OR uselots IS NULL AND :old_uselots IS NULL)\n{useserl}=(useserl = :old_useserl OR useserl IS NULL AND :old_useserl IS NULL)\n{makeitr}=(makeitr = :old_makeitr OR makeitr IS NULL AND :old_makeitr IS NULL)\n{purextr}=(purextr = :old_purextr OR purextr IS NULL AND :old_purextr IS NULL)\n{defcost}=(defcost = :old_defcost OR defcost IS NULL AND :old_defcost IS NULL)\n{phantom}=(phantom = :old_phantom OR phantom IS NULL AND :old_phantom IS NULL)\n{onbom}=(onbom = :old_onbom OR onbom IS NULL AND :old_onbom IS NULL)\n{genpob}=(genpob = :old_genpob OR genpob IS NULL AND :old_genpob IS NULL)\n{weight}=(weight = :old_weight OR weight IS NULL AND :old_weight IS NULL)\n{itmclss}=(itmclss = :old_itmclss OR itmclss IS NULL AND :old_itmclss IS NULL)\n{code}=(code = :old_code OR code IS NULL AND :old_code IS NULL)\n{barcode}=(barcode = :old_barcode OR barcode IS NULL AND :old_barcode IS NULL)\n{commpln}=(commpln = :old_commpln OR commpln IS NULL AND :old_commpln IS NULL)\n{nserial}=(nserial = :old_nserial OR nserial IS NULL AND :old_nserial IS NULL)\n{nlotno}=(nlotno = :old_nlotno OR nlotno IS NULL AND :old_nlotno IS NULL)\n{itmmemo}=(itmmemo = :old_itmmemo OR itmmemo IS NULL AND :old_itmmemo IS NULL)\n{drpshp}=(drpshp = :old_drpshp OR drpshp IS NULL AND :old_drpshp IS NULL)\n{inspect}=(inspect = :old_inspect OR inspect IS NULL AND :old_inspect IS NULL)\n{subcom}=(subcom = :old_subcom OR subcom IS NULL AND :old_subcom IS NULL)\n{adduser}=(adduser = :old_adduser OR adduser IS NULL AND :old_adduser IS NULL)\n{adddate}=(adddate = :old_adddate OR adddate IS NULL AND :old_adddate IS NULL)\n{addtime}=(addtime = :old_addtime OR addtime IS NULL AND :old_addtime IS NULL)\n{lckstat}=(lckstat = :old_lckstat OR lckstat IS NULL AND :old_lckstat IS NULL)\n{lckuser}=(lckuser = :old_lckuser OR lckuser IS NULL AND :old_lckuser IS NULL)\n{lckdate}=(lckdate = :old_lckdate OR lckdate IS NULL AND :old_lckdate IS NULL)\n{lcktime}=(lcktime = :old_lcktime OR lcktime IS NULL AND :old_lcktime IS NULL)\n{webprice}=(webprice = :old_webprice OR webprice IS NULL AND :old_webprice IS NULL)\n{shpdays}=(shpdays = :old_shpdays OR shpdays IS NULL AND :old_shpdays IS NULL)\n{esellable}=(esellable = :old_esellable OR esellable IS NULL AND :old_esellable IS NULL)\n{savgcst}=(savgcst = :old_savgcst OR savgcst IS NULL AND :old_savgcst IS NULL)\n{sstdcst}=(sstdcst = :old_sstdcst OR sstdcst IS NULL AND :old_sstdcst IS NULL)\n{slstcst}=(slstcst = :old_slstcst OR slstcst IS NULL AND :old_slstcst IS NULL)\n{pavgcst}=(pavgcst = :old_pavgcst OR pavgcst IS NULL AND :old_pavgcst IS NULL)\n{pstdcst}=(pstdcst = :old_pstdcst OR pstdcst IS NULL AND :old_pstdcst IS NULL)\n{plstcst}=(plstcst = :old_plstcst OR plstcst IS NULL AND :old_plstcst IS NULL)\n{itemstat}=(itemstat = :old_itemstat OR itemstat IS NULL AND :old_itemstat IS NULL)\n{cmpumid}=(cmpumid = :old_cmpumid OR cmpumid IS NULL AND :old_cmpumid IS NULL)\n{cmpumfact}=(cmpumfact = :old_cmpumfact OR cmpumfact IS NULL AND :old_cmpumfact IS NULL)\n{manufac}=(manufac = :old_manufac OR manufac IS NULL AND :old_manufac IS NULL)\n{mpartno}=(mpartno = :old_mpartno OR mpartno IS NULL AND :old_mpartno IS NULL)\n{bin}=(bin = :old_bin OR bin IS NULL AND :old_bin IS NULL)\n{usagea}=(usagea = :old_usagea OR usagea IS NULL AND :old_usagea IS NULL)\n{usageb}=(usageb = :old_usageb OR usageb IS NULL AND :old_usageb IS NULL)\n{usagec}=(usagec = :old_usagec OR usagec IS NULL AND :old_usagec IS NULL)\n{orderpt}=(orderpt = :old_orderpt OR orderpt IS NULL AND :old_orderpt IS NULL)\n{ordqty}=(ordqty = :old_ordqty OR ordqty IS NULL AND :old_ordqty IS NULL)\n{ordincr}=(ordincr = :old_ordincr OR ordincr IS NULL AND :old_ordincr IS NULL)\n{nusera}=(nusera = :old_nusera OR nusera IS NULL AND :old_nusera IS NULL)\n{nuserb}=(nuserb = :old_nuserb OR nuserb IS NULL AND :old_nuserb IS NULL)\n{nuserc}=(nuserc = :old_nuserc OR nuserc IS NULL AND :old_nuserc IS NULL)\n{casepack}=(casepack = :old_casepack OR casepack IS NULL AND :old_casepack IS NULL)\n{defloct}=(defloct = :old_defloct OR defloct IS NULL AND :old_defloct IS NULL)\n{blclass}=(blclass = :old_blclass OR blclass IS NULL AND :old_blclass IS NULL)\n{cubeamt}=(cubeamt = :old_cubeamt OR cubeamt IS NULL AND :old_cubeamt IS NULL)\n{bldesc}=(bldesc = :old_bldesc OR bldesc IS NULL AND :old_bldesc IS NULL)\n{rfid}=(rfid = :old_rfid OR rfid IS NULL AND :old_rfid IS NULL)\n{nmfcufc}=(nmfcufc = :old_nmfcufc OR nmfcufc IS NULL AND :old_nmfcufc IS NULL)\n{classrate}=(classrate = :old_classrate OR classrate IS NULL AND :old_classrate IS NULL)\n{stkfee}=(stkfee = :old_stkfee OR stkfee IS NULL AND :old_stkfee IS NULL)\n{wntid}=(wntid = :old_wntid OR wntid IS NULL AND :old_wntid IS NULL)\n{somin}=(somin = :old_somin OR somin IS NULL AND :old_somin IS NULL)\n{itmdesc2}=(itmdesc2 = :old_itmdesc2 OR itmdesc2 IS NULL AND :old_itmdesc2 IS NULL)\n{itmdesc3}=(itmdesc3 = :old_itmdesc3 OR itmdesc3 IS NULL AND :old_itmdesc3 IS NULL)\n{itmdesc4}=(itmdesc4 = :old_itmdesc4 OR itmdesc4 IS NULL AND :old_itmdesc4 IS NULL)\n{itmdesc5}=(itmdesc5 = :old_itmdesc5 OR itmdesc5 IS NULL AND :old_itmdesc5 IS NULL)\n{itmdesc6}=(itmdesc6 = :old_itmdesc6 OR itmdesc6 IS NULL AND :old_itmdesc6 IS NULL)\n{altitmid}=(altitmid = :old_altitmid OR altitmid IS NULL AND :old_altitmid IS NULL)\n{eimagesm}=(eimagesm = :old_eimagesm OR eimagesm IS NULL AND :old_eimagesm IS NULL)\n{eimagemd}=(eimagemd = :old_eimagemd OR eimagemd IS NULL AND :old_eimagemd IS NULL)\n{eimagelg}=(eimagelg = :old_eimagelg OR eimagelg IS NULL AND :old_eimagelg IS NULL)\n{eimagexl}=(eimagexl = :old_eimagexl OR eimagexl IS NULL AND :old_eimagexl IS NULL)\n{especial}=(especial = :old_especial OR especial IS NULL AND :old_especial IS NULL)\n{efeatured}=(efeatured = :old_efeatured OR efeatured IS NULL AND :old_efeatured IS NULL)\n{erecurring}=(erecurring = :old_erecurring OR erecurring IS NULL AND :old_erecurring IS NULL)\n{etemplate}=(etemplate = :old_etemplate OR etemplate IS NULL AND :old_etemplate IS NULL)\n{elink}=(elink = :old_elink OR elink IS NULL AND :old_elink IS NULL)\n{enoshipchg}=(enoshipchg = :old_enoshipchg OR enoshipchg IS NULL AND :old_enoshipchg IS NULL)\n{noshipcalc}=(noshipcalc = :old_noshipcalc OR noshipcalc IS NULL AND :old_noshipcalc IS NULL)\n{msrp}=(msrp = :old_msrp OR msrp IS NULL AND :old_msrp IS NULL)\n{estyle}=(estyle = :old_estyle OR estyle IS NULL AND :old_estyle IS NULL)\n{estyle1}=(estyle1 = :old_estyle1 OR estyle1 IS NULL AND :old_estyle1 IS NULL)\n{estyle2}=(estyle2 = :old_estyle2 OR estyle2 IS NULL AND :old_estyle2 IS NULL)\n{listorder}=(listorder = :old_listorder OR listorder IS NULL AND :old_listorder IS NULL)\n{elength}=(elength = :old_elength OR elength IS NULL AND :old_elength IS NULL)\n{ewidth}=(ewidth = :old_ewidth OR ewidth IS NULL AND :old_ewidth IS NULL)\n{eheight}=(eheight = :old_eheight OR eheight IS NULL AND :old_eheight IS NULL)\n{solopack}=(solopack = :old_solopack OR solopack IS NULL AND :old_solopack IS NULL)\n{noreturn}=(noreturn = :old_noreturn OR noreturn IS NULL AND :old_noreturn IS NULL)\n{itmdesc7}=(itmdesc7 = :old_itmdesc7 OR itmdesc7 IS NULL AND :old_itmdesc7 IS NULL)\n{itemgen}=(itemgen = :old_itemgen OR itemgen IS NULL AND :old_itemgen IS NULL)\n{id_col}=id_col = :old_id_col\n",
-                                        "updateWhereClauseNative": "",
-                                        "allowInsert": true,
-                                        "allowUpdate": true,
-                                        "allowDelete": true,
-                                        "deleteType": "Hard",
-                                        "deleteField": "",
-                                        "readonly": false,
-                                        "securityGroups_insert": "",
-                                        "securityGroups_update": "",
-                                        "securityGroups_delete": "",
-                                        "serversidePermission_insert": "",
-                                        "serversidePermission_update": "",
-                                        "serversidePermission_delete": "",
-                                        "joinDefinition": "[\n{\n\tleft: 'item',\n\tright: 'item'\n}]",
-                                        "parentAlias": "a",
-                                        "events": {
-                                            "beforeInsert": "",
-                                            "beforeUpdate": "",
-                                            "beforeDelete": "",
-                                            "afterInsert": "",
-                                            "afterUpdate": "",
-                                            "afterDelete": "",
-                                            "onWriteConflict": "",
-                                            "onSQLError": ""
-                                        },
-                                        "geography": {
-                                            "geocodeFieldDefinition": "",
-                                            "locationFieldDefinition": ""
-                                        },
-                                        "flagStoreLocationInformationC": "No",
-                                        "flagStoreLocationInformation": false,
-                                        "latField": "",
-                                        "lngField": "",
-                                        "flagUpdateLocationField": false,
-                                        "storeLocationWhen": "InsertOnly",
-                                        "locationFieldNameForLatLng": ""
-                                    }
-                                ]
-                            }
-                        }
+                        "optimizeJSONSize": true
+                    },
+                    "displayAsSlider": false,
+                    "precalc": {
+                        "controlHTMLInPanelCard": "in panel card",
+                        "javascript_listViewData": "{dialog.object}._listViewData['MOVELIST'] = [[dialog.listViewData.MOVELIST]]; ",
+                        "javascript_listViewSettings": "{dialog.object}._listViewSettings['MOVELIST'] = [[dialog.listViewSettings.MOVELIST]]; ",
+                        "javascript_listview": "{dialog.object}._controls['MOVELIST'] =  { type: 'list',  data: {dialog.object}._listViewData['MOVELIST'],  onInitialize: function() { \n\t\tvar pe = $(this.contId).parentElement;\n\t\tif(typeof this.listVariableName != 'undefined') { \n\t\t\tvar _cn = '{dialog.componentName}_' + this.listVariableName.toUpperCase() + '_2';\n\t\t\t$acn(pe,_cn);\n\t\t}\n\t\n},  settings: {dialog.object}._listViewSettings['MOVELIST'] }",
+                        "javascriptAbstractSetupCode": ""
+                    },
+                    "flags": {
+                        "clientSideDefinition": false
                     }
                 },
-                "indentTree": 2,
                 "precalc": {
                     "ControlHTML": "<div class=\"A5CWLayout\" style=\"width: 4in\" >\n\t<!--LblS--><label id=\"{grid.componentname}.LBL.R{grid.rownumber}.MOVELIST\" for=\"{grid.componentname}.V.R{grid.rownumber}.MOVELIST\" title=\"\" class=\"[class.dialogFieldLabel]\" style=\"float: left; width: __global.labelWidth__; box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -webkit-box-sizing: border-box;\">MOVELIST</label>\n<!--LblE--><!--FldS--><div style=\"margin-left: __global.labelWidth__ ;\"><!--JSControlStart--><input type=\"hidden\" id=\"{grid.componentname}.V.R{grid.rownumber}.MOVELIST\" name=\"V.R{grid.rownumber}.MOVELIST\" /><!--JSControlEnd-->\n<div  class=\"[theme:listBox.base.className|{dialog.style}List]\"   style=\"padding:0px; \"  >\n\t<div id=\"{grid.componentname}.V.R{grid.rownumber}.MOVELIST.CONTROL\"  class=\"{grid.componentName}_MOVELIST <Default>\" style=\"overflow: auto; width: 100%; height: 3in; \"></div>\n</div>\n</div><!--FldE-->\n</div>",
                     "DesignViewHTML": "",
@@ -7405,10 +7408,7 @@
                     "isIncrementalRefresh": false,
                     "js_afterListInitialize": "var listObj = {UXPRERENDEREDALIAS}_DlgObj.getControl('MOVELIST');\nif(listObj) listObj._state.recordCount = 0;\nif(listObj) listObj._state.recordCountFormatted = '0';\nif(listObj) listObj._state.lastBreakValue = '<None>';\nif(listObj) listObj._state.pageCount = 0;\nif(listObj) listObj._state.pageSize = 20;\nif(listObj) {var ele = $('{UXPRERENDEREDALIAS}.MOVELIST.RECORDCOUNT'); if(ele) ele.innerHTML = listObj._state.recordCountFormatted;};\nif(listObj) listObj._state.paginated = false;\n\nif(listObj) listObj._state.filter = '';\nif(listObj) listObj._state.having = '';\nif(listObj) listObj._state.order = '';\nif(listObj) listObj._state.filterParameters = '';\nif(listObj) listObj._state.highlight = {  };\nif(listObj) listObj._state.whereClause = '';\nif(listObj) listObj._state.whereParameters = '';\n\t\t\n\t\tvar flagPersist = false;\n\t\tif(typeof listObj._flagPersistDataOK != 'undefined') { \n\t\t\tif(listObj._flagPersistDataOK) { \n\t\t\t\tvar data = listObj._data;\n\t\t\t\tlistObj.persistToStorage({mode:'populate', data: data, submode: 'ListViewData'});\n\t\t\t}\n\t\t}\n\t\t\n\t\t\n;\n{UXPRERENDEREDALIAS}_DlgObj._list_executeEvent('MOVELIST','afterRenderComplete',{});\n\nif(listObj._refreshStateMessages) listObj._refreshStateMessages();",
                     "list_CapturedFieldValueFromFirstRow": ""
-                },
-                "parentIsCollapsed": false,
-                "inPanelCard": true,
-                "inTreeControl": false
+                }
             },
             {
                 "controlType": "layout_directive_PanelCardEnd",
@@ -22058,9 +22058,9 @@
         "keyboardShortcutsJSON": "",
         "preRenderWarningMessageShow": true,
         "autoSetPreRenderOnForAllUX": true,
-        "selected": "3e7e36e6-ac59-4632-9609-4170d1ae86e6\n",
+        "selected": "cf150de0_df1d_4a16_9d4e_50704a0c91e8\n",
         "designPaneIndex": 1,
-        "masterPaneC": "XbasicFunctions",
+        "masterPaneC": "controls",
         "serverSideEventIndex": 1,
         "clientSideEventIndex": 15,
         "clientSideEventIndexC": "15",
@@ -22078,7 +22078,7 @@
         "alphaFiveBuildNumber": "12",
         "openedFromTemplate": false,
         "builtWithVersionNumer": 1,
-        "_buildCount": "1084",
+        "_buildCount": "1085",
         "securityEnabled": false,
         "showHideIsUsed": false,
         "precalc": {
@@ -22246,7 +22246,7 @@
         "sassProcessor": true,
         "debugMode": false,
         "__jsLibraries": "<script type=\"text/javascript\" src=\"javascript/a5.js\"></script>\n<script type=\"text/javascript\" src=\"javascript/a5_url.js\"></script>\n",
-        "A5SaveTimeStamp": "20190820161136946",
+        "A5SaveTimeStamp": "20190821093901922",
         "a_actionJavascript": [
             {
                 "actionGuid": "29f57df5-2627-47b7-861e-44e02134c08a   ",
@@ -22426,7 +22426,7 @@
             "output": {
                 "Head": {
                     "JavaScript": "*gzip:H4sIAAAAAAAAC5WMsQ6CQBAFexP/Aa/Hq+gOOjsqf2Cznq84PPGyuyD8vSQUFlaWM5NM0CipWGVrQesMi/mBZ96tq1Ri677Cc3Me1HXB79wdD+HfAU2Sfyanun/x/bIYZOTcp5uwJGi9NSJByRzBdp1GS08QRVW1NcPe4IcSfQAk7ywxxgAAAA==",
-                    "CSS_Link": "*gzip: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",
+                    "CSS_Link": "*gzip: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",
                     "title": "*gzip:H4sIAAAAAAAAC7MpySzJSbVzSiwuVgj3DbbRh/AB7f2gVxcAAAA="
                 },
                 "body": {
