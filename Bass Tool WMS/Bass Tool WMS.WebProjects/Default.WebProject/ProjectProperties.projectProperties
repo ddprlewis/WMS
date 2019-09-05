@@ -29,6 +29,7 @@
 <jQueryUIVersion="1.8.16">
 <cordova<loadFrom="BuiltIn">
 >
+<vuejs="None">
 >
 <cssLibraries<links="">
 <jQuery="No Theme">
@@ -39,6 +40,7 @@
 <encryptConnectionStrings=.T.>
 <saveFileType="">
 <showPublishCompleteDialog=.F.>
+<livePreviewMachineName="Localhost">
 >
 <googleMapsAPIKey="">
 <googleStaticMapsAPIKey="">
@@ -72,6 +74,7 @@
 <fieldmap="">
 <sequenceName="">
 >
+<defaultmethod="Internal">
 >
 <repository<tableType="SQL">
 <connectionString="">
@@ -124,4 +127,29 @@
 <sessionTimeout=15>
 <sessionCookieName="XBasic_SessionId">
 <authenticationCookieName=".ASPXFORMSAUTH">
+>
+<oauthEvents<onGotAccessToken="">
+<library="">
+>
+<deleteOldBackups=.F.>
+<maxNumberOfBackups="">
+<minNumberOfBackups="">
+<deleteIfOlderThanDays="">
+<switchYear="">
+<tfa<twillioAccountSID="">
+<twillioAuthCode="">
+<twillioPhoneNumber="">
+<tokenLife=7200>
+<googleAuthenticatorPassword="">
+<googleAuthenticatorIssuer="AlphaAnywhere">
+<email<send_from="">
+<send_from_alias="">
+<subject="">
+<message="">
+>
+<codenotvalidmessage="Code is not valid">
+>
+<extendedUserInfo<connectionString="">
+<tableName="">
+<userIdField="">
 >

@@ -86,10 +86,10 @@
 <securityStoreType="">
 <AlphaDAOConnectionStrings=<<%str%
 <arrVars<[1]<name="Bass-SQL-Probass">
-<value="Encrypted:3MLNR/D8BLbOLVyV2vnymlT4970fFMs7f75fDdfEcUW8NybBUh1UElbHYu2liZNRPSJ0gDBGoKf8vQwsJIWqFTfhpeFq2jpYRK77rkhOcAkGjroa2O6rnmuE+aOrpb2ERJ41Lnf6FWHVV99oDaRD49ePBPPAz8u3Lx3GHGYBofnFbizk0FxAExQwKeZ3AK8K/P7OSobW6nS5SJ7mvNymsw==">
+<value="Encrypted:3MLNR/D8BLbOLVyV2vnymlT4970fFMs7f75fDdfEcUW8NybBUh1UElbHYu2liZNRB5eaidbTl0oUXXdbf1dFFI57GsroyFnn+bD+13089miT0Cdtij07ig9ryq2oNnrPl7/fUTNJhdDybwwZUyBD6Pg+NAiDcsHwTnWzHgjcz+Y=">
 >
 <[2]<name="Bass-SQL-Prosys">
-<value="Encrypted:3MLNR/D8BLbOLVyV2vnymlT4970fFMs7f75fDdfEcUW8NybBUh1UElbHYu2liZNRPSJ0gDBGoKf8vQwsJIWqFTfhpeFq2jpYRK77rkhOcAkGjroa2O6rnmuE+aOrpb2ERJ41Lnf6FWHVV99oDaRD49ePBPPAz8u3Lx3GHGYBofnFbizk0FxAExQwKeZ3AK8KLdLzKi3RS32gmqJaEGK8SA==">
+<value="Encrypted:3MLNR/D8BLbOLVyV2vnymlT4970fFMs7f75fDdfEcUW8NybBUh1UElbHYu2liZNRB5eaidbTl0oUXXdbf1dFFI57GsroyFnn+bD+13089miT0Cdtij07ig9ryq2oNnrPl7/fUTNJhdDybwwZUyBD6Pg+NAiDcsHwjSniitygdow=">
 >
 >
 %str%>
@@ -232,3 +232,4 @@
 >
 >
 >
+<activeDirectory>
