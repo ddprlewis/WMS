@@ -38,7 +38,7 @@
 <publishing_type="Publish on LAN">
 <lan<webroot=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
 <target_folder="">
-<hostname="http://bass-alpha.basstool.com:1580/wms">
+<hostname="https://bass-alpha.basstool.com:1580/wms">
 <server_port=80>
 >
 <local<target_folder="">
@@ -143,6 +143,8 @@
 <publishDifferentThanConfiguration=.F.>
 <version="2.0.0.0">
 <hashAlgorithm="SHA1">
+<providerClassParameters<[1]>
+>
 >
 <role<type="SameAsMembershipProvider">
 <connectionString="">
@@ -157,6 +159,8 @@
 <publishDataSource="SQLServer">
 <publishDifferentThanConfiguration=.F.>
 <version="">
+<providerClassParameters<[1]>
+>
 >
 <sessionState<type="LocalStateServer">
 <connectionString="">
@@ -175,6 +179,8 @@
 <storageConnectionString="">
 <version="">
 <storageScope="Only this application">
+<providerClassParameters<[1]>
+>
 >
 <profile<type="None">
 <connectionString="">
@@ -189,6 +195,8 @@
 <publishDataSource="SQLServer">
 <publishDifferentThanConfiguration=.F.>
 <version="">
+<providerClassParameters<[1]>
+>
 >
 >
 <remoteErrorDetailShow=.F.>
@@ -223,6 +231,7 @@
 >
 <StorageConnectionStrings="">
 <ssrsConnectionStrings="">
+<websocket>
 <activeDirectory<name="">
 <serverName="">
 <userId="">
