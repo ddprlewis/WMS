@@ -143,8 +143,6 @@
 <publishDifferentThanConfiguration=.F.>
 <version="2.0.0.0">
 <hashAlgorithm="SHA1">
-<providerClassParameters<[1]>
->
 >
 <role<type="SameAsMembershipProvider">
 <connectionString="">
@@ -159,8 +157,6 @@
 <publishDataSource="SQLServer">
 <publishDifferentThanConfiguration=.F.>
 <version="">
-<providerClassParameters<[1]>
->
 >
 <sessionState<type="LocalStateServer">
 <connectionString="">
@@ -179,8 +175,6 @@
 <storageConnectionString="">
 <version="">
 <storageScope="Only this application">
-<providerClassParameters<[1]>
->
 >
 <profile<type="None">
 <connectionString="">
@@ -195,8 +189,6 @@
 <publishDataSource="SQLServer">
 <publishDifferentThanConfiguration=.F.>
 <version="">
-<providerClassParameters<[1]>
->
 >
 >
 <remoteErrorDetailShow=.F.>
@@ -231,7 +223,6 @@
 >
 <StorageConnectionStrings="">
 <ssrsConnectionStrings="">
-<websocket>
 <activeDirectory<name="">
 <serverName="">
 <userId="">
@@ -241,4 +232,3 @@
 >
 >
 >
-<activeDirectory>
