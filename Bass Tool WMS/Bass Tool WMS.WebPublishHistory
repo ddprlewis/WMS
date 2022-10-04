@@ -6,22 +6,22 @@
 <[2]<type="folder">
 <name="ExeReportStyles">
 <target_folder="c:\a5webroot\wms">
-<timestamp=CTODT('10/03/2019 03:03:42 25 pm')>
+<timestamp=CTODT('09/11/2020 12:25:02 63 pm')>
 >
 <[3]<type="folder">
 <name="AppDataReportStyles">
 <target_folder="c:\a5webroot\wms">
-<timestamp=CTODT('10/03/2019 03:03:42 25 pm')>
+<timestamp=CTODT('09/11/2020 12:25:02 63 pm')>
 >
 <[4]<type="folder">
 <name="ExeChartStyles">
 <target_folder="c:\a5webroot\wms">
-<timestamp=CTODT('10/03/2019 03:03:42 25 pm')>
+<timestamp=CTODT('09/11/2020 12:25:02 63 pm')>
 >
 <[5]<type="folder">
 <name="AppDataChartStyles">
 <target_folder="c:\a5webroot\wms">
-<timestamp=CTODT('10/03/2019 03:03:42 25 pm')>
+<timestamp=CTODT('09/11/2020 12:25:02 63 pm')>
 >
 <[6]<type="A5WPage">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5w}">
@@ -36,7 +36,7 @@
 <[8]<type="css">
 <name="a5system">
 <target_folder="c:\a5webroot\wms">
-<timestamp=CTODT('10/03/2019 11:30:27 88 am')>
+<timestamp=CTODT('09/11/2020 07:58:15 88 am')>
 >
 <[9]<type="css">
 <name="ios7">
@@ -51,22 +51,22 @@
 <[11]<type="folder">
 <name="ExeReportStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('10/07/2019 02:53:58 91 pm')>
+<timestamp=CTODT('10/04/2022 09:14:01 47 am')>
 >
 <[12]<type="folder">
 <name="AppDataReportStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('10/07/2019 02:53:58 91 pm')>
+<timestamp=CTODT('03/22/2022 12:56:12 50 pm')>
 >
 <[13]<type="folder">
 <name="ExeChartStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('10/07/2019 02:53:58 91 pm')>
+<timestamp=CTODT('10/04/2022 09:14:01 48 am')>
 >
 <[14]<type="folder">
 <name="AppDataChartStyles">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('10/07/2019 02:53:58 91 pm')>
+<timestamp=CTODT('03/22/2022 12:56:12 50 pm')>
 >
 <[15]<type="A5WPage">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5w}">
@@ -81,12 +81,12 @@
 <[17]<type="css">
 <name="a5system">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/06/2019 02:08:05 28 pm')>
+<timestamp=CTODT('07/21/2022 08:22:13 13 pm')>
 >
 <[18]<type="css">
 <name="ios7">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('08/13/2019 12:28:25 78 pm')>
+<timestamp=CTODT('08/22/2022 07:36:11 72 am')>
 >
 <[19]<type="file">
 <name="{d:\development\aphaanywhere\wms\bass tool wms\bass tool wms.webprojects\default.webproject\project.securitysettings}">
@@ -138,7 +138,7 @@
 <[28]<type="css">
 <name="alpha">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/06/2019 02:08:11 15 pm')>
+<timestamp=CTODT('07/21/2022 08:22:27 18 pm')>
 >
 <[29]<type="css">
 <name="custom-alert-bootstrap.css}">
@@ -210,7 +210,7 @@
 <[42]<type="css">
 <name="alpha-blue">
 <target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
-<timestamp=CTODT('06/06/2019 02:08:11 61 pm')>
+<timestamp=CTODT('07/21/2022 08:22:27 82 pm')>
 >
 <[43]<type="library">
 <name="library">
@@ -308,4 +308,693 @@
 <target_folder="c:\a5webroot\wms">
 <timestamp=CTODT('10/03/2019 12:59:13 39 pm')>
 >
+<[61]<type="A5WPage">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\index.a5w}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:19 89 pm')>
 >
+<[62]<type="A5WPage">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5w}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:19 97 pm')>
+>
+<[63]<type="WebComponent">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\basstoolwms.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/18/2019 12:33:54 22 pm')>
+>
+<[64]<type="WebComponent">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 06 pm')>
+>
+<[65]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\project.securitysettings}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 30 pm')>
+>
+<[66]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\bower.json}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 39 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[67]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\customalert2.jpg}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 47 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[68]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\gulpfile.js}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 55 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[69]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\index.html}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 63 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[70]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\package.json}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 73 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[71]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\pockbo.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 90 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[72]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\pockbo3.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:21 98 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[73]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\poreceipt.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:22 06 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[74]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\projectproperties.projectproperties}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:22 14 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[75]<type="file">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\readme.md}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/17/2019 04:20:22 22 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[76]<type="WebComponent">
+<name="{d:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\quickmove.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/18/2019 03:21:40 23 pm')>
+>
+<[77]<type="WebComponent">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\basstoolwms.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('10/04/2022 09:14:01 73 am')>
+>
+<[78]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\project.securitysettings}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/12/2020 03:44:58 89 pm')>
+>
+<[79]<type="WebComponent">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\quickmove.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('03/22/2022 12:56:12 70 pm')>
+>
+<[80]<type="A5WPage">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\index.a5w}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('02/11/2020 11:15:29 01 am')>
+>
+<[81]<type="A5WPage">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5w}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('02/11/2020 11:15:29 02 am')>
+>
+<[82]<type="WebComponent">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\itemlookup.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('02/11/2020 11:15:29 07 am')>
+>
+<[83]<type="WebComponent">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\test.a5wcmp}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 41 am')>
+>
+<[84]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\poreceipt.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 12:09:37 99 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[85]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\porcptcvr.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 95 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[86]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\bower.json}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 00 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[87]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\customalert2.jpg}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 02 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[88]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\dialogcomponenttemplates\basswmstest.dialogtemplatedefinition}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 07 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[89]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c128hdm.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 08 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[90]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c128hdn.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 09 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[91]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c128hdw.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 10 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[92]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c128m.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 10 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[93]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c128n.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 11 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[94]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c128w.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 12 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[95]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39hdm2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 13 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[96]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39hdm3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 14 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[97]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39hdn2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 14 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[98]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39hdn3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 15 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[99]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39hdw2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 16 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[100]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39hdw3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 17 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[101]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39m2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 17 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[102]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39m3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 18 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[103]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39n2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 19 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[104]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39n3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 20 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[105]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39w2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 21 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[106]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\c39w3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 24 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[107]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarhdm2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 25 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[108]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarhdm3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 28 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[109]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarhdn2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 30 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[110]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarhdn3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 32 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[111]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarhdw2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 34 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[112]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarhdw3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 37 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[113]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarm2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 38 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[114]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarm3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 40 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[115]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarn2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 43 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[116]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarn3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 45 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[117]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarw2.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 47 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[118]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\cbarw3.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 50 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[119]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\i25hdm.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 53 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[120]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\i25hdn.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 55 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[121]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\i25hdw.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 57 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[122]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\i25m.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 59 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[123]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\i25n.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 61 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[124]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\i25w.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 63 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[125]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\pnet.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 65 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[126]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\upchdm.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 68 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[127]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\upchdn.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 70 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[128]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\upchdw.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 72 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[129]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\upcm.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 74 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[130]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\upcn.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 76 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[131]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\fonts\upcw.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 77 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[132]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\gulpfile.js}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 78 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[133]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\index.html}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 79 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[134]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\package.json}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 80 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[135]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\pockbo.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 93 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[136]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\pockbo3.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 94 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[137]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\projectproperties.projectproperties}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 83 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[138]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\readme.md}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('05/14/2020 03:19:46 84 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[139]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\packlist.a5rpt}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 12:11:36 74 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[140]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\project.securitysettings}">
+<target_folder="c:\a5webroot\wms">
+<timestamp=CTODT('09/11/2020 07:58:16 05 am')>
+>
+<[141]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\packlist.a5rpt}">
+<target_folder="c:\a5webroot\wms">
+<timestamp=CTODT('09/11/2020 10:52:49 59 am')>
+>
+<[142]<type="WebComponent">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\basstoolwms.a5wcmp}">
+<target_folder="c:\a5webroot\wms">
+<timestamp=CTODT('09/11/2020 12:25:02 82 pm')>
+>
+<[143]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\css\font-awesome.css}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:14 78 pm')>
+>
+<[144]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\css\font-awesome.min.css}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:14 81 pm')>
+>
+<[145]<type="css">
+<name="cssicons">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 08 pm')>
+>
+<[146]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\fonts\fontawesome-webfont.eot}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 11 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[147]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\fonts\fontawesome-webfont.svg}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 13 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[148]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\fonts\fontawesome-webfont.ttf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 15 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[149]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\fonts\fontawesome-webfont.woff2}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 16 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[150]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\fonts\fontawesome-webfont.woff}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 18 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[151]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\css\cssicons\font-awesome\fonts\fontawesome.otf}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('11/02/2020 12:45:27 19 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[152]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__a5docgen\packlist.a5rpt.a5docgen}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 12:11:36 75 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[153]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__a5docgen\pockbo.a5rpt.a5docgen}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 96 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[154]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__aafunctionlibrary_wms_functions.aex}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/30/2021 10:08:01 07 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[155]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__projectguid.guid}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/30/2021 10:08:01 08 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[156]<type="cssIcon">
+<name="font-awesome">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('02/24/2022 10:55:04 94 am')>
+>
+<[157]<type="folder">
+<name="ExeReportStyles">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:18 57 am')>
+>
+<[158]<type="folder">
+<name="ExeChartStyles">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:18 74 am')>
+>
+<[159]<type="WebComponent">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\basstoolwms.a5wcmp}">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:18 98 am')>
+>
+<[160]<type="css">
+<name="a5system">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:19 45 am')>
+>
+<[161]<type="css">
+<name="alpha">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:24 82 am')>
+>
+<[162]<type="css">
+<name="alpha-blue">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:25 10 am')>
+>
+<[163]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\project.securitysettings}">
+<target_folder="d:\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 10:50:25 15 am')>
+>
+<[164]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__a5docgen\poreceipt.a5rpt.a5docgen}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/04/2022 12:09:38 00 pm')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[165]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__a5docgen\pockbo3.a5rpt.a5docgen}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 97 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+<[166]<type="file">
+<name="{k:\development\aphaanywhere\wms_new\bass tool wms\bass tool wms.webprojects\default.webproject\__a5docgen\porcptcvr.a5rpt.a5docgen}">
+<target_folder=""+chr(92)+chr(92)+"bass-alpha\c$\a5webroot\wms">
+<timestamp=CTODT('08/22/2022 07:36:11 98 am')>
+<project="Default">
+<profile="LAN Publish">
+>
+>
+<connectionStringCRC=4294965298>

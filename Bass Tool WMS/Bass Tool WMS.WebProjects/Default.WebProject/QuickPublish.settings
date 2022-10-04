@@ -1,0 +1,13 @@
+<profile="LAN Publish">
+<pubType=3>
+<files="K:\Development\AphaAnywhere\WMS_New\Bass Tool WMS\Bass Tool WMS.WebProjects\Default.WebProject\PACKLIST.a5rpt">
+<optimize=.T.>
+<pubALB=.F.>
+<pubSecurity=.F.>
+<default_page="index.a5w">
+<open_in_browser=.F.>
+<pubSupport=.T.>
+<pubSelected=.F.>
+<flagCreateAex=.F.>
+<flagCheckSec=.F.>
+<remoteTest=.F.>

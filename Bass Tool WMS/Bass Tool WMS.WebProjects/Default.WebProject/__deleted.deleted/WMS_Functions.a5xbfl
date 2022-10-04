@@ -1,0 +1,5564 @@
+'TIP: You can encrypt this file when it is saved, or password protect it, by adding a special comment to the first line of the file (with no leading spaces).
+'To encrypt the file, set the comment on the first line to: 'ENCRYPTED
+'To password protect the file (which will also encrypt it), set the comment on the first line to: 'PASSWORD:your_password_phrase
+'To create a compiled AEX library (when this project is published), add the comment 'COMPILEAEX anywhere in the code.
+
+'
+'You can reference functions defined in other function libraries by using the compile_xbasic_function_library() function.
+'For example: dim p as p; p = compile_xbasic_function_library("name of library");
+
+function locate_po as c (e as p)
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llFlag2 as l
+dim llFlag3 as l
+dim lcSQL as c
+dim lcJs as c
+dim llCont as l
+dim lcPurno as c
+dim lcVendno as c
+dim lcPostat as c
+dim lcotype as c
+dim lcLoctid as c
+dim lcPrompt as c
+dim llOK as l
+dim lnRows as n
+
+'Ersror handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "locate_po"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_locate_po
+
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+
+	'Lookup the order in POMAST and see if it can be received
+	l_SQLSettings(cn)
+
+	lcPurno = padl(alltrim(e.dataSubmitted.PURNO), 10)
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Locating PO " + alltrim(lcPurno) + "...\n';")
+
+	args2.Add("VP_PURNO",lcPurno)
+	lcSQL = "SELECT COUNT(*) FROM pomast WITH (NOLOCK) WHERE purno = :vp_purno"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows <> 0
+			lcSQL = "SELECT purno, vendno, postat, potype, loctid FROM pomast WITH (NOLOCK) WHERE purno = :vp_purno"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+		  		rs = cn.ResultSet
+				rs.nextRow()
+				lcPurno     = rs.data(1)
+				lcVendno   = rs.data(2)
+				lcPostat   = rs.data(3)
+				lcPotype   = rs.data(4)
+				lcLoctid   = rs.data(5)
+			else
+				lcPrompt = "Could not query POMAST in locate_po.  There may be a lock in the system.  If this continues, please notify IT."
+			end if
+		end if
+
+		select
+			case .NOT. llCont
+			case lnRows = 0
+				'Query returned no results
+				lcPrompt = "Purchase Order " + alltrim(lcPurno) + " does not exist."
+			case lcPostat = "C" .AND. lcPOType <> "D"
+				'Order is closed
+				lcSQL = "SELECT COUNT(*) FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :vp_purno AND (pockbo = 0 OR porcpt = 0)"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					lnRows = 0
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnRows = rs.data(1)
+					if lnRows = 0
+						llCont = .f.
+					end if
+				end if
+				if .NOT. llCont
+					lcPrompt = "Purchase Order " + alltrim(lcPurno) + " is closed."
+				end if
+			case lcPostat = "V"
+				'Order is voided
+				lcPrompt = "Purchase Order " + alltrim(lcPurno) + " is voided."
+			case lcPotype = "B"
+				'Order is a bid
+				lcPrompt = "Purchase Order " + alltrim(lcPurno) + " is a bid."
+			case lcPotype = "R"
+				'Order is a return
+				lcPrompt = "Purchase Order " + alltrim(lcPurno) + " is a return."
+			case lcPotype = "D"
+				'Order is a drop ship
+				lcPrompt = "Purchase Order " + alltrim(lcPurno) + " is a drop ship PO."
+			case else
+				'Order is good to go
+				lcPrompt = ""
+		end select
+
+		if len(lcPrompt) <> 0
+			llCont = .f.
+			lcPrompt = lcPrompt + "  Cannot receive order."
+		end if
+	else
+		lcPrompt = "Could not query POMAST in locate_po.  There may be a lock in the system.  If this continues, please notify IT."
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the database."
+end if
+
+if alltrim(lcPurno) = "12345"
+	error_generate("Another really bad error.")
+end if
+
+if len(lcPrompt) <> 0
+	lcJs = "var title = 'PO Entry';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PURNO'); },10)});"
+else
+	e._set.vendno.value = lcVendno
+	e._set.purno.value = alltrim(lcPurno)
+	e._set.loctid.value = lcLoctid
+	e._set.cart.value = ""
+	e._set.item.value = ""
+	lcJs = "callPOEntry('" + lcLoctid + "');"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+locate_po = lcJs
+EXIT FUNCTION
+
+error_locate_po:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PURNO');")
+
+a5AjaxChunkedResponseDone()
+locate_po = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbgetpoitem as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcPurno as c
+dim lcItem as c
+dim lcVendno as c
+dim lcDescription as c
+dim lnQty as n
+dim lnReceived as n
+dim lnPending as n
+dim lnLine as n
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim lcVpartno as c
+dim lnQtyOrd as n
+dim lcPrompt as c
+dim lnRows as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbgetpoitem"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbgetpoitem
+
+lcPrompt = ""
+lcDescription = ""
+lnQty = 0
+lnLine = 0
+lnQtyOrd = 0
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	'We already got the valid item from the item lookup, so just get the record for it here
+	l_SQLSettings(cn)
+
+	lcPurno = padl(alltrim(e.dataSubmitted.PURNO), 10)
+	lcVendno = padr(alltrim(e.dataSubmitted.VENDNO), 6)
+	lcItem = padr(alltrim(e.dataSubmitted.ITEM), 25)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Locating " + alltrim(lcItem) + "...\n';")
+
+	args2.Add("vp_purno",lcPurno)
+	args2.Add("vp_vendno", lcVendno)
+	args2.Add("vp_item", lcItem)
+
+	lcSQL = "SELECT COUNT(*) " + crlf()
+	lcSQL = lcSQL + "FROM potran a WITH (NOLOCK) " + crlf()
+	lcSQL = lcSQL + "WHERE a.purno = :VP_PURNO AND a.item = :VP_ITEM AND a.postat <> 'X' AND a.postat <> 'C'"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows = 0
+			lcPrompt = "Could not find item " + alltrim(lcItem) + " on PO " + alltrim(lcPurno) + "."
+		else
+			lcSQL = "SELECT a.descrip, a.qtyord, a.qtyrec, a.tranlineno, a.vpartno " + crlf()
+			lcSQL = lcSQL + "FROM potran a WITH (NOLOCK) " + crlf()
+			lcSQL = lcSQL + "WHERE a.purno = :VP_PURNO AND a.item = :VP_ITEM AND a.postat <> 'X' AND a.postat <> 'C'"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lcDescription = rs.data(1)
+				lnQtyOrd = rs.data(2)
+				lnReceived = rs.data(3)
+				lnQty = lnQtyOrd - lnReceived
+				lnLine = rs.data(4)
+				lcVpartno = transformstring(rs.data(5))
+			else
+				lcPrompt = "Could not query POTRAN in xbgetpoitem.  There may be a lock in the system.  If this continues, please notify IT."
+			end if
+		end if
+	else
+		lcPrompt = "Could not query POTRAN in xbgetpoitem.  There may be a lock in the system.  If this continues, please notify IT."
+	end if
+
+	if llOK
+		if lnQty <= 0
+			lcPrompt = "Item has been fully received."
+		end if
+	end if
+	cn.Close()
+else
+	lcPrompt = "Unable to connect to SQL database."
+end if
+
+if LEN(lcPrompt) <> 0
+	e._set.item.value = ""
+	lcJs = "var title = 'PO Entry';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "var width = '400px';" + crlf()
+	lcJs = lcJs + "var loc = 'top';" + crlf()
+	lcJs = lcJs + "var oKButtonLabel = 'OK';" + crlf()
+	lcJs = lcJs + "var cancelButtonLabel = '';" + crlf()
+	lcJs = lcJs + "var onOK = function() { callPOEntry(''); };" + crlf()
+	lcJs = lcJs + "{dialog.object}.dropDownMessage('message',title,msgBody,width,oKButtonLabel,cancelButtonLabel,onOK,'',loc);"
+else
+	e._set.description.value = lcDescription
+	e._set.open.value = lnQty
+	e._set.received.value = lnReceived
+	e._set.pending.value = lnPending
+	e._set.line.value = lnLine
+	e._set.vpartno.value = lcVPartno
+	e._set.itemvalid.value = .t.
+	lcJs = "callPOEntry('RETURN');"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+xbgetpoitem = lcJs
+EXIT FUNCTION
+
+error_xbgetpoitem:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "callPOEntry('');")
+
+a5AjaxChunkedResponseDone()
+xbgetpoitem = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function lookup_item as c (e AS p)
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llFlag2 as l
+dim llFlag3 as l
+dim lcSQL as c
+dim lcJs as c
+dim llCont as l
+dim llOK as l
+dim lcFilt as c
+dim lcPrompt as c
+dim ops as p
+dim llItem as l
+dim lcPurno as c
+dim llPurno as l
+dim lnCount as n
+dim llPartial as l
+dim lcShelf as c
+dim llShelf as l
+dim lcValue as c
+dim lnCount as n
+dim lcSono as c
+dim llSono as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "lookup_item"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_lookup_item
+
+llCont = cn.open("::Name::Bass-SQL-Probass")
+lcFilt = ""
+llItem = .f.
+
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Verifying item...\n';")
+
+	lcValue = UPPER(e.dataSubmitted.ITEMLIST_KEYWORDSEARCH)
+	lcPurno = padl(alltrim(e.dataSubmitted.ITEMSEARCHPURNO), 10)
+	llPurno = len(alltrim(lcPurno)) != 0
+	lcShelf = padr(alltrim(UPPER(e.datasubmitted.ITEMSEARCHSHELF)), 15)
+	llShelf = len(alltrim(lcShelf)) != 0
+	lcSono = padl(alltrim(e.dataSubmitted.ITEMSEARCHSONO), 10)
+	llSono = len(alltrim(lcSono)) != 0
+	llPartial = len(alltrim(e.dataSubmitted.ITEMPARTIALOK)) != 0
+	if ")" $ lcValue
+		lcValue = substr(lcValue, AT(")", lcValue) + 1)
+	end if
+	lcValue = padr(alltrim(lcValue), 25)
+
+	'See if the search is found in the item field
+	args2.Add("VP_ITEM",lcValue)
+	lcSQL = "SELECT count(*) FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND item = :VP_ITEM"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+		if lnCount > 0
+			lcFilt = "a.item = :Value"
+			llItem = .t.
+		end if
+	end if
+
+	if ISBLANK("var->lcFilt")
+		'See if the search field is found in the ICSUPL table
+	 	if llPurno
+			args2.Add("VP_PURNO", lcPurno)
+			lcSQL = "SELECT count(*) FROM icsupl a WITH (NOLOCK) " + crlf()
+			lcSQL = lcSQL + "INNER JOIN potran b WITH (NOLOCK) ON a.item = b.item AND a.vendno = b.vendno AND a.vpartno = b.vpartno " + crlf()
+			lcSQL = lcSQL + "WHERE a.itemstat = 'A' AND a.vpartno = :VP_ITEM AND b.purno = :VP_PURNO"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnCount = rs.data(1)
+				if lnCount > 0
+					lcSQL = "SELECT a.item FROM icsupl a WITH (NOLOCK) " + crlf()
+					lcSQL = lcSQL + "INNER JOIN potran b WITH (NOLOCK) ON a.item = b.item AND a.vendno = b.vendno AND a.vpartno = b.vpartno " + crlf()
+					lcSQL = lcSQL + "WHERE a.itemstat = 'A' AND a.vpartno = :VP_ITEM AND b.purno = :VP_PURNO"
+					llOK = cn.Execute(lcSQL, args2)
+					if llOK
+						rs = cn.ResultSet
+						rs.NextRow()
+						lcFilt = "a.item = :Value"
+						lcValue = padr(alltrim(rs.data(1)), 25)
+						llItem = .t.
+					end if
+				end if
+			end if
+	 	elseif llSono
+			args2.Add("VP_SONO", lcSono)
+			lcSQL = "SELECT count(*) FROM icsupl a WITH (NOLOCK) " + crlf()
+			lcSQL = lcSQL + "INNER JOIN sotran b WITH (NOLOCK) ON a.item = b.item AND a.item = b.item AND b.sostat = ' ' " + crlf()
+			lcSQL = lcSQL + "WHERE a.itemstat = 'A' AND a.vpartno = :VP_ITEM AND b.sono = :VP_SONO"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnCount = rs.data(1)
+				if lnCount > 0
+					lcSQL = "SELECT a.item FROM icsupl a WITH (NOLOCK) " + crlf()
+					lcSQL = lcSQL + "INNER JOIN sotran b WITH (NOLOCK) ON a.item = b.item AND a.item = b.item AND b.sostat = ' ' " + crlf()
+					lcSQL = lcSQL + "WHERE a.itemstat = 'A' AND a.vpartno = :VP_ITEM AND b.sono = :VP_SONO"
+					llOK = cn.Execute(lcSQL, args2)
+					if llOK
+						rs = cn.ResultSet
+						rs.NextRow()
+						lcFilt = "a.item = :Value"
+						lcValue = padr(alltrim(rs.data(1)), 25)
+						llItem = .t.
+					end if
+				end if
+			end if
+	 	elseif llShelf
+			args2.Add("VP_SHELF", lcShelf)
+			lcSQL = "SELECT count(*) FROM icsupl a WITH (NOLOCK) " + crlf()
+			lcSQL = lcSQL + "INNER JOIN ICIQTY b WITH (NOLOCK) ON a.item = b.item " + crlf()
+			lcSQL = lcSQL + "WHERE a.itemstat = 'A' AND a.vpartno = :VP_ITEM AND b.qstore = :VP_SHELF"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnCount = rs.data(1)
+				if lnCount > 0
+					lcSQL = "SELECT a.item FROM icsupl a WITH (NOLOCK) " + crlf()
+					lcSQL = lcSQL + "INNER JOIN ICIQTY b WITH (NOLOCK) ON a.item = b.item " + crlf()
+					lcSQL = lcSQL + "WHERE a.itemstat = 'A' AND a.vpartno = :VP_ITEM AND b.qstore = :VP_SHELF"
+					llOK = cn.Execute(lcSQL, args2)
+					if llOK
+						rs = cn.ResultSet
+						rs.NextRow()
+						lcFilt = "a.item = :Value"
+						lcValue = padr(alltrim(rs.data(1)), 25)
+						llItem = .t.
+					end if
+				end if
+			end if
+	 	else
+			lcSQL = "SELECT count(*) FROM icsupl WITH (NOLOCK) WHERE itemstat = 'A' AND vpartno = :VP_ITEM"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnCount = rs.data(1)
+
+				if lnCount > 1
+					lcFilt = "b.vpartno = :Value"
+				elseif lnCount > 0
+					lcSQL = "SELECT item FROM icsupl WITH (NOLOCK) WHERE itemstat = 'A' AND vpartno = :VP_ITEM"
+					llOK = cn.Execute(lcSQL, args2)
+					if llOK
+						rs = cn.ResultSet
+						rs.NextRow()
+						lcFilt = "a.item = :Value"
+						lcValue = padr(alltrim(rs.data(1)), 25)
+						llItem = .t.
+					end if
+				end if
+			end if
+		end if
+	end if
+
+	if ISBLANK("var->lcFilt")
+		'See if the search field is found in the MPARTNO field
+		lcSQL = "SELECT count(*) FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND mpartno = :VP_ITEM"
+		llOK = cn.Execute(lcSQL, args2)
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnCount = rs.data(1)
+			if lnCount > 1
+				lcFilt = "a.mpartno = :Value"
+			elseif lnCount > 0
+				lcSQL = "SELECT item FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND mpartno = :VP_ITEM"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lcFilt = "a.item = :Value"
+					lcValue = padr(alltrim(rs.data(1)), 25)
+					llItem = .t.
+				end if
+			end if
+		end if
+	end if
+
+	if ISBLANK("var->lcFilt")
+		'See if the search field is found in the UPCCODE field
+		lcSQL = "SELECT count(*) FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND upccode = :VP_ITEM"
+		llOK = cn.Execute(lcSQL, args2)
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnCount = rs.data(1)
+			if lnCount > 1
+				lcFilt = "a.upccode = :Value"
+			elseif lnCount > 0
+				lcSQL = "SELECT item FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND upccode = :VP_ITEM"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lcFilt = "a.mpartno = :Value"
+					lcValue = padr(alltrim(rs.data(1)), 25)
+					llItem = .t.
+				end if
+			end if
+		end if
+	end if
+
+	if ISBLANK("var->lcFilt")
+		'See if the search field is found in the BARCODE field
+		lcSQL = "SELECT count(*) FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND barcode = :VP_ITEM"
+		llOK = cn.Execute(lcSQL, args2)
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnCount = rs.data(1)
+			if lnCount > 1
+				lcFilt = "a.upccode = :Value"
+			elseif lnCount > 0
+				lcSQL = "SELECT item FROM icitem WITH (NOLOCK) WHERE itemstat = 'A' AND barcode = :VP_ITEM"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lcFilt = "a.mpartno = :Value"
+					lcValue = padr(alltrim(rs.data(1)), 25)
+					llItem = .t.
+				end if
+			end if
+		end if
+	end if
+
+	if ISBLANK("var->lcFilt")
+		if llPartial
+			e._set.returnitem.value = lcValue
+			lcJs = "callItemSearchReturnFunction();"
+		else
+			lcPrompt = "Item " + UPPER(e.dataSubmitted.ITEMLIST_KEYWORDSEARCH) + " could not be located."
+			e._set.returnitem.value = ""
+			e._set.item_list_keywordsearch.value = ""
+			lcJs = "var title = 'Item Lookup';" + crlf()
+			lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+			lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+			lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+			lcJs = lcJs + "function(button) " + crlf()
+			lcJs = lcJs + "{setTimeout(function() {  },10)});"
+		end if
+	elseif llItem
+		e._set.returnitem.value = lcValue
+		lcJs = "callItemSearchReturnFunction();"
+	else
+		ops.Action = "Filter"
+		ops.filter = lcFilt
+		ops.order = "item"
+		ops.parameters = lcValue + "|||C|Value"
+		ops.listId = "ITEMLIST"
+		lcJs = a5_UX_Action(e, ops, "ajaxListAction")
+		lcJs = lcJs + crlf() + "evaluate_itemlist();"
+	end if
+	cn.Close()
+else
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = 'Could not access the database.';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() {  },10)});"
+end if	
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+lookup_item = lcJs
+EXIT FUNCTION
+
+error_lookup_item:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+lookup_item = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function getLoctid as c (tcItem as c)
+dim llCont as l
+dim llOK as l
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcLoctid as c
+dim lcSQL as c
+
+lcLoctid = ""
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	'See if there is a default location assigned to the item
+	args2.Add("VP_ITEM", tcItem)
+	lcSQL = "SELECT defloct FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lcLoctid = rs.data(1)
+	end if
+	cn.Close()
+end if
+
+if len(alltrim(lcLoctid)) = 0
+	lcLoctid = "02HOU "
+end if
+
+getLoctid = lcLoctid
+end function
+
+'*****************************************
+
+function getcost as n (tcItem as c, tcLoctid as c)
+dim llCont as l
+dim llOK as l
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lnCost as n
+dim lcSQL as c
+
+args2.Add("VP_ITEM", tcItem)
+args2.Add("VP_LOCTID", tcLoctid)
+
+lnCost = 0
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	lcSQL = "SELECT stdcost FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCost = rs.data(1)
+	end if
+	cn.Close()
+end if
+
+getcost = lnCost
+end function
+
+'*****************************************
+
+function xbvalidateuser as c (e as p)
+dim lcUser as c
+dim llValid as l
+dim llCont as l
+dim llOK as l
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim lcPrompt as c
+dim lcJs as c
+dim lcPassword as c
+dim lnRows as n
+dim llAdmin as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidateuser"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidateuser
+
+lcUser = UPPER(e.dataSubmitted.USERID)
+lcPassword = UPPER(e.dataSubmitted.PASSWORD)
+llAdmin = .f.
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Logging in...\n';")
+
+llCont = cn.open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+
+	args2.Add("VP_USERID", lcUser)
+	args2.Add("VP_PASSWORD", lcPassword)
+	lcSQL = "SELECT COUNT(*) FROM syuuser WITH (NOLOCK) WHERE userid = :VP_USERID AND disabled = 'N' AND wmspwd = :VP_PASSWORD"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows = 0
+			llValid = .f.
+			lcSQL = "SELECT COUNT(*) FROM syuuser WITH (NOLOCK) WHERE userid = :VP_USERID AND disabled = 'N'"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnRows = rs.data(1)
+				if lnRows = 0
+					lcPrompt = "User " + lcUser + " could not be located."
+				else
+					lcPrompt = "Password for user " + lcUser + " is incorrect."
+				end if
+			end if
+		else
+			llValid = .t.
+			lcSQL = "SELECT ulevel FROM syuuser WITH (NOLOCK) WHERE userid = :VP_USERID AND disabled = 'N'"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				llAdmin = rs.data(1)
+			end if
+		end if
+	else
+	  llValid = .f.
+	  lcPrompt = "Timeout attempting to query SYUUSER table.  If this continues, please notify IT."
+	end if
+else
+	llValid = .f.
+	lcPrompt = "Could not connect to PROSYS database.  Please notify IT immediately."
+end if
+
+if llValid
+	'Set the privileges for users
+	e._set.moveinventory.value = .t.
+	e._set.iteminquiry.value = .t.
+	e._set.receivepo.value = .t.
+	e._set.printlabel.value = .t.
+	e._set.pickso.value = .t.
+	e._set.packso.value = .t.
+
+	if llAdmin = .f.
+		'Move Inventory
+		lcSQL = "SELECT COUNT(*) FROM syupriv WITH (NOLOCK) WHERE userid = :VP_USERID AND procid = 'RFCHNGL'"
+		llOK = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		if lnRows = 0
+			e._set.moveinventory.value = .f.
+		end if
+	
+		'Item Inquiry
+		lcSQL = "SELECT COUNT(*) FROM syupriv  WITH (NOLOCK) WHERE userid = :VP_USERID AND procid = 'RFINQ'"
+		llOK = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		if lnRows = 0
+			e._set.iteminquiry.value = .f.
+		end if
+	
+		'PO Receipts
+		lcSQL = "SELECT COUNT(*) FROM syupriv WITH (NOLOCK) WHERE userid = :VP_USERID AND procid = 'RFPRCPT'"
+		llOK = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		if lnRows = 0
+			e._set.receivepo.value = .f.
+		end if
+	
+		'Print Label
+		lcSQL = "SELECT COUNT(*) FROM syupriv WITH (NOLOCK) WHERE userid = :VP_USERID AND procid = 'RFLABEL'"
+		llOK = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		if lnRows = 0
+			e._set.printlabel.value = .f.
+		end if
+
+		'Pick SO
+		lcSQL = "SELECT COUNT(*) FROM syupriv WITH (NOLOCK) WHERE userid = :VP_USERID AND procid = 'RFPICK'"
+		llOK = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		if lnRows = 0
+			e._set.pickso.value = .f.
+		end if
+
+		'Pack SO
+		lcSQL = "SELECT COUNT(*) WITH (NOLOCK) FROM syupriv WHERE userid = :VP_USERID AND procid = 'RFPACK'"
+		llOK = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		if lnRows = 0
+			e._set.packso.value = .f.
+		end if
+	end if
+end if
+
+if lcUser = "B123"
+	error_generate("This is a really bad error")
+end if
+
+if llValid
+	cn.Close()
+	lcJs = "callMainMenu();"
+else
+	lcJs = "var title = 'User Validation';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() {{dialog.object}.setFocus('USERID'); },10)});"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbvalidateuser = lcJs
+EXIT FUNCTION
+
+error_xbvalidateuser:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('USERID');")
+
+a5AjaxChunkedResponseDone()
+xbvalidateuser = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbgetplitem as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcItem as c
+dim lcDescription as c
+dim lnQty as n
+dim lnReceived as n
+dim lnPending as n
+dim lnLine as n
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim lcVendno as c
+dim lcBin as c
+dim lcPartno as c
+dim lnOnhand as n
+dim lcPrompt as c
+dim lcUser
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbgetplitem"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbgetplitem
+
+lcPrompt = ""
+lcDescription = ""
+lnQty = 0
+lnLine = 0
+lcUser = e.dataSubmitted.USERID
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	'We already got the valid item from the item lookup, so just get the record for it here
+	l_SQLSettings(cn)
+
+	lcItem = padr(alltrim(e.dataSubmitted.PLITEM), 25)
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Locating item " + alltrim(lcItem) + "...\n';")
+
+	args2.Add("vp_item", lcItem)
+
+	lcSQL = "SELECT count(*) "
+	lcSQL = lcSQL + "FROM icitem WITH (NOLOCK) "
+	lcSQL = lcSQL + "WHERE item = :VP_ITEM"
+	llOK = cn.Execute(lcSQL, args2)
+	lnRows = 0
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+	end if
+	
+	if lnRows <> 0
+		lcSQL = "SELECT itmdesc, ionhand, bin, mpartno, suplier "
+		lcSQL = lcSQL + "FROM icitem WITH (NOLOCK) "
+		lcSQL = lcSQL + "WHERE item = :VP_ITEM"
+		llOK = cn.Execute(lcSQL, args2)
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+'			lcDescription = transformstring(rs.data(1))
+			lcDescription = rs.data(1)
+			lnOnhand = rs.data(2)
+			lcBin = rs.data(3)
+			lcPartno = transformstring(rs.data(4))
+			lcVendno = rs.data(5)
+		else
+		  lcPrompt = "Timeout attempting the item lookup in xbgetplitem.  If this continues, please notify IT."
+		end if
+	else
+		lcPrompt = "Could not locate item in xbgetplitem."
+	end if
+	cn.Close()
+else
+	lcPrompt = "Unable to connect to SQL database."
+end if
+
+if LEN(lcPrompt) <> 0
+	lcJs = "var title = 'Print Label';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { callPrintLabel(); },10)});"
+else
+	e._set.pldescription.value = lcDescription
+	e._set.plvendno.value = lcVendno
+	e._set.plbin.value = lcBin
+	e._set.plpartno.value = lcPartno
+	lcJs = "{dialog.object}.setFocus('PLQTY');"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+xbgetplitem = lcJs
+EXIT FUNCTION
+
+error_xbgetplitem:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PLQTY');")
+
+a5AjaxChunkedResponseDone()
+xbgetplitem = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbcompleteprintlabel as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcJs as c
+dim cn as SQL::Connection
+dim cn2 as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim lcItem as c
+dim lcBin as c
+dim lcPartno as c
+dim lnQty as n
+dim lnTranQty as n
+dim lcSessno as c
+dim lnSessno as n
+dim lcUserID as c
+dim lcDesc1 as c
+dim lcDesc2 as c
+dim lnPos as n
+dim lcString as c
+dim lcPrinter as c
+dim lcPath as c
+dim lcFile as c
+dim socket as Inet::Socket
+dim lcIP as c
+dim lnPort as n
+dim lcReturnCall as c
+dim lcPrompt as c
+dim llSmall as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbcompleteprintlabel"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbcompleteprintlabel
+
+lcUserID = e.dataSubmitted.USERID
+lcReturnCall = e.dataSubmitted.PLRETURNCALL
+lcPrompt = ""
+llOK = .t.
+llCont = cn.open("::Name::Bass-SQL-Probass")
+llCont = llCont .AND. cn2.open("::Name::Bass-SQL-Prosys")
+if llCont
+	'We already got the valid item from the item lookup, so just get the record for it here
+	l_SQLSettings(cn)
+	l_SQLSettings(cn2)
+
+	lcItem = padr(alltrim(e.dataSubmitted.PLITEM), 25)
+	lnQty = e.dataSubmitted.PLQTY
+	lcBin = upper(e.dataSubmitted.PLBIN)
+	lcVendno = e.dataSubmitted.PLVENDNO
+	lcPartno = transformstring(e.dataSubmitted.PLPARTNO)
+	lcDescription = transformstring(e.dataSubmitted.PLDESCRIPTION)
+	lcPrinter = e.dataSubmitted.PLPRINTER
+	lcDesc1 = ""
+	lcDesc2 = ""
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Turn " + alltrim(lcPrinter) + " on...\n';")
+
+	'Set the printer IP and port
+	if right(lcPrinter, 5) = "Small"
+		llSmall = .t.
+	else
+		llSmall = .f.
+	end if
+
+	select
+		case left(lcPrinter, 8) = "WLabel 1"
+			lcIP = "10.1.1.73"
+		case left(lcPrinter, 8) = "WLabel 2"
+			lcIP = "10.1.1.74"
+		case left(lcPrinter, 8) = "WLabel 3"
+			lcIP = "10.1.1.75"
+		case left(lcPrinter, 8) = "WLabel 4"
+			lcIP = "10.1.1.99"
+		case left(lcPrinter, 8) = "WLabel 5"
+			lcIP = "10.1.1.100"
+		case left(lcPrinter, 8) = "WLabel 6"
+			lcIP = "10.1.1.101"
+	end select
+	lnPort = 9100
+	
+	lnPos = 0
+	for i = 1 to 30
+		if substr(lcDescription, i, 1) = " "
+			lnPos = i
+		end if
+	next
+	
+	if lnPos = 0
+		lnPos = 30
+	end if
+	lcDesc1 = left(lcDescription, lnPos)
+	lcDesc2 = substr(lcDescription, lnPos + 1)
+
+	if llSmall
+		lcString = "^XA" + crlf()
+		lcString = lcString + "^PW609" + crlf()
+		lcString = lcString + "^FO0,15" + crlf()
+		lcString = lcString + "^IME:BLOGO.png^FS" + crlf()
+		lcString = lcString + "^FO45,12" + crlf()
+		lcString = lcString + "^A0N,admn30,22" + crlf()
+		lcString = lcString + "^FDI:" + alltrim(lcItem) + "   PN:" + alltrim(lcPartno) + "^FS" + crlf()
+		lcString = lcString + "^FO45,48" + crlf()
+		lcString = lcString + "^A0N,30,22" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcDescription) + "^FS" + crlf()
+		lcString = lcString + "^FO45,74^BY2,2.2,10" + crlf()
+		lcString = lcString + "^BAN,30,N,N,N" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcItem) + "^FS" + crlf()
+		lcString = lcString + "^XZ" + crlf()
+	else
+		lcString = "^XA" + crlf()
+	'	lcString = lcString + "^PQ" + alltrim(str(lnQty)) + crlf()
+		lcString = lcString + "^PW600" + crlf()
+		lcString = lcString + "^FO142,40" + crlf()
+		lcString = lcString + "^A0N,40,29" + crlf()
+		lcString = lcString + "^FDBass Tool & Supply, Inc.^FS" + crlf()
+		lcString = lcString + "^FO201,81" + crlf()
+		lcString = lcString + "^A0N,35,25" + crlf()
+		lcString = lcString + "^FD(713) 682-1889^FS" + crlf()
+		lcString = lcString + "^FO25,100" + crlf()
+		lcString = lcString + "^A0N,34,20" + crlf()
+		lcString = lcString + "^FDVend P/N:^FS" + crlf()
+		lcString = lcString + "^FO25,140" + crlf()
+		lcString = lcString + "^A0N,35,20" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcPartno) + "^FS" + crlf()
+		lcString = lcString + "^FO410,100" + crlf()
+		lcString = lcString + "^A0N,35,20" + crlf()
+		lcString = lcString + "^FDBin:^FS" + crlf()
+		lcString = lcString + "^FO410,140" + crlf()
+		lcString = lcString + "^A0N,35,20" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcBin) + "^FS" + crlf()
+		lcString = lcString + "^FO25,183" + crlf()
+		lcString = lcString + "^A0N,30,22" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcDesc1) + "^FS" + crlf()
+		lcString = lcString + "^FO25,218" + crlf()
+		lcString = lcString + "^A0N,30,22" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcDesc2) + "^FS" + crlf()
+		lcString = lcString + "^FO25,255^BY2,2.2,10" + crlf()
+		lcString = lcString + "^BAN,60,N,N,N" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcItem) + "^FS" + crlf()
+		lcString = lcString + "^FO60,325" + crlf()
+		lcString = lcString + "^A0N,40,28" + crlf()
+		lcString = lcString + "^FD" + alltrim(lcItem) + "^FS" + crlf()
+		lcString = lcString + "^XZ" + crlf()
+	end if
+
+	if socket.Connect(lcIP, lnPort, 20000)
+		a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Printing...\n';")
+		for i = 1 TO lnQty
+			socket.Write(lcString)
+		next
+		socket.Close()
+	else
+	  lcPrompt = "Cannot connect to " + alltrim(lcPrinter) + ".  Make sure it is on."
+	end if
+	cn.Close()
+	cn2.Close()
+else
+	lcPrompt = "Unable to connect to SQL database."
+end if
+
+if LEN(lcPrompt) <> 0
+	lcJs = "var title = 'Label Print';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() {  " + crlf()
+	if len(lcReturnCall) = 0
+		lcJs = lcJs + "{dialog.object}.panelSetActive('PANELCARD_PRINTLABEL', false);" + crlf()
+		lcJs = lcJs + "{dialog.object}.setFocus('PLQTY');" + crlf()
+	else
+		lcJs = lcJs + lcReturnCall + "();" + crlf()
+	end if
+	lcJs = lcJs + " },10)});"
+else
+	if len(lcReturnCall) = 0
+		lcJs = "callPrintLabel();"
+	else
+		lcJs = lcReturnCall + "();"
+	end if
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+xbcompleteprintlabel = lcJs
+EXIT FUNCTION
+
+error_xbcompleteprintlabel:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PLQTY');")
+
+a5AjaxChunkedResponseDone()
+xbcompleteprintlabel = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbcallpockbo as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcPrinter as c
+dim lcPurno as c
+dim lcPrompt as c
+dim lcJs as c
+dim lcFileName as c
+dim lcPrintDir as c
+dim lcPrintDir as c
+dim lcReport as c
+dim lcSQL as c
+dim lnCount as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbcallpockbo"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbcallpockbo
+
+lcPurno   = padl(alltrim(e.dataSubmitted.PURNO), 10)
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Querying POCKBO data...\n';")
+
+ 	'POCKBO query
+	args2.Add("VP_PURNO", lcPurno)
+	lcSQL = "SELECT COUNT(*) FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :VP_PURNO AND pockbo = 0"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+		if lnCount > 0
+		else
+			lcPrompt = "Nothing received has been set aside."
+		end if
+	end if
+	cn.Close()
+end if
+
+if len(lcPrompt) <> 0
+	lcJs = "var title = 'Print POCKBO';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() {  },10)});"
+else
+	lcJs = "callPrintPOCKBO2();"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbcallpockbo = lcJs
+EXIT FUNCTION
+
+error_xbcallpockbo:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbcallpockbo = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbprintpockbo as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcPrinter as c
+dim lcPurno as c
+dim lcPrompt as c
+dim lcJs as c
+dim lcFileName as c
+dim lcPrintDir as c
+dim lcPrintDir as c
+dim lcReport as c
+dim lcSQL as c
+dim lnCount as n
+dim lcText as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbprintpockbo"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbprintpockbo
+
+lcPrinter = e.dataSubmitted.POCKBOPRINTER
+lcPurno   = padl(alltrim(e.dataSubmitted.PURNO), 10)
+lcPrompt  = ""
+lcJs      = ""
+lcPrintDir = "C:\PRINTING\\" + lcPrinter + "\\"
+lcFileName = lcPrintDir + file.filename_parse(strtran(upper(a5_get_tempfile_name()), ".TMP", ".PDF"), "ne")
+lcReport = a5_removeTrailingBackslash(context.request.applicationRoot) + chr(92) + "POCKBO.a5rpt"
+args2.Add("VP_PURNO", lcPurno)
+
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	'a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Printing POCKBO...\n';")
+
+ 	'POCKBO query
+	lcSQL = "SELECT COUNT(*) FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :VP_PURNO AND pockbo = 0"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+		if lnCount > 0
+			a5w_report_saveAs(lcReport,"PDF","","",lcFileName,global_variables(), null_value(), args2)
+			if FILE.exists(lcFileName)
+				'Mark the records in ICTRAN as having been reported
+				lcSQL = "SELECT ttranno, item, docno, id_col FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :VP_PURNO AND pockbo = 0"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					rs = cn.ResultSet
+					while (rs.NextRow())
+						lnID = rs.data(4)
+						l_lockrec("ictran", "lckuser", lnID, cn, -1, "Printing POCKBO...\n")
+						args2.Add("VP_ID", lnID)
+						lcSQL = "UPDATE ictran SET pockbo = 1 WHERE id_col = :VP_ID"
+						cn.Execute(lcSQL, args2)
+						l_Unlock(cn)
+					end while
+				end if
+			end if
+		end if
+	end if
+	cn.Close()
+end if
+
+lcJs = lcJs + "callPOEntry('');"
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbprintpockbo = lcJs
+EXIT FUNCTION
+
+error_xbprintpockbo:
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbprintpockbo = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function transformstring as c (tcString as c)
+dim lcString
+
+lcString = strtran(strtran(tcString, "'", "\'"), chr(34), chr(92) + chr(34))
+
+transformstring = lcString
+end function
+
+'*****************************************
+
+function getPORecords as c (e as p)
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lnCount as n
+dim llOK as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "getPORecords"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_getPORecords
+
+lnCount = 0
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	lcPurno = padl(alltrim(e.dataSubmitted.PURNO), 10)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Locating PO...\n';")
+
+	lcSQL = "SELECT COUNT(*) FROM (SELECT DISTINCT tranlineno FROM ictran WITH (NOLOCK) WHERE docno = :VP_PURNO AND applid = 'PO' AND porcpt = 0) a"
+	args2.Add("VP_PURNO", lcPurno)
+	llCont = cn.Execute(lcSQL, args2)
+	lnCount = 0
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+	end if
+	cn.Close()
+end if	
+
+a5AjaxChunkedResponseDone()
+e._set.pocount.value = lnCount
+getPORecords = "clearWaitMode();"
+EXIT FUNCTION
+
+error_getPORecords:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+getPORecords = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbcallporeceipt as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcPurno as c
+dim lcPrompt as c
+dim lcJs as c
+dim lnCount as n
+dim lcSQL as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbcallporeceipt"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbcallporeceipt
+
+lcPurno   = padl(alltrim(e.dataSubmitted.PURNO), 10)
+lcPrompt  = ""
+lcJs      = ""
+
+lcPurno   = padl(alltrim(e.dataSubmitted.PURNO), 10)
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Querying data for PORECEIPT...\n';")
+
+ 	'PO RECEIPT query
+	args2.Add("VP_PURNO", lcPurno)
+	lcSQL = "SELECT COUNT(*) FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :VP_PURNO AND porcpt = 0"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+		if lnCount > 0
+		else
+			lcPrompt = "Nothing received to print."
+		end if
+	end if
+	cn.Close()
+end if
+
+if len(lcPrompt) <> 0
+	lcJs = "var title = 'Print PO Receipt';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() {  },10)});"
+else
+	lcJs = "callPrintPORECEIPT2();"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbcallporeceipt = lcJs
+EXIT FUNCTION
+
+error_xbcallporeceipt:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbcallporeceipt = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbprintporeceipt as c (e as p)
+dim llCont as l
+dim llOK as l
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcPrinter as c
+dim lcPurno as c
+dim lcPrompt as c
+dim lcJs as c
+dim lcFileName as c
+dim lcPrintDir as c
+dim lcReport as c
+dim lnCount as n
+dim lcSQL as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbprintporeceipt"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbprintporeceipt
+
+lcPrinter = e.dataSubmitted.PORECEIPTPRINTER
+lcPurno   = padl(alltrim(e.dataSubmitted.PURNO), 10)
+lcPrompt  = ""
+lcJs      = ""
+lcPrintDir = "C:\PRINTING\\" + lcPrinter + "\\"
+lcFileName = lcPrintDir + file.filename_parse(strtran(upper(a5_get_tempfile_name()), ".TMP", ".PDF"), "ne")
+lcFileName2 = lcPrintDir + file.filename_parse(strtran(upper(a5_get_tempfile_name()), ".TMP", ".PDF"), "ne")
+lcReport = a5_removeTrailingBackslash(context.request.applicationRoot) + chr(92) + "PORECEIPT.a5rpt"
+lcReport2 = a5_removeTrailingBackslash(context.request.applicationRoot) + chr(92) + "PORCPTCVR.a5rpt"
+
+args2.Add("VP_PURNO", lcPurno)
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	'a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Printing PORECEIPT...\n';")
+
+ 	'PO RECEIPT query
+	lcSQL = "SELECT COUNT(*) FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :VP_PURNO AND porcpt = 0"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+		if lnCount > 0
+			a5w_report_saveAs(lcReport,"PDF","","",lcFileName,global_variables(), null_value(), args2)
+			a5w_report_saveAs(lcReport2,"PDF","","",lcFileName2,global_variables(), null_value(), args2)
+			if FILE.exists(lcFileName)
+				'Mark the records in ICTRAN as having been reported
+				lcSQL = "SELECT ttranno, item, docno, id_col FROM ictran WITH (NOLOCK) WHERE applid = 'PO' AND docno = :VP_PURNO AND porcpt = 0"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					rs = cn.ResultSet
+					while rs.nextRow()
+						lnID = rs.data(4)
+						l_lockrec("ictran", "lckuser", lnID, cn, -1, "Printing PORECEIPT...\n")
+						args2.Add("VP_ID", lnID)
+						lcSQL = "UPDATE ictran SET porcpt = 1 WHERE id_col = :VP_ID"
+						cn.Execute(lcSQL, args2)
+						l_Unlock(cn)
+					end while
+				end if
+			end if
+		end if
+	end if
+	cn.Close()
+end if
+
+lcJs = lcJs + "callPOEntry('');"
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbprintporeceipt = lcJs
+EXIT FUNCTION
+
+error_xbprintporeceipt:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbprintporeceipt = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function getPurno as c (e as p)
+getPurno = padl(alltrim(e.datasubmitted.purno), 10)
+end function
+
+'*****************************************
+
+function xbvalidateFromShelf as c (e as p)
+dim lcShelf as c
+dim lcLoctid as c
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lnCount as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidateFromShelf"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidateFromShelf
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.FROMSHELF)
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Validating Shelf location...\n';")
+
+	args2.Add("VP_SHELF", lcShelf)
+	lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE qstore = :VP_SHELF AND qonhand <> 0 AND qserial <> '_OVERSHIP'"
+	llCont = cn.Execute(lcSQL, args2)
+	lnCount = 0
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+	end if
+	
+	if lnCount = 0
+		lcPrompt = "No items are found at shelf " + lcShelf + "."
+		lcJs = "var title = 'Shelf Validation';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('FROMSHELF'); },10)});"
+	else
+		e._set.fromshelf.value = lcShelf
+		e._set.fromshelfvalid.value = .t.
+		lcJs = "callMoveInventory();"
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('FROMSHELF'); },10)});"
+end if	
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbvalidateFromShelf = lcJs
+EXIT FUNCTION
+
+error_xbvalidateFromShelf:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('FROMSHELF');")
+
+a5AjaxChunkedResponseDone()
+xbvalidateFromShelf = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbvalidateFromItem as c (e as p)
+dim lcShelf as c
+dim lcItem as c
+dim lcLoctid as c
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lcDescrip as c
+dim lcDefShelf as c
+dim lcTotQty as c
+dim lcQty as c
+dim lcPartno as c
+dim llOK as l
+dim lnCount as n
+dim llOK as l
+dim lcUser as c
+dim lcPass as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidateFromItem"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidateFromItem
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.FROMSHELF)
+lcItem  = upper(e.datasubmitted.FROMITEM)
+lcLoctid = upper(e.datasubmitted.LOCTID)
+lcPartno = ""
+lcUser = e.datasubmitted.USERID
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Validating item...\n';")
+
+	args2.Add("VP_SHELF", lcShelf)
+	args2.Add("VP_ITEM", lcItem)
+
+	lcSQL = "SELECT defloct, mpartno FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+	llCont = cn.Execute(lcSQL, args2)
+	IF llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lcLoctid = rs.data(1)
+		if len(alltrim(lcLoctid)) = 0
+			lcLoctid = "02HOU "
+		end if
+		lcPartno = rs.data(2)
+	end if
+
+	args2.Add("VP_LOCTID", lcLoctid)
+	lcSQL = "SELECT COUNT(*) " + crlf()
+	lcSQL = lcSQL + "FROM iciqty a WITH (NOLOCK) " + crlf()
+	lcSQL = lcSQL + "INNER JOIN icitem b WITH (NOLOCK) ON a.item = b.item " + crlf()
+	lcSQL = lcSQL + "WHERE qstore = :VP_SHELF AND a.item = :VP_ITEM AND qserial <> '_OVERSHIP' AND qonhand > 0"
+	llCont = cn.Execute(lcSQL, args2)
+	lnCount = 0
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+	end if
+	
+	if lnCount = 0
+		lcPrompt = "No items are found at shelf " + lcShelf + "."
+		lcJs = "var title = 'Shelf Validation';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('FROMSHELF'); },10)});"
+	else
+		lcSQL = "SELECT a.qonhand, b.ionhand, b.bin, b.itmdesc " + crlf()
+		lcSQL = lcSQL + "FROM iciqty a WITH (NOLOCK) " + crlf()
+		lcSQL = lcSQL + "INNER JOIN icitem b WITH (NOLOCK) ON a.item = b.item " + crlf()
+		lcSQL = lcSQL + "WHERE a.qstore = :VP_SHELF AND a.item = :VP_ITEM AND a.qserial <> '_OVERSHIP' AND a.qonhand > 0"
+		llCont = cn.Execute(lcSQL, args2)
+		if llCont
+			rs = cn.ResultSet
+			rs.NextRow()
+			lcQty = alltrim(str(rs.data(1), 10))
+			lcTotQty = alltrim(str(rs.data(2), 10))
+			lcDefShelf = rs.data(3)
+			lcDescrip = rs.data(4)
+			
+			e._set.fromdesc.value = lcDescrip
+			e._set.frompartno.value = lcPartno
+			e._set.fromqty.value = val(lcQty)
+			e._set.totqty.value = val(lcTotQty)
+			e._set.defshelf.value = lcDefShelf
+			e._set.loctid.value = lcLoctid
+			e._set.fromitemvalid.value = .t.
+			lcJs = "callMoveInventory();"
+		else
+			lcMessage = "Error in query on ICIQTY in xbvalidateFromItem."
+			lcJs = "var title = 'Query Issue';" + crlf()
+			lcJs = lcJs + "var msgBody = '" + lcMessage + "';" + crlf()
+			lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+			lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+			lcJs = lcJs + "function(button) " + crlf()
+			lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('FROMITEM'); },10)});"
+		end if
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('FROMITEM'); },10)});"
+end if	
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbvalidateFromItem = lcJs
+EXIT FUNCTION
+
+error_xbvalidateFromItem:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('FROMITEM');")
+
+a5AjaxChunkedResponseDone()
+xbvalidateFromItem = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbprocessMoveInventory as c (e as p)
+dim lcFromShelf as c
+dim lcToShelf as c
+dim lcItem as c
+dim lcLoctid as c
+dim lcJs as c
+dim cn2 as SQL::Connection
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lcDescrip as c
+dim lcDefShelf as c
+dim lcTotQty as c
+dim lcQty as c
+dim lcUserID as c
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lnNeeded as n
+dim lnIOnhand as n
+dim lnLOnhand as n
+dim lcSessno as c
+dim lnCost as n
+dim lnQty as n
+dim lnQtyrec as n
+dim lnCost as n
+dim lnExtCost as n
+dim lnDisc as n
+dim lnTotCost as n
+dim llRollBack as l
+dim llBegin as l
+dim lnIAvgCost as n
+dim lnLAvgCost as n
+dim laParameters as p
+dim lnQID as n
+dim lnOQID as n
+dim lnLOnordr as n
+dim llFromII
+dim lcStkCode as c
+dim lcShelf as c
+dim llOK as l
+dim lcTranno as c
+dim lcTranno2 as c
+dim lcPrompt as c
+dim lnIID as n
+dim lnLID as n
+dim lnOvership as n
+dim lnTQID as n
+dim lnRows as n
+dim lcPass as c
+dim llFromPick as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbprocessMoveInventory"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbprocessMoveInventory
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.FROMSHELF)
+llFromII = (e.datasubmitted.FROMII = "TRUE")
+llFromPick = (e.datasubmitted.FROMII = "PICK")
+lcStkCode = ""
+lnOvership = 0
+lnIID = 0
+lnLID = 0
+lnQID = 0
+lnOQID = 0
+lnTQID = 0
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+llCont = llCont .AND. cn2.Open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+	l_SQLSettings(cn2)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Saving move...\n';")
+
+	lcItem  = e.datasubmitted.FROMITEM
+	lcLoctid = e.datasubmitted.LOCTID
+	lnQty    = e.datasubmitted.MOVEQTY
+	lcUserID = e.datasubmitted.USERID
+	lcSessno = e.datasubmitted.PPSESSNO
+	lcToShelf  = upper(e.datasubmitted.TOSHELF)
+	lcFromShelf = upper(e.datasubmitted.FROMSHELF)
+	ldDate = DATE()
+	lcTime = TIME()
+	ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+	args2.Add("VP_DATE", ltDate)
+	args2.Add("VP_TIME", lcTime)
+	args2.Add("VP_USERID", lcUserID)
+	args2.Add("VP_ITEM", lcItem)
+	args2.Add("VP_LOCTID", lcLoctid)
+	args2.Add("VP_TOSHELF", lcToShelf)
+	args2.Add("VP_FROMSHELF", lcFromShelf)
+
+	if llCont
+		'Validate the from loction/shelf
+		lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_FROMSHELF AND qserial <> '_OVERSHIP'"
+		llCont = cn.Execute(lcSQL, args2)
+		if llCont
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+			lnQID = 0
+			if llCont
+				if lnRows <> 0
+					lcSQL = "SELECT item, qonhand, id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_FROMSHELF AND qserial <> '_OVERSHIP'"
+					llCont = cn.Execute(lcSQL, args2)
+					if llCont
+						rs = cn.ResultSet
+						rs.NextRow()
+						lnQOnhand = rs.data(2)
+						lnQID = rs.data(3)
+					else
+						lcPrompt = "Could not query ICIQTY in xbprocessmoveinventory.  There may be a lock in the system.  If this continues, please notify IT."
+					end if
+				end if
+			else
+				lcPrompt = "Could not query ICIQTY in xbprocessmoveinventory.  There may be a lock in the system.  If this continues, please notify IT."
+			end if
+		end if
+	else
+		lcPrompt = "Could not query ICIQTY in xbprocessmoveinventory.  There may be a lock in the system.  If this continues, please notify IT."
+	end if
+	
+	if llCont .AND. lnQOnhand < lnQty
+		llCont = .f.
+		lcPrompt = "Please validate the quantity again.  There does not appear to be enough on this shelf to complete the inventory move."
+	end if
+
+	if llCont
+		'Get additional data from ICITEM
+		lcSQL = "SELECT item, mpartno, stkumid, ionhand, avgcost, stkcode, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+		llCont = cn.Execute(lcSQL, args2)
+		rs = cn.ResultSet
+		if llCont
+			rs.NextRow()
+			lcPartno = rs.data(2)
+			lcUM = rs.data(3)
+			lnIonhand = rs.data(4)
+			lnIAvgCost = rs.data(5)
+			lcStkCode = rs.data(6)
+			lnIID = rs.data(7)
+		else
+			lcPrompt = "Could not query ICITEM."
+		end if
+	end if
+
+	if llCont
+		lcSQL = "SELECT count(*) FROM iciloc WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID"
+		llCont = cn.Execute(lcSQL, args2)
+		lnRows = 0
+		if llCont
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+		end if
+		
+		if lnRows > 0
+			'Get data from ICILOC
+			lcSQL = "SELECT lonhand, lavgcst, lonordr, id_col FROM iciloc WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnLOnhand = rs.data(1)
+				lnLavgcost = rs.data(2)
+				lnLonordr = rs.data(3)
+				lnLID = rs.data(4)
+				lnCost = lnLAvgCost
+			else
+				lcPrompt = "Could not query ICILOC."
+			end if
+		else
+			lcPrompt = "Item " + alltrim(lcItem) + " does not exist at loction " + alltrim(lcLoctid) + ". Cannot proceed with move of item."
+			llCont = .f.
+		end if
+	end if
+
+	if llCont
+		'Get Session number (from SYSDATA IC record INT3 and validate against ICTRAN.SESSNO field)
+		'Once per session
+		if len(alltrim(lcSessno)) = 0
+			lcSessno = getTranno("ICBASS", "int3", "sessno", .t., cn, cn2, "Saving move...\n")
+			if lcSessno = "INVALID"
+				llCont = .f.
+				lcSessno = ""
+				lcPrompt = "Could not obtain session number from autonumbering routine."
+			end if
+		end if
+	end if
+
+	' One transaction # for issue and one for receipt
+	if llCont
+		'Get Tranaction number (from SYSDATA IC record INT1 and validate against ICTRAN.TRANNO field)
+		lcTranno = getTranno("ICBASS", "int1", "ttranno", .t., cn, cn2, "Saving move...\n")
+		if lcTranno = "INVALID"
+			llCont = .f.
+			lcTranno = ""
+			lcPrompt = "Could not obtain transaction number for autonumbering routine."
+		end if
+	end if
+
+	if llCont
+		'Get second Tranaction nubmer (from SYSDATA IC record INT1 and validate against ICTRAN.TRANNO field)
+		lcTranno2 = getTranno("ICBASS", "int1", "ttranno", .t., cn, cn2, "Saving move...\n")
+		if lcTranno2 = "INVALID"
+			llCont = .f.
+			lcTranno2 = ""
+			lcPrompt = "Could not obtain transaction number for autonumbering routine."
+		end if
+	end if
+
+	if llCont .AND. lcStkCode = "Y"
+		'Create the ICIQTY regular inventory record if we don't currently have one
+		lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_TOSHELF AND qserial <> '_OVERSHIP'"
+		llCont = cn.Execute(lcSQL, args2)
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if llCont 
+			if lnRows = 0
+				'First we need a new serial # for the qserial record
+				lcSQL = "SELECT item, nserial, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnSerial = rs.data(2) + 1
+					lcSerial = padl(alltrim(STR(lnSerial, 20)), 20, " ")
+					lnIID = rs.data(3)
+					args2.Add("VP_NSERIAL", lnSerial)
+					if l_lockrec("icitem", "lckuser", lnIID, cn, -1, "Saving move...\n")
+						lcSQL = "UPDATE icitem SET nserial = :VP_NSERIAL WHERE item = :VP_ITEM"
+						llOK = cn.Execute(lcSQL, args2)
+						l_Unlock(cn)
+					else
+						lcPrompt = "Could not obtain next record counter for item " + alltrim(lcItem) + ". It may be locked by another user."
+						llCont = .f.
+					endif
+				else
+					lcPrompt = "Could not obtain next record counter for item " + alltrim(lcItem) + ". It may be locked by another user."
+					llCont = .f.
+				end if
+			endif
+
+			if lnRows = 0 .AND. llCont
+				'Create a new record for this item/location
+				l_lockhead("iciqty", "lckuser", cn, -1, "Saving move...\n")
+				args2.Add("VP_SERIAL", lcSerial)
+				args2.Add("VP_COST", lnCost)
+				args2.Add("VP_TRANNO", lcTranno)
+				ldDate = DATE()
+				lcTime = TIME()
+				ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+				args2.Add("VP_DATE", ltDate)
+				args2.Add("VP_TIME", lcTime)
+				lcSQL = "INSERT INTO iciqty (qserial, item, loctid, qonhnd1, qonhand, qstore, qbin, " + crlf()
+				lcSQL = lcSQL + "lotno, qtranno, otranno, adduser, adddate, addtime, qcost) VALUES " + crlf()
+				lcSQL = lcSQL + "(:VP_SERIAL, :VP_ITEM, :VP_LOCTID, 0, 0, :VP_TOSHELF, '', '', :VP_TRANNO, :VP_TRANNO, :VP_USERID, " + crlf()
+				lcSQL = lcSQL + ":VP_DATE, :VP_TIME, :VP_COST) "
+				llCont = cn.Execute(lcSQL, args2)
+				l_Unlock(cn)
+				if .NOT. llCont
+					lcPrompt = "Could not create the ICIQTY record for item " + alltrim(lcItem) + "."
+				end if
+			end if
+		else
+			lcPrompt = "Could not query ICIQTY in xbprocessmoveinventory.  There may be a lock in the system.  If this continues, please notify IT."
+		end if
+		
+		if llCont
+			lcSQL = "SELECT id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_TOSHELF AND qserial <> '_OVERSHIP'"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnTQID = rs.data(1)
+			else
+				lcPrompt = "Could not query ICIQTY in xbProcessMoveInventory.  There may be a lock in the system.  If this continues, please notify IT."
+			end if
+		end if
+	end if
+
+	if llCont .AND. lcStkCode = "Y"
+		'See if we have an overship record with onhand on it
+		lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qserial = '_OVERSHIP' AND qonhand <> 0"
+		llCont = cn.Execute(lcSQL, args2)
+		if llCont
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnRows = rs.data(1)
+			llOvership = .t.
+			if lnRows = 0
+				'No overship record found
+				llOvership = .f.
+			else
+				lcSQL = "SELECT qonhand, id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qserial = '_OVERSHIP'"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnOvership = rs.data(1)
+					lnOQID = rs.data(2)
+					if lnOvership = 0
+						llOvership = .f.
+					end if
+				end if
+			end if
+		end if
+
+		if .NOT. llCont
+			lcPrompt = "Could not query ICIQTY for overship record."
+		end if
+	end if
+
+	if llCont
+		'Issue inventory from old shelf/cart
+		laParameters.Item = lcItem
+		laParameters.Qty = lnQty * -1
+		laParameters.Loctid = lcLoctid
+		laParameters.Reference = "Transfer inventory from shelf"
+		laParameters.Sessno = lcSessno
+		laParameters.Cost = lnCost
+		laParameters.UserID = lcUserID
+		laParameters.Applid = "IC"
+		laParameters.Line = 0
+		laParameters.Vendno = ""
+		laParameters.Purno = ""
+		laParameters.Partno = lcPartno
+		laParameters.UM = lcUM
+		laParameters.Tranno = lcTranno
+		laParameters.docno  = ""
+		laParameters.LAvgCost = lnLAvgCost
+		laParameters.IAvgCost = lnIAvgCost
+		laParameters.Overship = 0
+		laParameters.OQID = 0
+		laParameters.QID = lnQID
+		laParameters.QOnhand = lnQOnhand
+		laParameters.TQID = 0
+		laParameters.Lonordr = lnLonordr
+		laParameters.Bin = lcFromShelf
+		laParameters.stkcode = lcStkCode
+		laParameters.LID = lnLID
+		laParameters.IID = lnIID
+		laParameters.SID = 0
+
+		lcPrompt = inventorytransaction(cn, cn2, laParameters)
+		if len(lcPrompt) > 0
+			llCont = .f.
+			llRollBack = .t.
+		end if
+	end if
+
+	if llCont
+		'Receive inventory
+		laParameters.Item = lcItem
+		laParameters.Qty = lnQty
+		laParameters.Loctid = lcLoctid
+		laParameters.Reference = "Transfer inventory to shelf"
+		laParameters.Sessno = lcSessno
+		laParameters.Cost = lnCost
+		laParameters.UserID = lcUserID
+		laParameters.Applid = "IC"
+		laParameters.Line = 0
+		laParameters.Vendno = ""
+		laParameters.Purno = ""
+		laParameters.Partno = lcPartno
+		laParameters.UM = lcUM
+		laParameters.Tranno = lcTranno2
+		laParameters.docno  = ""
+		laParameters.LAvgCost = lnLAvgCost
+		laParameters.IAvgCost = lnIAvgCost
+		laParameters.Overship = lnOvership
+		laParameters.OQID = 0
+		laParameters.QID = 0
+		laParameters.QOnhand = 0
+		laParameters.TQID = lnTQID
+		laParameters.Lonordr = lnLonordr
+		laParameters.Bin = lcToShelf
+		laParameters.stkcode = lcStkCode
+		laParameters.LID = lnLID
+		laParameters.IID = lnIID
+		laParameters.SID = 0
+
+		lcPrompt = inventorytransaction(cn, cn2, laParameters)
+		if len(lcPrompt) > 0
+			llCont = .f.
+			llRollBack = .t.
+		end if
+	end if
+
+	if llCont .AND. left(lcFromShelf, 2) = "SO"
+		'Moved a pick quantity, so "reduce" the pick quantity
+		lcSono = padl(alltrim(strtran(lcFromShelf, "SO", "")), 10)
+		args2.Add("VP_SONO", lcSono)
+		args2.Add("VP_SHELF", lcFromShelf)
+		args2.Add("VP_QTY", lnQty)
+		lcSQL = "UPDATE sopick SET qty = qty - :vp_qty WHERE sono = :vp_sono AND qstore = :vp_shelf AND packed = 0"
+		llCont = cn.Execute(lcSQL, args2)
+	end if
+
+	cn.Close()
+	cn2.Close()
+else
+	lcPrompt = "Could not connect to the database."
+end if
+
+if .NOT. llCont
+	lcJs = "var title = 'Move Inventory';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('FROMSHELF'); },10)});"
+else
+	if llFromPick
+		lcJs = ""
+	else
+		e._set.ppsessno.value = lcSessno
+		lcJs = "callAfterMoveInventory('" + lcToShelf + "');"
+	end if
+end if
+	
+if .NOT. llFromPick
+	lcJs = "clearWaitMode();" + crlf() + lcJs
+
+	a5AjaxChunkedResponseDone()
+end if
+
+xbprocessMoveInventory = lcJs
+EXIT FUNCTION
+
+error_xbprocessMoveInventory:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('FROMSHELF');")
+
+a5AjaxChunkedResponseDone()
+xbprocessMoveInventory = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbprocessAdjustInventory as c (e as p)
+dim lcFromShelf as c
+dim lcToShelf as c
+dim lcItem as c
+dim lcLoctid as c
+dim lcJs as c
+dim cn2 as SQL::Connection
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lcDescrip as c
+dim lcDefShelf as c
+dim lcTotQty as c
+dim lcQty as c
+dim lcUserID as c
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lnNeeded as n
+dim lnIOnhand as n
+dim lnLOnhand as n
+dim lcSessno as c
+dim lnCost as n
+dim lnQty as n
+dim lnQtyrec as n
+dim lnCost as n
+dim lnExtCost as n
+dim lnDisc as n
+dim lnTotCost as n
+dim llRollBack as l
+dim llBegin as l
+dim lnIAvgCost as n
+dim lnLAvgCost as n
+dim laParameters as p
+dim lnQID as n
+dim lnOQID as n
+dim lnLOnordr as n
+dim llFromII
+dim lnDiff as n
+dim lnCurQty as n
+dim lnQOnhand as n
+dim lcStkCode as c
+dim lnIID as n
+dim lnLID as n
+dim lcReason as c
+dim lcPass as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbprocessAdjustInventory"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbprocessAdjustInventory
+
+lcJs = ""
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+llCont = llCont .AND. cn2.Open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+	l_SQLSettings(cn2)
+
+	'a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Processing inventory adjustment...\n';")
+
+	lcItem  = e.datasubmitted.ADJITEM
+	lcLoctid = e.datasubmitted.LOCTID
+	lnQty    = e.datasubmitted.ADJQTY
+	lnCurQty    = e.datasubmitted.ADJCURQTY
+	lnDiff = lnQty - lnCurQty
+	lcUserID = e.datasubmitted.USERID
+	lcSessno = e.datasubmitted.PPSESSNO
+	lcShelf = upper(e.datasubmitted.ADJSHELF)
+	lcReason = e.datasubmitted.ADJREASON
+	ldDate = DATE()
+	lcTime = TIME()
+	ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+	args2.Add("VP_DATE", ltDate)
+	args2.Add("VP_TIME", lcTime)
+	args2.Add("VP_USERID", lcUserID)
+	args2.Add("VP_ITEM", lcItem)
+	args2.Add("VP_LOCTID", lcLoctid)
+	args2.Add("VP_SHELF", lcShelf)
+
+	if llCont
+		'Get additional data from ICITEM
+		lcSQL = "SELECT item, mpartno, stkumid, ionhand, avgcost, stkcode, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+		llCont = cn.Execute(lcSQL, args2)
+		rs = cn.ResultSet
+		if llCont
+			rs.NextRow()
+			lcPartno = rs.data(2)
+			lcUM = rs.data(3)
+			lnIonhand = rs.data(4)
+			lnIAvgCost = rs.data(5)
+			lcStkCode = rs.data(6)
+			lnIID = rs.data(7)
+		else
+			lcPrompt = "Could not query ICITEM in xbadjustinventory.  There may be a lock in the system.  If this continues, please notify IT."
+		end if
+	end if
+
+	if llCont
+		'Get data from ICILOC
+		lcSQL = "SELECT lonhand, lavgcst, lonordr, id_col FROM iciloc WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID"
+		llCont = cn.Execute(lcSQL, args2)
+		rs = cn.ResultSet
+		if llCont
+			rs.NextRow()
+			lnLOnhand = rs.data(1)
+			lnLavgcost = rs.data(2)
+			lnLonordr  = rs.data(3)
+			lnLID = rs.data(4)
+			lnCost = lnLavgCost
+		else
+			lcPrompt = "Could not query ICILOC in xbadjustinventory.  There may be a lock in the system.  If this continues, please notify IT."
+		end if
+	end if
+	
+	if llCont
+		'Validate the loction/shelf
+		lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_SHELF AND qserial <> '_OVERSHIP'"
+		llCont = cn.Execute(lcSQL, args2)
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		lnQID = 0
+		lnQOnhand = 0
+		if llCont
+			if lnRows = 0
+				'Create a new qty record
+	
+				'First we need a new serial # for the qserial record
+				lcSQL = "SELECT item, nserial, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnSerial = rs.data(2) + 1
+					lcSerial = padl(alltrim(STR(lnSerial, 20)), 20, " ")
+					lnIID = rs.data(3)
+					args2.Add("VP_NSERIAL", lnSerial)
+					if l_lockrec("icitem", "lckuser", lnIID, cn, -1, "Saving adjustment...\n")
+						lcSQL = "UPDATE icitem SET nserial = :VP_NSERIAL WHERE item = :VP_ITEM"
+						llOK = cn.Execute(lcSQL, args2)
+						l_Unlock(cn)
+					else
+						lcPrompt = "Could not obtain next record counter for item " + alltrim(lcItem) + ". It could be locked by another user.  If this continues please notify IT."
+						llCont = .f.
+					end if
+				else
+					lcPrompt = "Could not obtain next record counter for item " + alltrim(lcItem) + ". It could be locked by another user.  If this continues please notify IT."
+					llCont = .f.
+				end if
+			end if
+
+			if lnRows = 0 .AND. llCont
+				'Create a new record for this item/location
+				args2.Add("VP_SERIAL", lcSerial)
+				args2.Add("VP_COST", lnCost)
+				ldDate = DATE()
+				lcTime = TIME()
+				ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+				args2.Add("VP_DATE", ltDate)
+				args2.Add("VP_TIME", lcTime)
+				l_Lockhead("iciqty", "lckuser", cn, -1, "Saving adjustment...\n")
+				lcSQL = "INSERT INTO iciqty (qserial, item, loctid, qonhnd1, qonhand, qstore, " + crlf()
+				lcSQL = lcSQL + "adduser, adddate, addtime, qcost) VALUES " + crlf()
+				lcSQL = lcSQL + "(:VP_SERIAL, :VP_ITEM, :VP_LOCTID, 0, 0, :VP_SHELF, :VP_USERID, " + crlf()
+				lcSQL = lcSQL + ":VP_DATE, :VP_TIME, :VP_COST) "
+				llCont = cn.Execute(lcSQL, args2)
+				l_Unlock(cn)
+				if .NOT. llCont
+					lcPrompt = "Could not create the ICIQTY record for item " + alltrim(lcItem) + "."
+				else
+					lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_SHELF AND qserial <> '_OVERSHIP'"
+					llOK = cn.Execute(lcSQL, args2)
+					if llOK
+						rs = cn.ResultSet
+						rs.NextRow()
+						lnRows = rs.data(1)
+					else
+						lcPrompt = "Could not create the ICIQTY record for item " + alltrim(lcItem) + "."
+						llCont = .f.
+					end if
+				end if
+			end if
+		else
+			lcPrompt = "Could not query ICIQTY in xbprocessadjustinventory.  There could be a lock on the system.  If this continues, notify IT."
+		end if
+
+		if llCont .AND. lnRows <> 0
+			lcSQL = "SELECT item, qonhand, id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_SHELF AND qserial <> '_OVERSHIP' ORDER BY qonhand DESC"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnQOnhand = rs.data(2)
+				lnQID = rs.data(3)
+			else
+				lcPrompt = "Could not query ICIQTY in xbadjustinventory.  There may be a lock in the system.  If this continues, please notify IT."
+				llCont = .f.
+			end if
+		end if
+	end if
+
+	if llCont
+		'Get Session number (from SYSDATA IC record INT3 and validate against ICTRAN.SESSNO field)
+		'Once per session
+		if len(alltrim(lcSessno)) = 0
+			lcSessno = getTranno("ICBASS", "int3", "sessno", .t., cn, cn2, "Processing inventory adjustment...\n")
+			if lcSessno = "INVALID"
+				llCont = .f.
+				lcSessno = ""
+				lcPrompt = "Could not obtain session number from autonumbering routine."
+			end if
+		end if
+	end if
+
+	' Get Transaction #
+	if llCont
+		'Get Tranaction number (from SYSDATA IC record INT1 and validate against ICTRAN.TRANNO field)
+		lcTranno = getTranno("ICBASS", "int1", "ttranno", .t., cn, cn2, "Processing inventory adjustment...\n")
+		if lcTranno = "INVALID"
+			llCont = .f.
+			lcTranno = ""
+			lcPrompt = "Could not obtain transaction number for autonumbering routine."
+		end if
+	end if
+
+	if llCont
+		'Issue/Receive inventory adjustment
+		laParameters.Item = lcItem
+		laParameters.Qty = lnDiff
+		laParameters.Loctid = lcLoctid
+		laParameters.Reference = lcReason
+		laParameters.Sessno = lcSessno
+		laParameters.Cost = lnCost
+		laParameters.UserID = lcUserID
+		laParameters.Applid = "IC"
+		laParameters.Line = 0
+		laParameters.Vendno = ""
+		laParameters.Purno = ""
+		laParameters.Partno = lcPartno
+		laParameters.UM = lcUM
+		laParameters.Tranno = lcTranno
+		laParameters.docno  = "_PCOUNT"
+		laParameters.LAvgCost = lnLAvgCost
+		laParameters.IAvgCost = lnIAvgCost
+		laParameters.Overship = 0
+		laParameters.OQID = 0
+		laParameters.QID = lnQID
+		laParameters.TQID = lnQID
+		laParameters.QOnhand = lnQOnhand
+		laParameters.Lonordr = lnLonordr
+		laParameters.Bin = lcShelf
+		laParameters.StkCode = lcStkCode
+		laParameters.IID = lnIID
+		laParameters.LID = lnLID
+		laParameters.SID = 0
+
+		lcPrompt = inventorytransaction(cn, cn2, laParameters)
+		if len(lcPrompt) > 0
+			llCont = .f.
+			llRollBack = .t.
+		end if
+	end if
+
+	if llCont .AND. left(lcShelf, 2) = "SO"
+		'Moved a pick quantity, so "reduce" the pick quantity
+		lcSono = padl(alltrim(strtran(lcShelf, "SO", "")), 10)
+		args2.Add("VP_SONO", lcSono)
+		args2.Add("VP_SHELF", lcShelf)
+		args2.Add("VP_QTY", lnDiff)
+		lcSQL = "UPDATE sopick SET qty = qty - :vp_qty WHERE sono = :vp_sono AND qstore = :vp_shelf AND packed = 0"
+		llCont = cn.Execute(lcSQL, args2)
+	end if
+
+	cn.Close()
+	cn2.Close()
+else
+	lcPrompt = "Could not connect to the database."
+end if
+
+if .NOT. llCont
+	lcJs = "var title = 'Adjust Inventory';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('ADJITEM'); },10)});"
+else
+	e._set.ppsessno.value = lcSessno
+	lcJs = "callItemInquiryLookup();"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbprocessAdjustInventory = lcJs
+EXIT FUNCTION
+
+error_xbprocessAdjustInventory:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('ADJITEM');")
+
+a5AjaxChunkedResponseDone()
+xbprocessAdjustInventory = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbChangeDefaultShelf as c (e as p)
+dim lcFromShelf as c
+dim lcToShelf as c
+dim lcItem as c
+dim lcLoctid as c
+dim lcJs as c
+dim cn2 as SQL::Connection
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lcDescrip as c
+dim lcDefShelf as c
+dim lcTotQty as c
+dim lcQty as c
+dim lcUserID as c
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lnNeeded as n
+dim lnIOnhand as n
+dim lnLOnhand as n
+dim lcSessno as c
+dim lnCost as n
+dim lnQty as n
+dim lnQtyrec as n
+dim lnCost as n
+dim lnExtCost as n
+dim lnDisc as n
+dim lnTotCost as n
+dim llRollBack as l
+dim llBegin as l
+dim lnIAvgCost as n
+dim lnLAvgCost as n
+dim laParameters as p
+dim lnQID as n
+dim lnOQID as n
+dim lnLOnordr as n
+dim llFromII as l
+dim lnIID as n
+dim lcUser as c
+dim lcPass as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbChangeDefaultShelf"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbChangeDefaultShelf
+
+lcJs = ""
+lcPrompt = ""
+
+lcItem  = e.datasubmitted.FROMITEM
+lcToShelf  = upper(e.datasubmitted.TOSHELF)
+lcFromShelf = upper(e.datasubmitted.FROMSHELF)
+lcDefShelf  = upper(e.datasubmitted.DEFSHELF)
+llFromII = (e.datasubmitted.FROMII = "TRUE")
+lcLoctid = e.datasubmitted.LOCTID
+lcUser = e.datasubmitted.USERID
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+llCont = llCont .AND. cn2.Open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+	l_SQLSettings(cn2)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Changing default shelf...\n';")
+
+	args2.Add("VP_NEWBIN", lcToShelf)
+	args2.Add("VP_OLDBIN", lcDefShelf)
+	args2.Add("VP_ITEM", lcItem)
+
+	'Get ID for item record
+	lcSQL = "SELECT item, defloct, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+	llCont = cn.Execute(lcSQL, args2)
+	rs = cn.ResultSet
+	if llCont
+		rs.NextRow()
+		lcLoctid = rs.data(2)
+		if len(alltrim(lcLoctid)) = 0
+			lcLoctid = "02HOU "
+		end if
+		e._set.loctid.value = lcLoctid
+		lnIID = rs.data(3)
+		
+	else
+		lcPrompt = "Could not query ICITEM."
+	end if
+	args2.Add("VP_LOCTID", lcLoctid)
+end if
+	
+if llCont	
+	l_lockrec("icitem", "lckuser", lnIID, cn, -1, "Changing default shelf...\n")
+	lcSQL = "UPDATE icitem SET bin = :VP_NEWBIN WHERE item = :VP_ITEM"
+	llCont = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .NOT. llCont
+		lcPrompt = "Could not change the default bin.  A problem occurred in xbChangeDefaultShelf.  If this continues, please notify IT."
+	else
+		'Write to audit log
+		ldDate = DATE()
+		lcTime = TIME()
+		ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+		args2.Add("VP_USERID", lcUser)
+		args2.Add("VP_DATE", ltDate)
+		args2.Add("VP_TIME", lcTime)
+		l_lockhead("syaudt", "adduser", cn2, -1, "Changing default shelf...\n")
+		lcSQL = "INSERT INTO syaudt (procid, descrip, adduser, adddate, addtime, docno, applid) " + crlf()
+		lcSQL = lcSQL + "VALUES ('CHANGELOC', 'BIN changed to " + alltrim(lcToShelf) + " from " + ALLTRIM(lcFromShelf) + "', :VP_USERID, :VP_DATE, :VP_TIME, :VP_ITEM, 'IC')"
+		llOK = cn2.Execute(lcSQL, args2)
+		l_Unlock(cn2)
+
+		'Update existing checked items
+		l_lockhead("sopick", "adduser", cn, -1, "Changing default shelf...\n")
+		lcSQL = "UPDATE sopick SET qstore = :VP_NEWBIN WHERE item = :VP_ITEM AND packed = 0 AND qstore = :VP_OLDBIN"
+		llOK = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+
+		'Update manufacturing shelf
+		l_lockhead("bmtran", "loctid", cn, -1, "Changing default shelf...\n")
+		lcSQL = "UPDATE bmtran SET store = :VP_NEWBIN FROM bmtran a INNER JOIN bmmach b ON a.wono = b.wono AND b.proddate = '01/01/1900' WHERE a.item = :VP_ITEM AND a.validated = 1 AND a.store = :VP_OLDBIN"
+		llOK = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+
+		lcSQL = "SELECT COUNT(*) FROM iciqty WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_OLDBIN AND qonhand > 0"
+		llOK = cn.Execute(lcSQL, args2)
+		lnCount = 0
+		lnQty   = 0
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnCount = rs.data(1)
+		end if
+		if lnCount = 1
+			lcSQL = "SELECT qonhand FROM iciqty WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_OLDBIN AND qonhand > 0"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnQty = rs.data(1)
+			end if
+		end if
+	end if
+end if
+
+if len(alltrim(lcPrompt)) = 0
+	if lnQty <> 0
+	 	lcJs = "moveOldDefaultInventory('" + lcItem + "','" + lcDefShelf + "','" + lcToShelf + "', " + alltrim(str(lnQty,10)) + ", '" + iif(llFromII, "TRUE", "FALSE") + "');"
+	else
+		if lnCount > 1
+			lcPrompt = "There is more than one record for the old bin with onhand.  You must manually move the inventory from each record."
+			lcJs = "var title = 'Shelf Validation';" + crlf()
+			lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+			lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+			lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+			lcJs = lcJs + "function(button) " + crlf()
+			lcJs = lcJs + "{setTimeout(function() { "
+			if llFromII
+				lcJs = lcJs + "{grid.object}.runAction('inquirylookup');"
+			else
+				lcJs = lcJs + "moveInventoryNextItem();"
+			end if
+			lcJs = lcJs + " },10)});" + crlf()
+		else
+			if llFromII
+				lcJs = lcJs + "{grid.object}.runAction('inquirylookup');"
+			else
+				lcJs = lcJs + "moveInventoryNextItem();"
+			end if
+		end if
+	end if
+	cn.Close()
+	cn2.Close()
+else
+	lcJs = "var title = 'Shelf Validation';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { "
+	if llFromII
+		lcJs = lcJs + "{grid.object}.runAction('inquirylookup');"
+	else
+		lcJs = lcJs + "moveInventoryNextItem();"
+	end if
+	lcJs = lcJs + " },10)});" + crlf()
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbChangeDefaultShelf = lcJs
+EXIT FUNCTION
+
+error_xbChangeDefaultShelf:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbChangeDefaultShelf = "clearWaitMode();" + crlf() + lcJs
+end function
+'*****************************************
+
+function xbvalidatecart as c (e as p)
+dim lcShelf as c
+dim lcJs as c
+dim llCont as l
+dim lnCount as n
+dim llOK as l
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidatecart"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidatecart
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.CART)
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Validating shelf...\n';")
+
+	args2.Add("VP_SHELF", lcShelf)
+
+	lcSQL = "SELECT COUNT(*) FROM icshlf WITH (NOLOCK) WHERE shelf = :VP_SHELF"
+	llCont = cn.Execute(lcSQL, args2)
+	lnCount = 0
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+	end if
+	
+	if lnCount = 0
+		lcPrompt = alltrim(lcShelf) + " is not valid."
+		lcJs = "var title = 'Shelf Validation';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('CART'); },10)});"
+	else
+		e._set.cartvalid.value = .t.
+		lcJs = "{dialog.object}.setFocus('ITEM');"
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('CART'); },10)});"
+end if	
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbvalidatecart = lcJs
+EXIT FUNCTION
+
+error_xbvalidatecart:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('CART');")
+
+a5AjaxChunkedResponseDone()
+xbvalidatecart = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbvalidatetoshelf as c (e as p)
+dim lcShelf as c
+dim lcJs as c
+dim llCont as l
+dim lnCount as n
+dim llOK as l
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llFromII as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidatetoshelf"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidatetoshelf
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.TOSHELF)
+llFromII = (e.datasubmitted.FROMII = "TRUE")
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Validating Shelf...\n';")
+
+	args2.Add("VP_SHELF", lcShelf)
+
+	lcSQL = "SELECT COUNT(*) FROM icshlf WITH (NOLOCK) WHERE shelf = :VP_SHELF"
+	llCont = cn.Execute(lcSQL, args2)
+	lnCount = 0
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+	end if
+	
+	if lnCount = 0
+		lcPrompt = alltrim(lcShelf) + " is not valid."
+		lcJs = "var title = 'Shelf Validation';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('TOSHELF'); },10)});"
+	else
+		if llFromII
+			lcJs = "validateMoveQty();"
+		else
+			lcJs = "{dialog.object}.setFocus('MOVEQTY');"
+		end if
+		e._set.toshelfvalid.value = .t.
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('TOSHELF'); },10)});"
+end if	
+
+if lcJs <> "validateMoveQty();"
+	lcJs = "clearWaitMode();" + crlf() + lcJs
+end if
+
+a5AjaxChunkedResponseDone()
+xbvalidatetoshelf = lcJs
+EXIT FUNCTION
+
+error_xbvalidatetoshelf:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('TOSHELF');")
+
+a5AjaxChunkedResponseDone()
+xbvalidatetoshelf = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbsettimeout as v (e as p)
+'Fires before the query to retrieve List data is executed. You can use this event to authorize the query
+'If the query is not authorized, it will not return any data
+'The e object that is passed in includes:
+'e.tmpl = UX definition
+'e.sql - the SQL statement that will be executed
+'e.arguments - SQL argument values to be passed to the SQL statement
+'e.listProperties - properties of the List control
+
+'Your code can set these properties:
+'e.authorized - set to .t. or .f.. If you do not set e.authorized, it is assumed to be .t.. If e.authorized = .f., the query will not return any data.
+
+'Your code can modify the SQL and the arguments used in the List query. For example:
+'e.sql = "Select id, firstname, lastname from customers where id = :whatid "
+'e.arguments.add("whatId",23)
+
+end function
+
+'*****************************************
+
+function inventorytransaction as c (cn as SQL::Connection, cn2 as SQL::Connection, taParameters as p)
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as l
+dim llOK as l
+dim lcSQL as c
+dim lcJs as c
+dim lnCost as n
+dim lcPartno as c
+dim ltStart as t
+dim lcUserID as c
+dim lcDocno as c
+dim lnDocno as n
+dim llUpdDoc as l
+dim lnTotCost as n
+dim lnAvgCost as n
+dim lnOnhand as n
+dim lcDocno as c
+dim lcOrgType as c
+dim lcPrompt as c
+dim lcStkCode as c
+dim lnUpdQty as n
+dim lnUMFact as n
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lcTrType as c
+dim lnNQty as n
+dim lcPass as c
+
+lcPrompt = ""
+lcUserID = taParameters.UserID
+lnUMFact = 1
+lnUpdQty = taParameters.Qty
+lcStkCode = taParameters.StkCode
+
+llCont = .t.
+if llCont
+	'Update ICTRAN
+	ldDate = DATE()
+	lcTime = TIME()
+	ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+	args2.Add("VP_DATE", ltDate)
+	args2.Add("VP_TIME", lcTime)
+	args2.Add("VP_TRANNO", taParameters.Tranno)
+	args2.Add("VP_PARTNO", taParameters.Partno)
+	args2.Add("VP_UMFACT", lnUMFact)
+	args2.Add("VP_ITEM", taParameters.Item)
+	args2.Add("VP_LOCTID", taParameters.Loctid)
+	args2.Add("VP_UM", taParameters.UM)
+	args2.Add("VP_QTY", lnUpdQty)
+	args2.Add("VP_SESSNO", taParameters.Sessno)
+	args2.Add("VP_REF", taParameters.Reference)
+	args2.Add("VP_COST", taParameters.Cost)
+	args2.Add("VP_USERID", taParameters.UserID)
+	args2.Add("VP_DOCNO", taParameters.Docno)
+	args2.Add("VP_APPLID", taParameters.Applid)
+	args2.Add("VP_LINE", taParameters.Line)
+	args2.Add("VP_ORGNO", taParameters.Vendno)
+	args2.Add("VP_BIN", taParameters.Bin)
+	if lnUpdQty < 0
+		if taParameters.Docno = "_PCOUNT"
+			lcTrType = "PI"
+		else if len(alltrim(taParameters.Docno)) = 0
+			lcTrType = "TI"
+		else
+			lcTrType = " I"
+		end if
+	else
+		if taParameters.Docno = "_PCOUNT"
+			lcTrType = "PR"
+		else if len(alltrim(taParameters.Docno)) = 0
+			lcTrType = "TR"
+		else
+			lcTrType = " R"
+		end if
+	end if
+	if len(taParameters.Vendno) = 0
+		lcOrgType = ""
+	else
+		lcOrgType = "S"
+	end if
+	args2.Add("VP_TRTYPE", lcTrType)
+	args2.Add("VP_ORGTYPE", lcOrgtype)
+	l_lockhead("ictran", "lckuser", cn, -1, "inventorytransactions...\n")
+	lcSQL = "INSERT INTO ictran (ttranno, umfact, serial, loctid, item, vpartno, lotno, " + crlf()
+	lcSQL = lcSQL + "trantyp, tdate, sqty, tqty, umeasur, tcost, applid, orgtype, orgno, " + crlf()
+	lcSQL = lcSQL + "docno, adduser, adddate, addtime, currid, exchrat, ftcost, udref, tranlineno, " + crlf()
+	lcSQL = lcSQL + "tftcost, trcost, sessno, tstore) VALUES " + crlf()
+	lcSQL = lcSQL + "(:VP_TRANNO, :VP_UMFACT, '', :VP_LOCTID, :VP_ITEM, :VP_PARTNO, '', :VP_TRTYPE, "  + crlf()
+	lcSQL = lcSQL + ":VP_DATE, :VP_QTY, :VP_QTY, :VP_UM, :VP_COST, :VP_APPLID, :VP_ORGTYPE, :VP_ORGNO, " + crlf()
+	lcSQL = lcSQL + ":VP_DOCNO, :VP_USERID, :VP_DATE, :VP_TIME, 'USD', 1, :VP_COST, " + crlf()
+	lcSQL = lcSQL + ":VP_REF, :VP_LINE, :VP_COST, :VP_COST, :VP_SESSNO, :VP_BIN)"
+	llCont = cn.Execute(lcSQL, args2)
+	if .NOT. llCont
+		lcPrompt = "Could not add record to ICTRAN. (inventorytransaction)"
+	end if
+	l_Unlock(cn)
+end if
+
+if llCont .AND. lcStkCode = "Y"
+	'Update ICIQTY only for stocked items
+	if lnUpdQty > 0
+		'Receipt
+		args2.Add("VP_NQTY", lnUpdQty)
+		args2.Add("VP_ID", taParameters.TQID)
+		'Update the existing record
+		l_lockrec("iciqty", "lckuser", taParameters.TQID, cn, -1, "inventorytransactions...\n")
+		lcSQL = "UPDATE iciqty SET qonhand = qonhand + :VP_NQTY, lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME " + crlf()
+		lcSQL = lcSQL + "WHERE id_col = :VP_ID"
+		llCont = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+		if .NOT. llCont
+			lcPrompt = "Could not update ICIQTY record for receipt on item " + alltrim(taParameters.Item) + " in inventorytransaction."
+		end if
+	else
+		'Issue
+		if taParameters.QID <> 0
+			lnOnhand = taParameters.QOnhand
+			lnNQty = lnOnhand + lnUpdQty
+			args2.Add("VP_QID", taParameters.QID)
+			l_lockrec("iciqty", "lckuser", taParameters.QID, cn, -1, "inventorytransactions...\n")
+			if lnNQty < 0
+				'Update with zero onhand and the remaining on overship
+				lnUpdQty = lnNQty
+				lcSQL = "UPDATE iciqty SET qonhand = 0, lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME " + crlf()
+				lcSQL = lcSQL + "WHERE id_col = :VP_QID"
+				llCont = cn.Execute(lcSQL, args2)
+				if .NOT. llCont
+					lcPrompt = "Could not update ICIQTY record for issue on item " + alltrim(taParameters.Item) + " in inventorytransaction."
+				end if
+			else
+				'Put all of it on existing record
+				lnUpdQty = 0
+				args2.Add("VP_NQTY", lnNQty)
+				lcSQL = "UPDATE iciqty SET qonhand = :VP_NQTY, lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME " + crlf()
+				lcSQL = lcSQL + "WHERE  id_col = :VP_QID"
+				llCont = cn.Execute(lcSQL, args2)
+				if .NOT. llCont
+					lcPrompt = "Could not update ICIQTY record for issue on item " + alltrim(taParameters.Item) + " in inventorytransaction."
+				end if
+			end if
+			l_Unlock(cn)
+		end if
+
+		if llCont .AND. lnUpdQty < 0
+			args2.Add("VP_NQTY", lnUpdQty)
+			args2.Add("VP_ID", taParameters.OQID)
+			'Update the existing record
+			l_lockrec("iciqty", "lckuser", taParameters.OQID, cn, -1, "inventorytransactions...\n")
+			lcSQL = "UPDATE iciqty SET qonhand = qonhand + :VP_NQTY, lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME " + crlf()
+			lcSQL = lcSQL + "WHERE id_col = :VP_ID"
+			llCont = cn.Execute(lcSQL, args2)
+			if .NOT. llCont
+				lcPrompt = "Could not update ICIQTY overship record for issue on item " + alltrim(taParameters.Item) + " in inventorytransaction."
+			end if
+			l_Unlock(cn)
+		end if
+	end if
+end if
+
+if llCont .AND. lcStkCode = "Y"
+	'Update ICILOC
+	ldDate = DATE()
+	lcTime = TIME()
+	ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+	args2.Add("VP_DATE", ltDate)
+	args2.Add("VP_TIME", lcTime)
+	args2.Add("VP_QTY", taParameters.Qty)
+	args2.Add("VP_LAVGCST", taParameters.LAvgCost)
+	args2.Add("VP_LONORDR", taParameters.Lonordr)
+	args2.Add("VP_ID", taParameters.LID)
+	l_lockrec("iciloc", "lckuser", taParameters.LID, cn, -1, "inventorytransactions...\n")
+	lcSQL = "UPDATE iciloc SET lavgcst = :VP_LAVGCST, lonhand = lonhand + :VP_QTY, " + crlf()
+	lcSQL = lcSQL + "lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME, " + crlf()
+	lcSQL = lcSQL + "plagcst = :VP_LAVGCST, slagcst = :VP_LAVGCST, lonordr = :VP_LONORDR"
+	if taParameters.applid = "PO" .AND. taParameters.Qty > 0
+		lcSQL = lcSQL + ", lrecv = :VP_DATE " + crlf()
+	else
+		lcSQL = lcSQL + " " + crlf()
+	end if
+	lcSQL = lcSQL + "WHERE id_col = :VP_ID"
+	llCont = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .NOT. llCont
+		lcPrompt = "Could not update ICILOC for item " + allltrim(taParameters.Item) + " (inventorytransaction)."
+	end if
+end if
+
+if llCont .AND. lcStkCode = "Y"
+	'Update ICITEM
+	args2.Add("VP_AVGCOST", taParameters.IAvgCost)
+	l_lockrec("icitem", "lckuser", taParameters.IID, cn, -1, "inventorytransactions...\n")
+	lcSQL = "UPDATE icitem SET avgcost = :VP_AVGCOST, ionhand = ionhand + :VP_QTY, " + crlf()
+	if taParameters.Applid = "PO" .AND. taParameters.Qty > 0
+		lcSQL = lcSQL + "ilrecv = :VP_DATE, " + crlf()
+	end if
+
+	lcSQL = lcSQL + "lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME " + crlf()
+	lcSQL = lcSQL + "WHERE item = :VP_ITEM"
+	llCont = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .NOT. llCont
+		lcPrompt = "Could not update ICITEM on item " + alltrim(taParameters.Item) + " in inventorytransaction."
+	end if
+end if
+
+if llCont .AND. len(taParameters.Vendno) <> 0 .AND. lcStkCode = "Y"
+	'Update ICSUPL for vendor part #
+	args2.Add("VP_ID", taParameters.SID)
+	l_lockrec("icsupl", "lckuser", taParameters.SID, cn, -1, "inventorytransactions...\n")
+	lcSQL = "UPDATE icsupl SET lastcst = :VP_COST, tlstcst = :VP_COST, clstcst = :VP_COST, " + crlf()
+	if taParameters.Applid = "PO" .AND. taParameters.Qty > 0
+		lcSQL = lcSQL + "lrecdte = :VP_DATE, " + crlf()
+	end if
+	lcSQL = lcSQL + "ytdqty = ytdqty + :VP_QTY, " + crlf()
+	lcSQL = lcSQL + "lckuser = :VP_USERID, lckdate = :VP_DATE, lcktime = :VP_TIME " + crlf()
+	lcSQL = lcSQL + "WHERE id_col = :VP_ID"
+	llCont = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .NOT. llCont
+		lcPrompt = "Could not update ICSUPL for item " + alltrim(taParameters.Item) + " in inventorytransaction."
+	end if
+end if
+
+inventorytransaction = lcPrompt
+end function
+
+'*****************************************
+
+function l_Rlock as l (tcTable as c, tcField as c, tnID as n, cn as SQL::Connection)
+dim llLock as l
+dim args as SQL::Arguments
+dim llOK as l
+dim rs as SQL::ResultSet
+dim lcSQL as c
+
+llLock = .f.
+
+lcSQL = "SELECT @@TRANCOUNT AS TranCount"
+llOK = cn.Execute(lcSQL, args)
+if llOK
+	lcSQL = "BEGIN TRANSACTION"
+	llOK = cn.Execute(lcSQL, args)
+end if
+
+if llOK
+	args.Add("VP_ID", tnID)
+	lcSQL = "UPDATE " + tcTable + " WITH (UPDLOCK, NOWAIT) SET " + tcField + " = " + tcField + " WHERE id_col = :VP_ID"
+	llLock = cn.Execute(lcSQL, args)
+    Resp = cn.CallResult.text
+end if
+
+if .NOT. llLock
+	lcSQL = "COMMIT"
+	cn.Execute(lcSQL, args)
+end if
+
+l_rlock = llLock
+end function
+
+'*****************************************
+
+function l_Unlock as l (cn as SQL::Connection)
+dim llUnlock as l
+
+llUnlock = .t.
+cn.Execute("COMMIT")
+
+l_Unlock = llUnlock
+end function
+
+'*****************************************
+
+function l_UnlockAll as l (cn as SQL::Connection)
+dim lnCount as n
+
+lnCount = 1
+while lnCount < 1000
+	cn.Execute("COMMIT")
+end while
+
+l_UnlockAll = .t.
+end function
+
+'*****************************************
+
+function l_hlock as l (tcTable as c, tcFirstField as c, cn as SQL::Connection)
+dim llLock as l
+dim args as SQL::Arguments
+dim llOK as l
+dim rs as SQL::ResultSet
+dim lnCount as n
+dim lnID as n
+dim lcSQL as c
+
+llLock = .f.
+lnCount = 0
+lnID = 1
+
+lcSQL = "SELECT TOP 1 id_col FROM " + tcTable + " ORDER BY id_col"
+llOK = cn.Execute(lcSQL, args)
+if llOK
+	rs = cn.ResultSet
+	rs.NextRow()
+	lnID = 0
+	ON ERROR GOTO errhandle
+	lnID = rs.data(1)
+	
+	errhandle:
+end if
+args.Add("VP_ID", lnID)
+
+lcSQL = "SELECT @@TRANCOUNT AS TranCount"
+llOK = cn.Execute(lcSQL, args)
+if llOK
+	lcSQL = "BEGIN TRANSACTION"
+	llOK = cn.Execute(lcSQL, args)
+end if
+
+if llOK
+	lcSQL = "UPDATE " + tcTable + " WITH (TABLOCK, HOLDLOCK, NOWAIT) SET " + tcFirstField + " = " + tcFirstField + " WHERE id_col = :VP_ID"
+	llLock = cn.Execute(lcSQL, args)
+end if
+
+if .NOT. llLock
+	lcSQL = "COMMIT"
+	cn.Execute(lcSQL, args)
+end if
+
+l_hlock = llLock
+end function
+
+'*****************************************
+
+function l_lockrec as l (tcTable as c, tcFirstField as c, tnID as n, cn as SQL::Connection, tnRetry as n, tcPrompt as c)
+dim lnSecs as t
+dim llLock as l
+dim lnCount as n
+dim lcMsg as c
+
+llLock = .t.
+lnSecs = now()
+lnCount = 0
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Trying RLOCK - " + tcTable + "...\n';")
+
+while llLock .AND. .NOT. l_Rlock(tcTable, tcFirstField, tnID, cn)
+	if lnSecs + 0.5 < now()
+		lcMsg = "Pausing RLOCK " + time("0h:0m:0s AM", now())
+		a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = '" + lcMsg + "\n';")
+
+		'Pause for a few seconds and try again
+		sleep(3)
+
+		'Increment the counter and see if we should continue
+		if tnRetry <> -1
+			lnCount = lnCount + 1
+			if lnCount > tnRetry
+				llLock = .f.
+				exit while
+			end if
+		end if
+
+		a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Trying RLOCK - " + tcTable + "...\n';")
+
+		lnSecs = now()
+	end if
+end while
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = '" + tcPrompt + "';")
+
+l_lockrec = llLock
+end function
+
+'*****************************************
+
+function l_lockhead as l (tcTable as c, tcFirstField as c, cn as SQL::Connection, tnRetry as n, tcPrompt as c)
+dim llLock as l
+dim lnCount as n
+dim lnSecs as t
+
+llLock = .t.
+lnSecs = now()
+lnCount = 0
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Trying HLOCK - " + tcTable + "...\n';")
+
+while llLock .AND. .NOT. l_Hlock(tcTable, tcFirstField, cn)
+	if lnSecs + 0.5 < now()
+		lcMsg = "Pausing HLOCK " + time("0h:0m:0s AM", now())
+		a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = '" + lcMsg + "\n';")
+
+		'Pause for a few seconds and try again
+		sleep(3)
+
+		'Increment the counter and see if we should continue
+		if tnRetry <> -1
+			lnCount = lnCount + 1
+			if lnCount > tnRetry
+				llLock = .f.
+				exit while
+			end if
+		end if
+
+		a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Trying HLOCK - " + tcTable + "...\n';")
+
+		lnSecs = now()
+	end if
+end while
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = '" + tcPrompt + "';")
+
+l_lockhead = llLock
+end function
+
+'*****************************************
+
+function xbsavePOEntry as c (e AS p)
+dim cn as SQL::Connection
+dim cn2 as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim lcJs as c
+dim llCont as l
+dim llOK as l
+dim lcPrompt as c
+dim lcItem as c
+dim lcPurno as c
+dim lcLoctid as c
+dim lnLine as n
+dim lnQty as n
+dim lcVendno as c
+dim lnID as n
+dim lcCart as c
+dim lcUserID as c
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lnNeeded as n
+dim lnIOnhand as n
+dim lnLOnhand as n
+dim lcSessno as c
+dim lnCost as n
+dim lnQtyord as n
+dim lnQtyrec as n
+dim lnCost as n
+dim lnExtCost as n
+dim lnDisc as n
+dim lnTotCost as n
+dim lcTPostat as c
+dim lcMPostat as c
+dim llRollBack as l
+dim llBegin as l
+dim lnPORcptRows as n
+dim lnIAvgCost as n
+dim lnLAvgCost as n
+dim laParameters as p
+dim lnQID as n
+dim lnCQID as n
+dim lnOQID as n
+dim lnLOnordr as n
+dim lnPorcptRows as n
+dim lcBin as c
+dim lcPrompt2 as c
+dim lcStkCode as c
+dim lnRptCost as n
+dim lnRows as n
+dim lnIID as n
+dim lnSerial as n
+dim lcSerial as c
+dim lcTranno as c
+dim lcTranno2 as c
+dim llOvership as l
+dim lcYear as c
+dim lcPeriod as c
+dim lnQtyRem as n
+dim lnLID as n
+dim lnPTID as n
+dim lnPHID as n
+dim lnVID as n
+dim lnSID as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbsavePOEntry"
+lcUserID = e.dataSubmitted.USERID
+'ON ERROR GOTO error_xbsavePOEntry
+
+lcPrompt = ""
+lcPrompt2 = ""
+llRollBack = .f.
+llBegin = .f.
+lnID = 0
+lcMPOStat = " "
+lcTPOStat = " "
+lnPORcptRows = 0
+lnOvership = 0
+llOvership = .f.
+lnOQID = 0
+lnCQID = 0
+lnLAvgCost = 0
+lnIAvgCost = 0
+lnQID = 0
+lnQOnhand = 0
+lnLOnordr = 0
+lnPorcptRows = 0
+lcBin = ""
+lcStkCode = ""
+lnLID = 0
+lnIID = 0
+lnPTID = 0
+lnPHID = 0
+lnVID = 0
+lnSID = 0
+
+llCont = cn.open("::Name::Bass-SQL-Probass")
+llCont = llCont .AND. cn2.open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+	l_SQLSettings(cn2)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Processing PO receipt...\n';")
+
+	lcPurno = padl(alltrim(e.datasubmitted.PURNO), 10)
+	lcItem  = e.datasubmitted.ITEM
+	lcLoctid = e.datasubmitted.LOCTID
+	lnQty    = e.datasubmitted.QTY
+	lnLine   = e.datasubmitted.LINE
+	lcCart   = upper(e.datasubmitted.CART)
+	lcUserID = e.datasubmitted.USERID
+	lcSessno = e.datasubmitted.POSESSNO
+	args2.Add("VP_PURNO",lcPurno)
+	args2.Add("VP_LINE", lnLine)
+	args2.Add("VP_CART", lcCart)
+	args2.Add("VP_ITEM", lcItem)
+	args2.Add("VP_USERID", lcUserid)
+	args2.Add("VP_LOCTID", lcLoctid)
+
+	'Check to see if we need to set any aside for POCKBO orders
+	lcSQL = <<%txt%
+SELECT COUNT(*)
+	FROM sotran a WITH (NOLOCK)
+ 		INNER JOIN icitem c WITH (NOLOCK) ON a.item = c.item AND c.stkcode = 'Y'
+	WHERE a.item = :VP_ITEM AND a.sostat NOT IN ('C', 'V', 'X') AND 
+		a.sotype NOT IN ('B', 'R', 'D') AND a.qtyord > 0 AND a.loctid <> 'DROP  '
+%txt%
+	lnNeeded = 0
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows > 0
+			lcSQL = <<%txt%
+SELECT a.item, c.ionhand, c.stdcost, SUM(a.qtyord)
+	FROM sotran a WITH (NOLOCK)
+ 		INNER JOIN icitem c WITH (NOLOCK) ON a.item = c.item AND c.stkcode = 'Y'
+	WHERE a.item = :VP_ITEM AND a.sostat NOT IN ('C', 'V', 'X') AND 
+		a.sotype NOT IN ('B', 'R', 'D') AND a.qtyord > 0 AND a.loctid <> 'DROP  '
+	GROUP BY a.item, c.ionhand, c.stdcost
+	ORDER BY a.item 
+%txt%
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnIOnhand = rs.data(2)
+				lnCost   = rs.data(3)
+				lnNeeded = rs.data(4)
+				lnNeeded = lnNeeded - lnIOnhand
+				if lnNeeded > lnQty
+					lnNeeded = lnQty
+				end if
+			end if
+		end if
+	else
+		lcPrompt = "Could not query SOTRAN for POCKBO."
+	end if
+
+	if llCont
+		if llCont
+			'First get the POTRAN record so we can grab information we need for other places
+			lcSQL = "SELECT a.vpartno, a.vendno, a.cost, a.qtyord, a.qtyrec, a.disc, a.id_col, b.id_col, c.id_col " + crlf()
+			lcSQL = lcSQL + "FROM potran a WITH (NOLOCK) " + crlf()
+			lcSQL = lcSQL + "INNER JOIN pomast b WITH (NOLOCK) ON a.purno = b.purno INNER JOIN apvend c WITH (NOLOCK) ON a.vendno = c.vendno " + crlf()
+			lcSQL = lcSQL + "WHERE a.purno = :VP_PURNO AND a.tranlineno = :VP_LINE"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lcPartno = rs.data(1)
+				lcVendno = rs.data(2)
+				lnCost = rs.data(3)
+				lnQtyord = rs.data(4)
+				lnQtyrec = rs.data(5) + lnQty
+				lnQtyRem = rs.data(4) - rs.data(5)
+				lnDisc    = rs.data(6)
+				lnPTID = rs.data(7)
+				lnPHID = rs.data(8)
+				lnVID = rs.data(9)
+				lnExtCost = round(((lnQtyord - lnQtyrec) * lnCost) * ((100 - lnDisc) / 100), 2)
+				lnTotCost = ROUND(lnQty * ((lnCost * (100 - lnDisc)) / 100), 2)
+				lnRcptCost = ROUND((lnCost * (100 - lnDisc)) / 100, 3)
+				if lnQtyrec >= lnQtyord
+					lcTPOStat = "C"
+				end if
+				if lnQtyRem < lnQty
+					lcPrompt = "Please verify quantity.  It appears you are attempting to receive more than is on the order.  "
+					lcPrompt = lcPrompt + "PO # " + alltrim(lcPurno) + " line " + alltrim(str(lnLine)) + "."
+					llCont = .f.
+				end if
+			else
+				lcPrompt = "Could not access POTRAN for PO # " + alltrim(lcPurno) + " line " + alltrim(str(lnLine)) + "."
+			end if
+		end if
+
+		if llCont .AND. lcTPOStat = "C"
+			'Determine if order has been received in full
+			lcSQL = "SELECT COUNT(*) FROM potran WITH (NOLOCK) WHERE purno = :VP_PURNO AND qtyord > qtyrec AND postat = ' ' AND tranlineno <> :VP_LINE"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnRows = rs.data(1)
+				if lnRows = 0
+					lcMPOStat = "C"
+				end if
+			end if
+		end if
+
+		if llCont
+			'Get additional data from ICITEM
+			lcSQL = "SELECT mpartno, stkumid, ionhand, avgcost, bin, stkcode, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lcUM = rs.data(2)
+				lnIonhand = rs.data(3)
+				lnIAvgCost = rs.data(4)
+				lcBin = rs.data(5)
+				lcStkCode = rs.data(6)
+				lnIID = rs.data(7)
+				if lnIOnhand + lnNeeded <= 0 .OR. lnIOnhand = 0
+					lnIAvgCost = lnCost
+				else
+					lnIAvgCost = ROUND(((lnIOnhand * lnIAvgCost) + lnTotCost) / (lnIOnhand + lnQty), 5)
+				end if
+			else
+				lcPrompt = "Could not query ICITEM." + crlf() + lcSQL
+			end if
+		end if
+			
+		if llCont
+			lcSQL = "SELECT count(*) FROM iciloc WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID"
+			llCont = cn.Execute(lcSQL, args2)
+			lnRows = 0
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnRows = rs.data(1)
+			end if
+			
+			if lnRows > 0
+				'Get data from ICILOC
+				lcSQL = "SELECT lonhand, lavgcst, lonordr, id_col FROM iciloc WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnLOnhand = rs.data(1)
+					lnLavgcost = rs.data(2)
+					lnLonordr = rs.data(3)
+					lnLID = rs.data(4)
+	
+					lnLonordr = lnLonordr - lnQty
+					if lnLonordr < 0
+						lnLonordr = 0
+					end if
+					if lnLOnhand + lnQty <= 0 .OR. lnLonhand = 0
+						lnLAvgCost = lnCost
+					else
+						lnLavgcost = ROUND(((lnLOnhand * lnLavgcost) + lnTotCost) / (lnLOnhand + lnQty), 5)
+					end if
+				else
+					lcPrompt = "Could not query ICILOC." + crlf() + lcSQL
+				end if
+			else
+				lcPrompt = "Item " + alltrim(lcItem) + " does not exist at loction " + alltrim(lcLoctid) + ". Cannot proceed with receipt of item."
+				llCont = .f.
+			end if
+		end if
+
+		if llCont
+			'Get additional supplier information
+			args2.Add("VP_VENDNO", lcVendno)
+			args2.Add("VP_PARTNO", lcPartno)
+			lcSQL = "SELECT count(*) FROM icsupl WITH (NOLOCK) WHERE item = :VP_ITEM AND vendno = :VP_VENDNO AND vpartno = :VP_PARTNO"
+			llCont = cn.Execute(lcSQL, args2)
+			lnRows = 0
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnRows = rs.data(1)
+			else
+				lcPrompt = "Could not query ICSUPL." + crlf() + lcSQL
+			end if
+			if lnRows <> 0
+				lcSQL = "SELECT id_col FROM icsupl WITH (NOLOCK) WHERE item = :VP_ITEM AND vendno = :VP_VENDNO AND vpartno = :VP_PARTNO"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnSID = rs.data(1)
+				else
+					lcPrompt = "Could not query ICSUPL." + crlf() + lcSQL
+				end if
+			end if
+		end if
+
+		if llCont
+			'Receive this amount and notify user to set aside
+			if len(alltrim(lcSessno)) = 0
+				'Get a session number for this receipt
+				lcSessno = getTranno("ICBASS", "int3", "sessno", .t., cn, cn2, "Saving PO Receipt...\n")
+				if lcSessno = "INVALID"
+					llCont = .f.
+					lcSessno = ""
+					lcPrompt = "Could not obtain a session number from the automatic number system."
+				end if
+			end if
+		end if
+
+		' Look for the cart existing for the item as a store. If not, add it
+		if llCont .AND. lnNeeded < lnQty
+			'Get Tranaction number (from SYSDATA IC record INT1 and validate against ICTRAN.TRANNO field)
+			lcTranno2 = getTranno("ICBASS", "int1", "ttranno", .t., cn, cn2, "Saving PO Receipt...\n")
+			if lcTranno2 = "INVALID"
+				llCont = .f.
+				lcTranno2 = ""
+				lcPrompt = "Could not obtain a transaction number from the automatic number system."
+			end if
+
+			if llCont .AND. lcStkCode = "Y"
+				args2.Add("VP_CART", lcCart)
+				'Create the ICIQTY regular inventory record if we don't currently have one
+				lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_CART AND qserial <> '_OVERSHIP'"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnRows = rs.data(1)
+					if lnRows = 0
+						'First we need a new serial # for the qserial record
+						lcSQL = "SELECT nserial, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+						llOK = cn.Execute(lcSQL, args2)
+						rs = cn.ResultSet
+						rs.NextRow()
+						lnSerial = rs.data(1) + 1
+						lnIID = rs.data(2)
+						args2.Add("VP_NSERIAL", lnSerial)
+						if l_lockrec("icitem", "lckuser", lnIID, cn, 8, "Saving PO receipt...\n")
+							lcSQL = "UPDATE icitem SET nserial = :VP_NSERIAL WHERE item = :VP_ITEM"
+							llOK = cn.Execute(lcSQL, args2)
+							l_Unlock(cn)
+							lcSerial = padl(alltrim(STR(lnSerial, 20)), 20, " ")
+						else
+							lcPrompt = "Could not obtain next record counter for item " + alltrim(lcItem) + ". It could be locked by another user.  If this continues, please notify IT."
+							llCont = .f.
+						end if
+					end if
+				else
+					lcPrompt = "Could not obtain next record counter for item " + alltrim(lcItem) + ". It could be locked by another user.  If this continues, please notify IT."
+					llCont = .f.
+				end if
+
+				if lnRows = 0 .AND. llCont
+					'Create a new record for this item/location
+					args2.Add("VP_SERIAL", lcSerial)
+					args2.Add("VP_COST", lnCost)
+					args2.Add("VP_TRANNO", lcTranno2)
+					ldDate = DATE()
+					lcTime = TIME()
+					ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+					args2.Add("VP_DATE", ltDate)
+					args2.Add("VP_TIME", lcTime)
+					if l_lockhead("iciqty", "lckuser", cn, 8, "Saving PO receipt...\n")
+						lcSQL = "INSERT INTO iciqty (qserial, item, loctid, qonhnd1, qonhand, qstore, qbin, " + crlf()
+						lcSQL = lcSQL + "lotno, qtranno, otranno, adduser, adddate, addtime, qcost) VALUES " + crlf()
+						lcSQL = lcSQL + "(:VP_SERIAL, :VP_ITEM, :VP_LOCTID, 0, 0, :VP_CART, '', '', :VP_TRANNO, :VP_TRANNO, :VP_USERID, " + crlf()
+						lcSQL = lcSQL + ":VP_DATE, :VP_TIME, :VP_COST) "
+						llCont = cn.Execute(lcSQL, args2)
+						if .NOT. llCont
+							lcPrompt = "Could not create the ICIQTY record for item " + alltrim(lcItem) + " shelf " + alltrim(lcCart) + "."
+						end if
+						l_Unlock(cn)
+					else
+						llCont = .f.
+						lcPrompt = "Could not create the ICIQTY record for item " + alltrim(lcItem) + " shelf " + alltrim(lcCart) + "."
+					end if
+				end if
+
+				if llCont
+					lcSQL = "SELECT id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_CART AND qserial <> '_OVERSHIP'"
+					llCont = cn.Execute(lcSQL, args2)
+					if llCont
+						rs = cn.ResultSet
+						rs.NextRow()
+						lnCQID = rs.data(1)
+					else
+						lcPrompt = "Could not obtain correct shelf record id for item " + alltrim(lcItem) + " shelf " + alltrim(lcCart) + "."
+					end if
+				end if
+			end if
+		end if
+
+		if llCont .AND. lnNeeded > 0 .AND. lcStkCode = "Y"
+			'Get Tranaction number (from SYSDATA IC record INT1 and validate against ICTRAN.TRANNO field)
+			lcTranno = getTranno("ICBASS", "int1", "ttranno", .t., cn, cn2, "Saving PO receipt...\n")
+			if lcTranno = "INVALID"
+				llCont = .f.
+				lcTranno = ""
+				lcPrompt = "Could not obtain a transaction number from the automatic number system."
+			end if
+
+			if llCont
+				args2.Add("VP_BIN", lcBin)
+				'Create the ICIQTY regular inventory record if we don't currently have one
+				lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_BIN AND qserial <> '_OVERSHIP'"
+				llOK = cn.Execute(lcSQL, args2)
+				if llOK
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnRows = rs.data(1)
+					if lnRows = 0
+						'First we need a new serial # for the qserial record
+						lcSQL = "SELECT nserial, id_col FROM icitem WITH (NOLOCK) WHERE item = :VP_ITEM"
+						llOK = cn.Execute(lcSQL, args2)
+						rs = cn.ResultSet
+						rs.NextRow()
+						lnSerial = rs.data(1) + 1
+						lnIID = rs.data(2)
+						args2.Add("VP_ID", lnIID)
+						args2.Add("VP_NSERIAL", lnSerial)
+						if l_lockrec("icitem", "lckuser", lnIID, cn, 8, "Saving PO receipt...\n")
+							lcSQL = "UPDATE icitem SET nserial = :VP_NSERIAL WHERE item = :VP_ITEM"
+							llOK = cn.Execute(lcSQL, args2)
+							l_Unlock(cn)
+							lcSerial = padl(alltrim(STR(lnSerial, 20)), 20, " ")
+						else
+							llCont = .f.
+						end if
+	
+						'Create a new record for this item/location
+						if llCont .AND. l_lockhead("iciqty", "lckuser", cn, 8, "Saving PO receipt...\n")
+							args2.Add("VP_SERIAL", lcSerial)
+							args2.Add("VP_COST", lnCost)
+							args2.Add("VP_TRANNO", lcTranno)
+							ldDate = DATE()
+							lcTime = TIME()
+							ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+							args2.Add("VP_DATE", ltDate)
+							args2.Add("VP_TIME", lcTime)
+							lcSQL = "INSERT INTO iciqty (qserial, item, loctid, qonhnd1, qonhand, qstore, qbin, " + crlf()
+							lcSQL = lcSQL + "lotno, qtranno, otranno, adduser, adddate, addtime, qcost) VALUES " + crlf()
+							lcSQL = lcSQL + "(:VP_SERIAL, :VP_ITEM, :VP_LOCTID, 0, 0, :VP_BIN, '', '', :VP_TRANNO, :VP_TRANNO, :VP_USERID, " + crlf()
+							lcSQL = lcSQL + ":VP_DATE, :VP_TIME, :VP_COST) "
+							llCont = cn.Execute(lcSQL, args2)
+							l_Unlock(cn)
+						else
+							llCont = .f.
+						end if
+						if .NOT. llCont
+							lcPrompt = "Could not create the ICIQTY record for item " + alltrim(lcItem) + " for shelf " + alltrim(lcBin) + "."
+						end if
+					end if
+				else
+					lcPrompt = "Could not query ICIQTY record for item " + alltrim(lcItem) + " for shelf " + alltrim(lcBin) + "."
+					llCont = .f.
+				end if
+				if llCont
+					lcSQL = "SELECT id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qstore = :VP_BIN AND qserial <> '_OVERSHIP'"
+					llCont = cn.Execute(lcSQL, args2)
+					if llCont
+						rs = cn.ResultSet
+						rs.NextRow()
+						lnQID = rs.data(1)
+					else
+						lcPrompt = "Could not obtain record ID for item " + alltrim(lcItem) + " for shelf " + alltrim(lcBin) + "."
+					end if
+				end if
+			end if
+
+			if llCont
+				'See if we have an overship record with onhand on it
+				lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qserial = '_OVERSHIP' AND qonhand <> 0"
+				llCont = cn.Execute(lcSQL, args2)
+				if llCont
+					rs = cn.ResultSet
+					rs.NextRow()
+					lnRows = rs.data(1)
+					llOvership = .t.
+					if lnRows = 0
+						'No overship record found
+						llOvership = .f.
+					else
+						lcSQL = "SELECT qonhand, id_col FROM iciqty WITH (NOLOCK) WHERE item = :VP_ITEM AND loctid = :VP_LOCTID AND qserial = '_OVERSHIP'"
+						llCont = cn.Execute(lcSQL, args2)
+						if llCont
+							rs = cn.ResultSet
+							rs.NextRow()
+							lnOvership = rs.data(1)
+							lnOQID = rs.data(2)
+							if lnOvership = 0
+								llOvership = .f.
+							end if
+						end if
+					end if
+				end if
+
+				if .NOT. llCont
+					lcPrompt = "Could not query ICIQTY for overship record."
+				end if
+			end if
+
+			if llCont
+				'Receive inventory
+				laParameters.Item = lcItem
+				laParameters.Qty = lnNeeded
+				laParameters.Loctid = lcLoctid
+				laParameters.Reference = "PO " + alltrim(lcPurno) + " receipt for POCKBO"
+				laParameters.Sessno = lcSessno
+				laParameters.Cost = lnRcptCost
+				laParameters.UserID = lcUserID
+				laParameters.Applid = "PO"
+				laParameters.Line = lnLine
+				laParameters.Vendno = lcVendno
+				laParameters.Purno = lcPurno
+				laParameters.Partno = lcPartno
+				laParameters.UM = lcUM
+				laParameters.Tranno = lcTranno
+				laParameters.docno  = lcPurno
+				laParameters.LAvgCost = lnLAvgCost
+				laParameters.IAvgCost = lnIAvgCost
+				laParameters.Overship = lnOvership
+				laParameters.OQID = 0
+				laParameters.QID = 0
+				laParameters.QOnhand = 0
+				laParameters.TQID = lnQID
+				laParameters.Lonordr = lnLonordr
+				laParameters.Bin = lcBin
+				laParameters.stkcode = lcStkCode
+				laParameters.LID = lnLID
+				laParameters.IID = lnIID
+				laParameters.SID = lnSID
+
+				lcPrompt = inventorytransaction(cn, cn2, laParameters)
+				if len(lcPrompt) > 0
+					llCont = .f.
+				end if
+			end if
+		
+			if llCont
+				'Reduce quantity "received" by amount that is set aside
+				lnQty = lnQty - lnNeeded
+				lcPrompt2 = "alert('Quantity of " + alltrim(str(lnNeeded)) + " is required for order picking.');" + crlf()
+				e._set.pockboitem.value = lcItem
+				e._set.pockboqty.value = lnNeeded
+			end if
+		end if
+	end if
+
+	if llCont .AND. lnQty > 0
+		ldDate = DATE()
+		lcTime = TIME()
+		ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+		args2.Add("VP_DATE", ltDate)
+		args2.Add("VP_TIME", lcTime)
+		args2.Add("VP_QTY", lnQty)
+
+		'Receive the inventory to the cart as the "shelf location"
+		laParameters.Item = lcItem
+		laParameters.Qty = lnQty
+		laParameters.Loctid = lcLoctid
+		laParameters.Reference = "PO " + alltrim(lcPurno) + " receipt to cart"
+		laParameters.Sessno = lcSessno
+		laParameters.Cost = lnRcptCost
+		laParameters.UserID = lcUserID
+		laParameters.Applid = "PO"
+		laParameters.Line = lnLine
+		laParameters.Vendno = lcVendno
+		laParameters.Purno = lcPurno
+		laParameters.Partno = lcPartno
+		laParameters.UM = lcUM
+		laParameters.Tranno = lcTranno2
+		laParameters.docno  = lcPurno
+		laParameters.LAvgCost = lnLAvgCost
+		laParameters.IAvgCost = lnIAvgCost
+		laParameters.Overship = 0
+		laParameters.OQID = 0
+		laParameters.QID = 0
+		laParameters.QOnhand = 0
+		laParameters.TQID = lnCQID
+		laParameters.Lonordr = lnLonordr
+		laParameters.Bin = lcCart
+		laParameters.stkcode = lcStkCode
+		laParameters.LID = lnLID
+		laParameters.IID = lnIID
+		laParameters.SID = lnSID
+
+		lcPrompt = inventorytransaction(cn, cn2, laParameters)
+		if len(lcPrompt) > 0
+			llCont = .f.
+		end if
+	end if
+
+	if llCont
+		'Update POTRAN
+		l_lockrec("potran", "lckuser", lnPTID, cn, -1, "Processing PO receipt...\n")
+		ldDate = DATE()
+		lcTime = TIME()
+		ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+		args2.Add("VP_DATE", ltDate)
+		args2.Add("VP_TIME", lcTime)
+		args2.Add("VP_QTYREC", lnQtyRec)
+		args2.Add("VP_COST", lnCost)
+		args2.Add("VP_EXTCOST", lnExtCost)
+		args2.Add("VP_POSTAT", lcTPoStat)
+		lcSQL = "UPDATE potran " + crlf()
+		lcSQL = lcSQL + "SET qtyrec = :VP_QTYREC, " + crlf()
+		lcSQL = lcSQL + "tqtyrec = :VP_QTYREC, " + crlf()
+		lcSQL = lcSQL + "extcost = :VP_EXTCOST, " + crlf()
+		lcSQL = lcSQL + "recdate = :VP_DATE, "  + crlf()
+		lcSQL = lcSQL + "bextcst = :VP_EXTCOST, " + crlf()
+		lcSQL = lcSQL + "lckuser = :VP_USERID, " + crlf()
+		lcSQL = lcSQL + "lckdate = :VP_DATE, " + crlf()
+		lcSQL = lcSQL + "lcktime = :VP_TIME, " + crlf()
+		lcSQL = lcSQL + "postat = :VP_POSTAT " + crlf()
+		lcSQL = lcSQL + "WHERE purno = :VP_PURNO AND tranlineno = :VP_LINE"
+		llCont = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+		if .NOT. llCont
+			lcPrompt = "Could not update potran for PO # " + lcPurno + " line " + alltrim(str(lnLine)) + "."
+		end if
+	end if
+
+	if llCont
+		'Update SYSTOTL (IC totals)
+		lcYear = STR(YEAR(ldDate), 4)
+		lcPeriod = STRTRAN(STR(MONTH(ldDate), 3), " ", "0")
+'		updateTotals("IC", "ICTOTINV", lnTotCost, "    ", "   ", lcUserid)
+'		updateTotals("IC", "ICPTDINV", lnTotCost, lcYear, lcPeriod, lcUserid)
+
+		'Update POMAST
+		l_lockrec("pomast", "lckuser", lnPHID, cn, -1, "Processing PO receipt...\n")
+		args2.Add("VP_POSTAT", lcMPOStat)
+		args2.Add("VP_TOTCOST", lnTotCost)
+		lcSQL = "UPDATE pomast " + crlf()
+		lcSQL = lcSQL + "SET recamt = recamt + :VP_TOTCOST, " + crlf()
+		lcSQL = lcSQL + "brecamt = brecamt + :VP_TOTCOST, " + crlf()
+		lcSQL = lcSQL + "postat = :VP_POSTAT, " + crlf()
+		lcSQL = lcSQL + "lckuser = :VP_USERID, " + crlf()
+		lcSQL = lcSQL + "lckdate = :VP_DATE, " + crlf()
+		lcSQL = lcSQL + "lcktime = :VP_TIME " + crlf()
+		lcSQL = lcSQL + "WHERE purno = :VP_PURNO"
+		llCont = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+		if .NOT. llCont
+			lcPrompt = "Could not update POMAST table for PO # " + lcPurno + "."
+		end if
+	end if
+
+	if llCont
+		'Update SYSTOTL (PO totals)
+'		updateTotals("PO", "POTOTOPEN", -lnTotCost, "    ", "   ", lcUserid)
+'		updateTotals("PO", "POPTDRCP", lnTotCost, lcYear, lcPeriod, lcUserid)
+'		updateTotals("PO", "POPTDPO", -lnTotCost, lcYear, lcPeriod, lcUserid)
+
+		'Update APVEND
+		l_lockrec("apvend", "lckuser", lnVID, cn, -1, "Processing PO receipt...\n")
+		args2.Add("VP_VENDNO", lcVendno)
+		lcSQL = "UPDATE apvend SET openpo = openpo - :VP_TOTCOST " + crlf()
+		lcSQL = lcSQL + "WHERE vendno = :VP_VENDNO"
+		llCont = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+		if .NOT. llCont
+			lcPrompt = "Could not update APVEND for vendor " + lcVendno + "."
+		end if
+	end if
+
+	if llCont
+		'Successfully Saved the transaction, update the POITEM list and reset the screen
+		lcJs = "completePOEntrySave();"
+	else
+		lcJs = "var title = 'PO Entry';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PURNO'); },10)});"
+	end if
+	if len(lcPrompt2) > 0
+		lcJs = lcPrompt2 + crlf() + lcJs
+	end if
+	cn.Close()
+	cn2.Close()
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbsavePOEntry = lcJs
+'EXIT FUNCTION
+'
+'error_xbsavePOEntry:
+'
+'err = error_code_get()
+'msg = error_text_get(err)
+'script = error_script_get()
+'lineNumber = error_line_number_get()
+'
+'lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PURNO');")
+'
+'a5AjaxChunkedResponseDone()
+'xbsavePOEntry = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function updateTotals as c (tcApplid as c, tcType as c, tnTotal as n, tcYear as c, tcPeriod as c, tcUserID as c)
+dim cn as SQL::Connection
+dim args as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llOK as l
+dim lnRows as n
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lnID as n
+
+llOK = cn.Open("::Name::Bass-SQL-Prosys")
+if llOK
+	l_SQLSettings(cn)
+
+	args.Add("VP_APPLID", tcApplid)
+	args.Add("VP_TYPE", tcType)
+	args.Add("VP_TOTAL", tnTotal)
+	args.Add("VP_YEAR", tcYear)
+	args.Add("VP_PERIOD", tcPeriod)
+	lcSQL = "SELECT COUNT(*) FROM systotl WITH (NOLOCK) WHERE compid = 'BASS' AND applid = :VP_APPLID AND "  + crlf()
+	lcSQL = lcSQL + "fyear = :VP_YEAR AND fperiod = :VP_PERIOD AND totltyp = :VP_TYPE"
+	llOK = cn.Execute(lcSQL, args)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows <> 0
+			lcSQL = "SELECT id_col FROM systotl WITH (NOLOCK) WHERE compid = 'BASS' AND applid = :VP_APPLID AND "  + crlf()
+			lcSQL = lcSQL + "fyear = :VP_YEAR AND fperiod = :VP_PERIOD AND totltyp = :VP_TYPE"
+			llOK = cn.Execute(lcSQL, args)
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnID = rs.data(1)
+			
+			'Record found, so update it
+			l_lockrec("systotl", "lckuser", lnID, cn, -1, "updatetotals...\n")
+			args.Add("VP_ID", lnID)
+			lcSQL = "UPDATE systotl SET totvalue = totvalue + :VP_TOTAL WHERE id_col = :VP_ID"
+			cn.Execute(lcSQL, args)
+			l_Unlock(cn)
+		else
+			'Record not found, so add it
+			l_lockhead("systotl", "lckuser", cn, -1, "updatetotals...\n")
+			ldDate = DATE()
+			lcTime = TIME()
+			ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+			args.Add("VP_DATE", ltDate)
+			args.Add("VP_TIME", lcTime)
+			args.Add("VP_USERID", tcUserid)
+			lcSQL = "INSERT INTO systotl " + crlf()
+			lcSQL = lcSQL + "(compid, applid, totltyp, fyear, fperiod, totvalue, adduser, adddate, addtime) " + crlf()
+			lcSQL = lcSQL + "VALUES " + crlf()
+			lcSQL = lcSQL + "('BASS', :VP_APPLID, :VP_TYPE, :VP_YEAR, :VP_PERIOD, :VP_TOTAL, :VP_USERID, :VP_DATE, :VP_TIME)"
+			cn.Execute(lcSQL, args)
+			l_Unlock(cn)
+		end if
+	end if
+	cn.Close()
+end if
+
+updateTotals = ""
+end function
+
+'*****************************************
+
+function getTranno(tcSysid as c, tcField as c, tcCheckField as c, tlCheckUsage as l, cn as SQL::Connection, cn2 as SQL::Connection, tcPrompt as c)
+dim ltStart as t
+dim lnTranno as n
+dim lcTranno as c
+dim lnRows as n
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as l
+dim llOK as l
+dim lcSQL as c
+dim lnCount as n
+dim lnID as n
+
+llCont = .t.
+lnCount = 0
+lcTranno = ""
+lnTranno = 0
+if llCont
+	ltStart = now()
+	while .t.
+		'Incerment counter each time we loop
+		lnCount = lnCount + 1
+
+		'Get the next available transaction number from SYSDATA
+		args2.Add("VP_SYSID", tcSysid)
+		lcSQL = "SELECT " + tcField + ", id_col FROM sysdata WITH (NOLOCK) WHERE sysid = :VP_SYSID"
+		llCont = cn2.Execute(lcSQL, args2)
+		if llCont
+			rs = cn2.ResultSet
+			rs.NextRow()
+			lnTranno = rs.data(1) + 1
+			lnID = rs.data(2)
+			lcTranno = STR(lnTranno, 10)
+			args2.Add("VP_INT1", lnTranno)
+			if l_lockrec("sysdata", "lckuser", lnID, cn2, 3, tcPrompt)
+				lcSQL = "UPDATE sysdata SET " + tcField + " = :VP_INT1 WHERE sysid = :VP_SYSID"
+				llCont = cn2.Execute(lcSQL, args2)
+				l_Unlock(cn2)
+			else
+				llCont = .f.
+			end if
+		end if
+		if .NOT. llCont
+			'Problem with getting next counter from SYSDATA
+			lcTranno = "INVALID"
+			exit while
+		end if
+
+		if llCont .AND. tlCheckUsage
+			'Lookup the transaction number in ICTRAN to see if it is used
+			args2.Add("VP_TRANNO", lcTranno)
+			lcSQL = "SELECT COUNT(*) FROM ictran WITH (NOLOCK) WHERE " + tcCheckField + " = :VP_TRANNO"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+				rs = cn.ResultSet
+				rs.NextRow()
+				lnRows = rs.data(1)
+				if lnRows = 0
+					exit while
+				end if			
+			else
+				lcTranno = "INVALID"
+				exit while
+			end if
+		else
+			exit while
+		end if
+
+		if now() - ltStart > 5
+			'We've been trying for 5 seconds, pause for 5
+			sleep(5)
+			ltStart = now()
+		end if
+		if lnCount > 1000
+			lcTranno = "INVALID"
+			exit while
+		end if
+	end while
+end if
+
+getTranno = lcTranno
+end function
+
+'*****************************************
+
+function l_writeerror as c (tcMessage as c, tcPass as c, tcUser as c)
+dim llCont as l
+dim llOK as l
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+
+llCont = cn.open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+	
+	args2.Add("VP_USER", tcUser)
+	args2.Add("VP_MEMO", tcPass)
+	args2.Add("VP_MSG", tcMessage)
+	ldDate = DATE()
+	lcTime = TIME()
+	ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+	args2.Add("VP_DATE", ltDate)
+	args2.Add("VP_TIME", lcTime)
+	lcSQL = "INSERT INTO syeelog "
+	lcSQL = lcSQL + "(procid, compid, applid, userid, logdate, loggtime, dmpmemo, errmsg) " 
+	lcSQL = lcSQL + "VALUES ('WMS', 'BASS', 'WM', :VP_USER, :VP_DATE, :VP_TIME, :VP_MEMO, :VP_MSG)"
+	llOK = cn.Execute(lcSQL, args2)
+	cn.Close()
+end if
+
+l_writeerror = ""
+end function
+
+'*****************************************
+
+function l_SQLSettings as c (conn as SQL::Connection)
+dim lcSQL as c
+dim llOK as l
+
+	conn.ReportNotFoundAsWarning = .t.
+
+	'Set the timeout on locks to 3 seconds
+	lcSQL = "SET LOCK_TIMEOUT 3000;"
+	llOK = conn.Execute(lcSQL)
+
+	'Set transcation isolation level
+	lcSQL = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;"
+	llOK = conn.Execute(lcSQL)
+
+	'Set implicit transactions on
+	lcSQL = "SET IMPLICIT_TRANSACTIONS ON;"
+	llOK = conn.Execute(lcSQL)
+
+	l_sqlsettings= ""
+end function
+
+'*****************************************
+
+function xbvalidatePickSO as c (e AS p)
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llFlag2 as l
+dim llFlag3 as l
+dim lcSQL as c
+dim lcJs as c
+dim llCont as l
+dim lcSono as c
+dim lcSostat as c
+dim lcSotype as c
+dim lcDrop as c
+dim lcPrompt as c
+dim llOK as l
+dim lnRows as n
+dim lcUser as c
+dim lcCustno as c
+dim lnID as n
+dim lcStatUser as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidatePickSO"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidatePickSO
+
+lcUser = e.dataSubmitted.USERID
+lcCustno = ""
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	'Lookup the order in POMAST and see if it can be received
+	l_SQLSettings(cn)
+
+	lcSono = padl(alltrim(e.dataSubmitted.PICKSONO), 10)
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Locating SO " + alltrim(lcSono) + "...\n';")
+
+	args2.Add("VP_SONO",lcSono)
+	lcSQL = "SELECT COUNT(*) FROM somast WITH (NOLOCK) WHERE sono = :VP_SONO"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows <> 0
+			lcSQL = "SELECT sono, sostat, sotype, dropship, status, custno, id_col, statuser FROM somast WITH (NOLOCK) WHERE sono = :vp_sono"
+			llCont = cn.Execute(lcSQL, args2)
+			if llCont
+		  		rs = cn.ResultSet
+				rs.nextRow()
+				lcSostat   = rs.data(2)
+				lcSotype   = rs.data(3)
+				lcDrop     = rs.data(4)
+				lcStatus   = rs.data(5)
+				lcCustno   = rs.data(6)
+				lnID       = rs.data(7)
+				lcStatUser = rs.data(8)
+			else
+				lcPrompt = "Could not query SOMAST for 'validatePickSO'.  If this continues, please notify IT."
+			end if
+		end if
+
+		select
+			case lnRows = 0
+				'Query returned no results
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " could not be located."
+			case lcSostat = "C"
+				'Order is closed
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is closed."
+			case lcSostat = "V"
+				'Order is voided
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is voided."
+			case lcSotype = "B"
+				'Order is a bid
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is a bid."
+			case lcSotype = "R"
+				'Order is a return
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is a return."
+			case lcDrop = "D"
+				'Order is a drop ship
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is a drop ship order."
+			case lcStatus = "8" .AND. lcUser <> lcStatUser
+				'Order is in status of picking
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is being picked by " + lcStatUser + "."
+			case lcStatus = "2"
+				'Order marked as "Picked"
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " has been picked by " + alltrim(lcStatUser) + "."
+			case lcStatus <> "1" .AND. lcStatus <> "3" .AND. lcStatus <> "8"
+				'Order is not ready
+				lcPrompt = "Sales Order " + alltrim(lcSono) + " is not ready to pick."
+			case else
+				'Order is good to go
+				lcPrompt = ""
+				'Mark order as being picked
+				args2.Add("VP_USER",lcUser)
+				l_lockrec("somast", "lckuser", lnID, cn, -1, "Updating SOMAST status...\n")
+				lcSQL = "UPDATE somast SET status = '8', statdate = getdate(), statuser = :vp_user, pickuser = :vp_user WHERE sono = :VP_SONO"
+				llCont = cn.Execute(lcSQL, args2)
+				l_Unlock(cn)
+				if .NOT. llCont
+					lcPrompt = "Sales Order " + alltrim(lcSono) + " cannot be set to pick."
+				else
+					ldDate = DATE()
+					lcTime = TIME()
+					ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+					args2.Add("VP_DATE", ltDate)
+					args2.Add("VP_TIME", lcTime)
+					args2.Add("VP_CUSTNO", lcCustno)
+					l_lockhead("sostat", "adduser", cn, -1, "Updating status...\n")
+					lcSQL = "INSERT INTO sostat (sono, custno, status, adduser, adddate, addtime) VALUES "
+					lcSQL = lcSQL + "(:vp_sono, :vp_custno, '8', :vp_user, :vp_date, :vp_time)"
+					llCont = cn.Execute(lcSQL, args2)
+					l_Unlock(cn)
+				end if			
+		end select
+
+		if len(lcPrompt) <> 0
+			llCont = .f.
+			lcPrompt = lcPrompt + "  Cannot pick order."
+		end if
+	else
+		lcPrompt = "Timeout attempting query for 'validatePickSO'.  If this continues, please notify IT."
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the database."
+end if
+
+if len(lcPrompt) <> 0
+	lcJs = "var title = 'Pick SO';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PICKSONO'); },10)});"
+else
+	e._set.picksono.value = lcSono
+	lcJs = "callSOPickEntry();"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+
+xbvalidatePickSO = lcJs
+EXIT FUNCTION
+
+error_xbvalidatePickSO:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PICKSONO');")
+
+a5AjaxChunkedResponseDone()
+xbvalidatePickSO = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbgetPickSOItem as c (e AS p)
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llFlag2 as l
+dim llFlag3 as l
+dim lcSQL as c
+dim lcJs as c
+dim llCont as l
+dim lcSono as c
+dim lcSostat as c
+dim lcSotype as c
+dim lcDrop as c
+dim lcPrompt as c
+dim llOK as l
+dim lnRows as n
+dim lcItem as c
+dim lcLoctid as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbgetPickSOItem"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbgetPickSOItem
+
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	'Lookup the order in POMAST and see if it can be received
+	l_SQLSettings(cn)
+
+	lcSono = padl(alltrim(e.dataSubmitted.PICKSONO), 10)
+	lcItem = padr(alltrim(e.dataSubmitted.PICKSOITEM), 25)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Locating item on SO " + alltrim(lcSono) + "...\n';")
+
+	args2.Add("VP_SONO",lcSono)
+	args2.Add("vp_item", lcItem)
+
+	lcSQL = "SELECT COUNT(*) " + crlf()
+	lcSQL = lcSQL + "FROM sotran a WITH (NOLOCK) " + crlf()
+	lcSQL = lcSQL + "INNER JOIN icitem b WITH (NOLOCK) ON a.item = b.item " + crlf()
+	lcSQL = lcSQL + "LEFT OUTER JOIN sopick c WITH (NOLOCK) ON a.sono = c.sono AND a.tranlineno = c.tranlineno AND c.packed = 0 " + crlf()
+	lcSQL = lcSQL + "WHERE a.sono = :VP_SONO AND a.item = :VP_ITEM AND a.sostat <> 'X' AND a.sostat <> 'C' AND a.qtyord > 0" + crlf()
+	lcSQL = lcSQL + "GROUP BY a.descrip, a.qtyord, a.tranlineno, b.bin, a.loctid " + crlf()
+	lcSQL = lcSQL + "HAVING a.qtyord - SUM(COALESCE(c.qty, 0)) > 0"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+		if lnRows = 0
+			lcPrompt = "Could not find item " + alltrim(lcItem) + " on SO " + alltrim(lcSono) + "."
+		else
+			lcSQL = "SELECT a.descrip, a.qtyord, a.tranlineno, b.bin, a.loctid, SUM(COALESCE(c.qty, 0)) AS picked " + crlf()
+			lcSQL = lcSQL + "FROM sotran a WITH (NOLOCK) " + crlf()
+			lcSQL = lcSQL + "INNER JOIN icitem b WITH (NOLOCK) ON a.item = b.item " + crlf()
+			lcSQL = lcSQL + "LEFT OUTER JOIN sopick c WITH (NOLOCK) ON a.sono = c.sono AND a.tranlineno = c.tranlineno AND c.packed = 0 " + crlf()
+			lcSQL = lcSQL + "WHERE a.sono = :VP_SONO AND a.item = :VP_ITEM AND a.sostat <> 'X' AND a.sostat <> 'C' AND a.qtyord > 0" + crlf()
+			lcSQL = lcSQL + "GROUP BY a.descrip, a.qtyord, a.tranlineno, b.bin, a.loctid " + crlf()
+			lcSQL = lcSQL + "HAVING a.qtyord - SUM(COALESCE(c.qty, 0)) > 0"
+			llOK = cn.Execute(lcSQL, args2)
+			if llOK
+				rs = cn.ResultSet
+				rs.NextRow()
+				lcDescription = rs.data(1)
+				lnQtyOrd = rs.data(2) - rs.data(6)
+				lnLine = rs.data(3)
+				lcShelf = rs.data(4)
+				lcLoctid = rs.data(5)
+			else
+				lcPrompt = "Timeout attempting the SOTRAN lookup in xbgetPickSOItem.  If this continues, please notify IT."
+			end if
+		end if
+	else
+		lcPrompt = "Timeout attempting the SOTRAN lookup in xbgetPickSOItem.  If this continues, please notify IT."
+	end if
+
+	if llOK
+		if lnQtyOrd <= 0
+			lcPrompt = "Item has been fully shipped/delivered."
+		end if
+	end if
+	cn.Close()
+else
+	lcPrompt = "Unable to connect to SQL database."
+end if
+
+if LEN(lcPrompt) <> 0
+	e._set.item.value = ""
+	lcJs = "var title = 'Pick SO';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { callPickSOPick(); },10)});"
+else
+	e._set.picksoitem2.value = lcItem
+	e._set.picksodescription.value = lcDescription
+	e._set.picksoqtyord.value = lnQtyOrd
+	e._set.picksoline.value = lnLine
+	e._set.picksodefshelf.value = lcShelf
+	e._set.picksoshelf.value = ""
+	e._set.picksoshelfqty.value = 0
+	e._set.picksoqty.value = 0
+	e._set.loctid.value = lcLoctid
+	lcJs = "callPickSOEntry();"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+'return javascript
+a5AjaxChunkedResponseDone()
+xbgetPickSOItem = lcJs
+EXIT FUNCTION
+
+error_xbgetPickSOItem:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, " callPickSOPick();")
+
+a5AjaxChunkedResponseDone()
+xbgetPickSOItem = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbvalidatePickSOShelf as c (e as p)
+dim lcShelf as c
+dim lcLoctid as c
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lnCount as n
+dim lcItem as c
+dim lnQty as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbvalidatePickSOShelf"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbvalidatePickSOShelf
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.PICKSOSHELF)
+lcItem = upper(e.datasubmitted.PICKSOITEM)
+lcLoctid = e.datasubmitted.loctid
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Validating Shelf location...\n';")
+
+	args2.Add("VP_SHELF", lcShelf)
+	args2.Add("VP_ITEM", lcItem)
+	args2.Add("VP_LOCTID", lcLoctid)
+	lcSQL = "SELECT COUNT(*) FROM iciqty WITH (NOLOCK) WHERE qstore = :VP_SHELF AND item = :VP_ITEM AND loctid = :VP_LOCTID AND qonhand <> 0 AND qserial <> '_OVERSHIP'"
+	llCont = cn.Execute(lcSQL, args2)
+	lnCount = 0
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+	end if
+	
+	if lnCount = 0
+		lcJs = "var title = 'Pick SO';" + crlf()
+		lcJs = lcJs + "var msgBody = 'Item " + alltrim(lcItem) + " is not found at shelf " + lcShelf + ".';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PICKSOSHELF'); },10)});"
+	else
+		lcSQL = "SELECT qonhand FROM iciqty WITH (NOLOCK) WHERE qstore = :VP_SHELF AND item = :VP_ITEM AND loctid = :VP_LOCTID AND qonhand <> 0 AND qserial <> '_OVERSHIP'"
+		llCont = cn.Execute(lcSQL, args2)
+		lnQty = 0
+		if llCont
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnQty = rs.data(1)
+		end if
+		e._set.picksoshelf.value = lcShelf
+		e._set.picksoshelfqty.value = lnQty
+		lcJs = "{dialog.object}.setFocus('PICKSOQTY');"
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PISKSOSHELF'); },10)});"
+end if	
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbvalidatePickSOShelf = lcJs
+EXIT FUNCTION
+
+error_xbvalidatePickSOShelf:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PISKSOSHELF');")
+
+a5AjaxChunkedResponseDone()
+xbvalidatePickSOShelf = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbsavePickSOTransaction as c (e as p)
+dim lcShelf as c
+dim lcLoctid as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim lnCount as n
+dim lcItem as c
+dim lnQty as n
+dim lnLine as n
+dim laParameters as p
+dim lcUserID as c
+dim lcSono as c
+dim lcLoctid as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbsavePickSOTransaction"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbsavePickSOTransaction
+
+lcJs = ""
+lcShelf = upper(e.datasubmitted.PICKSOSHELF)
+lcItem = upper(e.datasubmitted.PICKSOITEM)
+lnQty  = e.datasubmitted.PICKSOQTY
+lnLine = e.datasubmitted.PICKSOLINE
+lcUserID = e.datasubmitted.USERID
+lcSono = e.datasubmitted.PICKSONO
+lcToShelf = "SO" + alltrim(lcSono)
+lcLoctid = e.datasubmitted.LOCTID
+lcPrompt = ""
+
+llCont = cn.Open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Saving Picking transaction...\n';")
+
+	'Transfer quantity from shelf to holding area
+	e.datasubmitted.fromitem = lcItem
+	e.datasubmitted.moveqty = lnQty
+	e.datasubmitted.FromShelf = lcShelf
+	e.datasubmitted.ToShelf = lcToShelf
+	e.datasubmitted.FROMII = "PICK"
+	lcJs = xbprocessMoveInventory(e)
+
+	if contains(lcJs, "var msgBody =")
+		llCont = .f.
+	end if
+
+	if llCont
+		'Save record to SOPICK
+		args2.Add("VP_SHELF", lcToShelf)
+		args2.Add("VP_ITEM", lcItem)
+		args2.Add("VP_QTY", lnQty)
+		args2.Add("VP_LINE", lnLine)
+		args2.Add("VP_SONO", lcSono)
+		args2.Add("VP_LOCTID", lcLoctid)
+		ldDate = DATE()
+		lcTime = TIME()
+		ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+		args2.Add("VP_DATE", ltDate)
+		args2.Add("VP_TIME", lcTime)
+		args2.Add("VP_USERID", lcUserID)
+
+		lcSQL = "SELECT COUNT(*) FROM sopick WITH (NOLOCK) WHERE qstore = :VP_SHELF AND sono = :VP_SONO AND tranlineno = :VP_LINE AND packed = 0"
+		llCont = cn.Execute(lcSQL, args2)
+		lnCount = 0
+		if llCont
+			rs = cn.ResultSet
+			rs.NextRow()
+			lnCount = rs.data(1)
+		end if
+
+		if lnCount = 0
+			'Insert
+			if l_lockhead("sopick", "adduser", cn, 8, "Updating quantity picked...\n")
+				lcSQL = "INSERT INTO sopick (sono, item, tranlineno, loctid, qty, qstore, adduser, adddate, addtime) " + crlf()
+				lcSQL = lcSQL + "VALUES (:VP_SONO, :VP_ITEM, :VP_LINE, :VP_LOCTID, :VP_QTY, :VP_SHELF, :VP_USERID, :VP_DATE, :VP_TIME)"
+				llCont = cn.Execute(lcSQL, args2)
+				l_unlock(cn)
+			else
+				llCont - .f.
+			end if
+			
+			if .NOT llCont
+				lcPrormpt = "Could not add picked record."
+			end if
+		else
+			'Add to existing
+			lcSQL = "SELECT id_col FROM sopick WITH (NOLOCK) WHERE qstore = :VP_SHELF AND sono = :VP_SONO AND tranlineno = :VP_LINE AND packed = 0"
+			cn.Execute(lcSQL, args2)
+			lnID = rs.data(1)
+			if l_lockrec("sopick", "adduser", lnID, cn, 8, "Updating quantity picked...\n")
+				lcSQL = "UPDATE sopick SET qty = qty + :VP_QTY WHERE qstore = :VP_SHELF AND sono = :VP_SONO AND tranlineno = :VP_LINE AND packed = 0"
+				llCont = cn.Execute(lcSQL, args2)
+				l_unlock(cn)
+			else
+				llCont = .f.
+			end if
+			if .NOT. llCont
+				lcPrompt = "Cannot update picked quantity."
+			end if
+		end if
+	end if
+
+	cn.Close()
+else
+	lcPrompt = "Could not connect to SQL server."
+end if
+
+if llCont
+	lcJs = "callSOPickEntry();"
+else
+	if len(lcPrompt) <> 0
+		lcJs = "var title = 'Server Issue';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { callSOPickEntry(); },10)});"
+	end if
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbsavePickSOTransaction = lcJs
+EXIT FUNCTION
+
+error_xbsavePickSOTransaction:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "callSOPickEntry();")
+
+a5AjaxChunkedResponseDone()
+xbsavePickSOTransaction = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'*****************************************
+
+function xbsavePassword as c (e as p)
+dim lcJs as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim lcSQL as c
+dim llCont as l
+dim llOK as l
+dim lcUser as c
+dim lcOldPass as c
+dim lcNewPass as c
+dim lnRows as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbsavePassword"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbsavePassword
+
+lcUser = UPPER(e.dataSubmitted.USERID)
+lcOldPass = upper(e.dataSubmitted.OLDPASSWORD)
+lcNewPass = upper(e.dataSubmitted.NEWPASSWORD)
+
+lcJs = ""
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Saving password...\n';")
+
+llCont = cn.open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+
+	args2.Add("VP_USERID", lcUser)
+	args2.Add("VP_PASSWORD", lcOldPass)
+	args2.Add("VP_NEWPASS", lcNewPass)
+	lcSQL = "SELECT COUNT(*) FROM syuuser WITH (NOLOCK) WHERE userid = :VP_USERID AND disabled = 'N' AND wmspwd = :VP_PASSWORD"
+	llOK = cn.Execute(lcSQL, args2)
+	lnRows = 0
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+	end if
+	
+	if lnRows = 0
+		lcJs = "var title = 'Change Password';" + crlf()
+		lcJs = lcJs + "var msgBody = 'Old Password is invalid.';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('OLDPASSWORD'); },10)});"
+	else
+		'Save new password
+		l_lockhead("syuuser", "lckuser", cn, -1, "Updating Password...\n")
+		lcSQL = "UPDATE syuuser SET wmspwd = :VP_NEWPASS WHERE userid = :VP_USERID"
+		llOK = cn.Execute(lcSQL, args2)
+		l_unlock(cn)
+		lcJs = "callMainMenu();"
+	end if
+	cn.Close()
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbsavePassword = lcJs
+EXIT FUNCTION
+
+error_xbsavePassword:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('OLDPASSWORD');")
+
+a5AjaxChunkedResponseDone()
+xbsavePassword = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'***************************************************
+
+function xbgetNextOrder as c (e as p)
+dim lcSQL as C
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as L
+dim lcJs as C
+dim lcSono as C
+dim lnRows as n
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbgetNextOrder"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbgetNextOrder
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Getting SO...\n';")
+
+'debug(1)
+
+lcJs = ""
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	lcSQL = <<%txt%
+SELECT COUNT(*)
+	FROM somast a   
+         INNER JOIN (SELECT s.sono, SUM(CASE WHEN LEFT(t.bin, 1) BETWEEN 'A' AND 'Z' THEN 1 ELSE 0 END) AS whse1, 
+                            SUM(CASE WHEN LEFT(t.bin, 2) BETWEEN '10' AND '21' THEN 1 ELSE 0 END) AS whse2, 
+                            SUM(CASE WHEN LEFT(t.bin, 2) BETWEEN '31' AND '39' THEN 1 ELSE 0 END) AS whse3, 
+                            COUNT(*) AS nlines
+                       FROM sotran s 
+                         INNER JOIN icitem t ON s.item = t.item
+                         INNER JOIN iciqty i ON s.item = i.item AND s.loctid = i.loctid AND s.qtyord <= i.qonhand
+                       WHERE s.qtyord > 0 AND s.sostat = ' ' AND s.item NOT LIKE 'SHIP%' AND s.sotype IN (' ', 'O')
+                       GROUP BY s.sono) AS b ON a.sono = b.sono
+	WHERE a.sostat = ' ' AND a.dropship <> 'D' AND a.status = '1' AND a.sotype <> 'O' AND a.statuser <> '    '
+%txt%
+
+	llOK = cn.Execute(lcSQL)
+	lnRows = 0
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+	end if
+	
+	if lnRows = 0
+		lcJs = "var title = 'Pick SO';" + crlf()
+		lcJs = lcJs + "var msgBody = 'No open orders found in system.';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PICKSONO'); },10)});"
+	else
+		'Save new password
+		lcSQL = <<%txt%
+SELECT TOP 1 a.sono
+	FROM somast a   
+         INNER JOIN (SELECT s.sono, SUM(CASE WHEN LEFT(t.bin, 1) BETWEEN 'A' AND 'Z' THEN 1 ELSE 0 END) AS whse1, 
+                            SUM(CASE WHEN LEFT(t.bin, 2) BETWEEN '10' AND '21' THEN 1 ELSE 0 END) AS whse2, 
+                            SUM(CASE WHEN LEFT(t.bin, 2) BETWEEN '31' AND '39' THEN 1 ELSE 0 END) AS whse3, 
+                            COUNT(*) AS nlines
+                       FROM sotran s 
+                         INNER JOIN icitem t ON s.item = t.item
+                         INNER JOIN iciqty i ON s.item = i.item AND s.loctid = i.loctid AND s.qtyord <= i.qonhand
+                       WHERE s.qtyord > 0 AND s.sostat = ' ' AND s.item NOT LIKE 'SHIP%' AND s.sotype IN (' ', 'O')
+                       GROUP BY s.sono) AS b ON a.sono = b.sono
+	WHERE a.sostat = ' ' AND a.dropship <> 'D' AND a.status = '1' AND a.sotype <> 'O' AND a.statuser <> '    '
+	ORDER BY a.status, 
+          CASE WHEN DATEPART(hour, GETDATE()) = 8 AND DATEPART(minute, GETDATE()) BETWEEN 0 AND 42 AND a.shipvia LIKE 'BASS%' AND a.source NOT LIKE '  %' THEN 3
+            WHEN ((DATEPART(hour, GETDATE()) = 12 AND DATEPART(minute, GETDATE()) >= 25) OR (DATEPART(hour, GETDATE()) = 13 AND DATEPART(minute, GETDATE()) <= 7)) AND a.shipvia LIKE 'BASS%' AND a.source NOT LIKE '___  %' THEN 3
+            WHEN (a.shipvia LIKE 'UPS%' OR a.shipvia LIKE 'FDX%') AND DATEPART(hour, GETDATE()) BETWEEN 15 AND 16 THEN 3
+            WHEN a.shipvia LIKE 'WCC%' THEN 1
+            WHEN a.shipvia LIKE 'HS %' THEN 2
+            WHEN a.shipvia LIKE 'WC %' THEN 5
+            ELSE 6 END, a.statdate ASC, a.sodate ASC, a.sono
+%txt%
+		llOK = cn.Execute(lcSQL)
+		if llOK
+			rs = cn.ResultSet
+			rs.NextRow()
+			lcSono = rs.data(1)
+			e._set.picksono.value = lcSono
+			lcJs = "validatePickSO();"
+		else
+			lcJs = "var title = 'Pick SO';" + crlf()
+			lcJs = lcJs + "var msgBody = 'Could not obtain the next sales order.';" + crlf()
+			lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+			lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+			lcJs = lcJs + "function(button) " + crlf()
+			lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PICKSONO');  },10)});"
+		end if
+	end if
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { {dialog.object}.setFocus('PICKSONO'); },10)});"
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbgetNextOrder = lcJs
+EXIT FUNCTION
+
+error_xbgetNextOrder:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "{dialog.object}.setFocus('PICKSONO');")
+
+a5AjaxChunkedResponseDone()
+xbgetNextOrder = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'***************************************************
+
+function xbcancelPickSO as c (e as p)
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as l
+dim lcJs as c
+dim lcSono as c
+dim lnRows as n
+dim lcStatus as c
+dim lcUser as c
+dim lcSono as c
+dim lcCustno as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbcancelPickSO"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbcancelPickSO
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Canceling pick...\n';")
+
+lcJs = ""
+lcSono = e.datasubmitted.PICKSONO
+lcUser = e.datasubmitted.USERID
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	'Determine if there are any pick quantities.  If so, then make it on hold
+	args2.Add("VP_SONO", lcSono)
+	lcSQL = "SELECT COUNT(*) FROM sopick WHERE sono = :vp_sono AND packed = 0"
+	llOK = cn.Execute(lcSQL, args2)
+	lnRows = 0
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+	end if
+	
+	if lnRows = 0
+		'Mark order as ready
+		lcStatus = "1"
+		lcPrompt = "Sales Order " + alltrim(lcSono) + " changed to Ready status."
+	else
+		'Mark order as on hold
+		lcStatus = "3"
+		lcPrompt = "Sales Order " + alltrim(lcSono) + " changed to Held status."
+	end if
+
+	lcSQL = "SELECT id_col, custno FROM somast WHERE sono = :VP_SONO"
+	llCont = cn.Execute(lcSQL, args2)
+	rs = cn.ResultSet
+	rs.NextRow()
+	lnID = rs.data(1)
+	lcCustno = rs.data(2)
+	args2.Add("VP_STATUS", lcStatus)
+	args2.Add("VP_USER",lcUser)
+	l_lockrec("somast", "lckuser", lnID, cn, -1, "Updating SOMAST status...\n")
+	lcSQL = "UPDATE somast SET status = :vp_status, statdate = getdate(), statuser = :vp_user WHERE sono = :VP_SONO"
+	llCont = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .NOT. llCont
+		lcPrompt = "Sales Order " + alltrim(lcSono) + " picking cannot be cancelled at this time."
+	else
+		ldDate = DATE()
+		lcTime = TIME()
+		ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+		args2.Add("VP_DATE", ltDate)
+		args2.Add("VP_TIME", lcTime)
+		args2.Add("VP_CUSTNO", lcCustno)
+		l_lockhead("sostat", "adduser", cn, -1, "Updating status...\n")
+		lcSQL = "INSERT INTO sostat (sono, custno, status, adduser, adddate, addtime) VALUES "
+		lcSQL = lcSQL + "(:vp_sono, :vp_custno, :vp_status, :vp_user, :vp_date, :vp_time)"
+		llCont = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+	end if			
+	cn.Close()
+else
+	lcPrompt = "Could not connect to SQL server."
+end if
+
+if len(lcPrompt) <> 0
+	if llCont
+		lcJs = "transient_message('" + lcPrompt + "');"
+		lcJs = lcJs + "callPickSO();"
+	else
+		lcJs = "var title = 'Pick SO';" + crlf()
+		lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+		lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+		lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+		lcJs = lcJs + "function(button) " + crlf()
+		lcJs = lcJs + "{setTimeout(function() { "
+		lcJs = lcJs + " },10)});" + crlf()
+	end if
+else
+	if llCont
+		lcJs = lcJs + "callPickSO();"
+	end if
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbcancelPickSO = lcJs
+EXIT FUNCTION
+
+error_xbcancelPickSO:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbcancelPickSO = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'***************************************************
+
+function xbcheckSOPickItems as c (e as p)
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as l
+dim lcJs as c
+dim lcSono as c
+dim lnRows as n
+dim lcStatus as c
+dim lcUser as c
+dim lcSono as c
+dim lcCustno as c
+dim llFirst as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbcheckSOPickItems"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbcheckSOPickItems
+
+lcJs = ""
+lcSono = e.datasubmitted.PICKSONO
+lcUser = e.datasubmitted.USERID
+llFirst = e.datasubmitted.PICKSOFIRST
+e._set.picksofirst.value = .f.
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	'Determine if there are any pick quantities.  If so, then make it on hold
+	args2.Add("VP_SONO", lcSono)
+	lcSQL = "SELECT COUNT(*) FROM ("
+	lcSQL = lcSQL + "SELECT a.item, a.descrip, a.qtyord, b.bin, a.tranlineno,  Sum(COALESCE(c.qty, 0))  AS picked, " + crlf()
+	lcSQL = lcSQL + "(a.qtyord - Sum(COALESCE(c.qty, 0))) AS remaining, COALESCE(d.qonhand, 0) AS qonhand " + crlf()
+	lcSQL = lcSQL + "FROM sotran a " + crlf()
+	lcSQL = lcSQL + "INNER JOIN icitem b ON  a.item = b.item " + crlf()
+	lcSQL = lcSQL + "LEFT OUTER JOIN sopick c ON a.sono = c.sono  AND  a.tranlineno = c.tranlineno  AND  c.packed = 0 " + crlf()
+	lcSQL = lcSQL + "LEFT OUTER JOIN iciqty d ON a.item = d.item  AND  a.loctid = d.loctid  AND  d.qserial <> '_OVERSHIP'  AND  b.bin = d.qstore  AND d.qonhand > 0 " + crlf()
+	lcSQL = lcSQL + "WHERE a.stkcode = 'Y'  AND  a.sono = :VP_SONO  AND  a.sostat = ' ' " + crlf()
+	lcSQL = lcSQL + "GROUP BY a.descrip, a.qtyord, a.tranlineno, a.item, b.bin, d.qonhand " + crlf()
+	lcSQL = lcSQL + "HAVING (a.qtyord - Sum(COALESCE(c.qty, 0))) > 0) z"
+	llOK = cn.Execute(lcSQL, args2)
+	lnRows = 0
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+	end if
+	
+	if .NOT. llFirst .AND. lnRows = 0
+		lcJs = "completeSOPick();"
+	else
+		lcJs = "activateSOPickEntry();"
+	end if
+	cn.Close()
+end if
+
+xbcheckSOPickItems = lcJs
+EXIT FUNCTION
+
+error_xbcheckSOPickItems:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "activateSOPickEntry();")
+
+a5AjaxChunkedResponseDone()
+xbcheckSOPickItems = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'***************************************************
+
+function xbprintPackSlip as c (e as p)
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as l
+dim lcSono as c
+dim lcPrinter as c
+dim lcPrompt as c
+dim lcJs as c
+dim lcFileName as c
+dim lcPrintDir as c
+dim lcReport as c
+dim llFromMenu as l
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbprintPackSlip"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbprintPackSlip
+
+lcJs = ""
+lcSono = e.datasubmitted.PACKSLIPSONO
+lcPrinter = e.datasubmitted.PACKSLIPPRINTER
+llFromMenu = e.datasubmitted.PACKSLIPFROMMENU
+lcPrompt  = ""
+lcJs      = ""
+lcPrintDir = "C:\PRINTING\\" + lcPrinter + "\\"
+lcFileName = lcPrintDir + file.filename_parse(strtran(upper(a5_get_tempfile_name()), ".TMP", ".PDF"), "ne")
+lcReport = a5_removeTrailingBackslash(context.request.applicationRoot) + chr(92) + "PACKLIST.a5rpt"
+
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+ 	'Pack Slip query
+	args2.Add("VP_SONO", lcSono)
+	lcSQL = "SELECT COUNT(*) FROM sopick WITH (NOLOCK) WHERE sono = :VP_SONO AND packed = 0"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnCount = rs.data(1)
+		if lnCount > 0
+			a5w_report_saveAs(lcReport,"PDF","","",lcFileName,global_variables(), null_value(), args2)
+		else
+			lcJs = "var title = 'Print Packingslip';" + crlf()
+			lcJs = lcJs + "var msgBody = 'Nothing to print.';" + crlf()
+			lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+			lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+			lcJs = lcJs + "function(button) " + crlf()
+			lcJs = lcJs + "{setTimeout(function() { },10)});"
+		end if
+	end if
+	cn.Close()
+end if
+
+if llFromMenu
+	lcJs = lcJs + "callMainMenu();"
+else
+	lcJs = lcJs + "callPickSO();"
+end if
+
+xbprintPackSlip = lcJs
+EXIT FUNCTION
+
+error_xbprintPackSlip:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbprintPackSlip = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'***************************************************
+
+function xbcompletePickSO as c (e as p)
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim llCont as l
+dim lcJs as c
+dim lcSono as c
+dim lnRows as n
+dim lcStatus as c
+dim lcUser as c
+dim lcSono as c
+dim lcCustno as c
+
+'Error handler
+dim lcUserID as c
+dim lcProgram as c
+lcProgram = "xbcompletePickSO"
+lcUserID = e.dataSubmitted.USERID
+ON ERROR GOTO error_xbcompletePickSO
+
+a5AjaxChunkedResponseWrite("$('LockMsg').innerHTML = 'Complete pick...\n';")
+
+lcJs = ""
+lcSono = e.datasubmitted.PICKSONO
+lcUser = e.datasubmitted.USERID
+lnRows = 0
+lnPick = 0
+llCont = cn.open("::Name::Bass-SQL-Probass")
+if llCont
+	l_SQLSettings(cn)
+
+	lcSQL = "SELECT COUNT(*) FROM sopick WITH (NOLOCK) WHERE sono = :VP_SONO AND packed = 0"
+	llCont = cn.Execute(lcSQL, args2)
+	if llCont
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnPick = rs.data(1)
+	end if
+
+	'Determine if there are any pick quantities.  If so, then make it on hold
+	args2.Add("VP_SONO", lcSono)
+	lcSQL = "SELECT COUNT(*) FROM (" + crlf()
+	lcSQL = lcSQL + "SELECT a.item, a.descrip, a.qtyord, b.bin, a.tranlineno,  Sum(COALESCE(c.qty, 0))  AS picked, " + crlf()
+	lcSQL = lcSQL + "(a.qtyord - Sum(COALESCE(c.qty, 0))) AS remaining, COALESCE(d.qonhand, 0) AS qonhand " + crlf()
+	lcSQL = lcSQL + "FROM sotran a " + crlf()
+	lcSQL = lcSQL + "INNER JOIN icitem b ON  a.item = b.item " + crlf()
+	lcSQL = lcSQL + "LEFT OUTER JOIN sopick c ON a.sono = c.sono  AND  a.tranlineno = c.tranlineno  AND  c.packed = 0 " + crlf()
+	lcSQL = lcSQL + "LEFT OUTER JOIN iciqty d ON a.item = d.item  AND  a.loctid = d.loctid  AND  d.qserial <> '_OVERSHIP'  AND  b.bin = d.qstore  AND  d.qonhand > 0 " + crlf()
+	lcSQL = lcSQL + "WHERE a.stkcode = 'Y'  AND  a.sono = :VP_SONO  AND  a.sostat = ' ' " + crlf()
+	lcSQL = lcSQL + "GROUP BY a.descrip, a.qtyord, a.tranlineno, a.item, b.bin, d.qonhand " + crlf()
+	lcSQL = lcSQL + "HAVING (a.qtyord - Sum(COALESCE(c.qty, 0))) > 0) z"
+	llOK = cn.Execute(lcSQL, args2)
+	if llOK
+		rs = cn.ResultSet
+		rs.NextRow()
+		lnRows = rs.data(1)
+	end if
+
+	'Change order status from picking to picked
+	lcSQL = "SELECT id_col, custno FROM somast WHERE sono = :VP_SONO"
+	llCont = cn.Execute(lcSQL, args2)
+	rs = cn.ResultSet
+	rs.NextRow()
+	lnID = rs.data(1)
+	lcCustno = rs.data(2)
+	args2.Add("VP_USER",lcUser)
+	l_lockrec("somast", "lckuser", lnID, cn, -1, "Updating SOMAST status...\n")
+	lcSQL = "UPDATE somast SET status = '2', statdate = getdate(), statuser = :vp_user WHERE sono = :VP_SONO"
+	llCont = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .NOT. llCont
+		lcPrompt = "Sales Order " + alltrim(lcSono) + " picking cannot be cancelled at this time."
+	else
+		ldDate = DATE()
+		lcTime = TIME()
+		ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+		args2.Add("VP_DATE", ltDate)
+		args2.Add("VP_TIME", lcTime)
+		args2.Add("VP_CUSTNO", lcCustno)
+		l_lockhead("sostat", "adduser", cn, -1, "Updating status...\n")
+		lcSQL = "INSERT INTO sostat (sono, custno, status, adduser, adddate, addtime) VALUES "
+		lcSQL = lcSQL + "(:vp_sono, :vp_custno, '2', :vp_user, :vp_date, :vp_time)"
+		llCont = cn.Execute(lcSQL, args2)
+		l_Unlock(cn)
+	end if			
+
+	cn.Close()
+else
+	lcPrompt = "Could not connect to the SQL Server.  Please notify IT immediately."
+	lcJs = "var title = 'Server Issue';" + crlf()
+	lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+	lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+	lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+	lcJs = lcJs + "function(button) " + crlf()
+	lcJs = lcJs + "{setTimeout(function() { },10)});"
+end if
+
+if llCont
+	if lnRows = 0
+		if lnPick = 0
+			lcJs = "cancelPickSO();"
+		else
+			lcJs = "completeSOPick();"
+		end if
+	else
+		lcJs = "promptCompleteSOPick();"
+	end if
+end if
+
+lcJs = "clearWaitMode();" + crlf() + lcJs
+
+a5AjaxChunkedResponseDone()
+xbcompletePickSO = lcJs
+EXIT FUNCTION
+
+error_xbcompletePickSO:
+
+err = error_code_get()
+msg = error_text_get(err)
+script = error_script_get()
+lineNumber = error_line_number_get()
+
+lcJs = write_error(err, msg, script, lineNumber, lcUserID, lcProgram, "")
+
+a5AjaxChunkedResponseDone()
+xbcompletePickSO = "clearWaitMode();" + crlf() + lcJs
+end function
+
+'***************************************************
+
+function write_error as c (err as n, msg as c, script as c, linenumber as n, tcUser as c, program as c, callback as c)
+dim llCont as l
+dim llOK as l
+dim lcSQL as c
+dim cn as SQL::Connection
+dim args2 as SQL::Arguments
+dim rs as SQL::ResultSet
+dim ldDate as d
+dim lcTime as c
+dim ltDate as t
+dim lcMemo as c
+dim lcPrompt as c
+dim lcJs as c
+
+llCont = cn.open("::Name::Bass-SQL-Prosys")
+if llCont
+	l_SQLSettings(cn)
+
+	lcMemo = "Error: " + alltrim(str(err)) + crlf() + "Program = " + program + crlf()
+	lcMemo = lcMemo + "Line Number = " + alltrim(str(linenumber)) + crlf() + "Message = " + msg + crlf() + "Script = " + script
+	trace.writeln(now() + " " + lcMemo, "WMS")
+
+	args2.Add("VP_USER", tcUser)
+	args2.Add("VP_MEMO", lcMemo)
+	args2.Add("VP_MSG", msg)
+	args2.Add("VP_PROG", program)
+	args2.Add("VP_ERR", alltrim(str(err)))
+	args2.Add("VP_LINE", linenumber)
+	ldDate = DATE()
+	lcTime = TIME()
+	ltDate = ctodt(dtoc(ldDate) + " 00:00:00")
+	args2.Add("VP_DATE", ltDate)
+	args2.Add("VP_TIME", lcTime)
+	lcSQL = "INSERT INTO syeelog " + crlf()
+	lcSQL = lcSQL + "(procid, compid, applid, userid, logdate, logtime, dmpmemo, errmsg, dmpcall, lnnumb, prognm, errnid) " + crlf()
+	lcSQL = lcSQL + "VALUES " + crlf()
+	lcSQL = lcSQL + "('WMS', 'BASS', 'WM', :VP_USER, :VP_DATE, :VP_TIME, :VP_MEMO, :VP_MSG, :VP_PROG, :VP_LINE, :VP_PROG, :VP_ERR)"
+
+	l_lockhead("syeelog", "userid", cn, -1, "")
+	llOK = cn.Execute(lcSQL, args2)
+	l_Unlock(cn)
+	if .not. llOK
+		trace.writeln(now() + " " + lcSQL, "WMS-SQL-ERROR")
+	end if
+
+	cn.Close()
+end if
+
+lcPrompt = "An error occurred in the system on line # " + alltrim(str(linenumber)) + " of " + program + ".  Please notify IT of this situation."
+lcJs = "var title = 'ERROR HANDLER';" + crlf()
+lcJs = lcJs + "var msgBody = '" + lcPrompt + "';" + crlf()
+lcJs = lcJs + "A5.msgBox.show(title,'<div style=""height: 1in; padding: 15pt;"">' + msgBody + '</div>'," + crlf()
+lcJs = lcJs + "[{name: 'ok', html: 'OK', value: 'ok'}]," + crlf()
+lcJs = lcJs + "function(button) " + crlf()
+lcJs = lcJs + "{setTimeout(function() { "
+
+if len(callback) = 0
+	lcJs = lcJs + "callMainMenu();"
+else
+	lcJs = lcJs + callback
+end if
+lcJs = lcJs + " },10)});"
+
+write_error = lcJs
+end function
+
+'***************************************************
+
+
